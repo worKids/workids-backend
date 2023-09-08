@@ -21,11 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class StudentController {
 
     private final StudentService studentService;
-
-    @RequestMapping("/test")
-    public void test(){
-        System.out.println("hello");
-    }
     @PostMapping("/account/join")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> join(@RequestBody JoinDto dto) {
