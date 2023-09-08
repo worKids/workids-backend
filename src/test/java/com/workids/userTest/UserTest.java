@@ -32,4 +32,5 @@ public class UserTest {
         Assertions.assertThat(student.getId()).isEqualTo("a1");
     }
 
+
 }

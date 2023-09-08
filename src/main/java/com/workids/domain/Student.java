@@ -21,6 +21,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "student_seq")
     @SequenceGenerator(name="student_seq", sequenceName = "student_seq", allocationSize = 1)
+    @Column(name="student_num")
     private Long studentNum;
 
     @Column(nullable = false, length = 40, unique = true)
@@ -39,6 +40,7 @@ public class Student {
     private String phone;
 
     // 생성할 때 default로 0 넣어주기
+    @Column(nullable = false)
     private int state;
 
     @Column(nullable = false, length = 20)
