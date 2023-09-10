@@ -1,5 +1,8 @@
 package com.workids.dto.request;
 
+import com.workids.domain.Student;
+import com.workids.global.config.Role;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -22,4 +25,21 @@ public class JoinDto {
     private int state;
 
     private String registNumber;
+
+    private Role role;
+
+    @Builder
+    public Student of(){
+        return Student.builder()
+                .id(id)
+                .password(password)
+                .name(name)
+                .email(email)
+                .phone(phone)
+                .state(state)
+                .role(Role.STUDENT)
+                .registNumber(registNumber)
+                .build();
+    }
+
 }
