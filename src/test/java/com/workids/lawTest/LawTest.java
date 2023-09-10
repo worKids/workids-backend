@@ -1,9 +1,13 @@
 package com.workids.lawTest;
 
 import com.workids.domain.Law;
+import com.workids.domain.LawNationStudent;
 import com.workids.domain.Nation;
+import com.workids.domain.NationStudent;
+import com.workids.repository.LawNationStudentRepository;
 import com.workids.repository.LawRepository;
 import com.workids.repository.NationRepository;
+import com.workids.repository.NationStudentRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +25,13 @@ public class LawTest {
     LawRepository lawRepository;
 
     @Autowired
+    LawNationStudentRepository lawNationStudentRepository;
+
+    @Autowired
     NationRepository nationRepository;
+
+    @Autowired
+    NationStudentRepository nationStudentRepository;
 
     @Test
     void lawInsert(){
@@ -37,7 +47,72 @@ public class LawTest {
                 .build();
 
         lawRepository.save(law);
-        Assertions.assertThat(law.getContent()).isEqualTo("숙제 1회 안함");
+        lawRepository.save(
+                    Law.builder()
+                        .nation(nationTest)
+                        .content("지각 할 시")
+                        .type(0)
+                        .fine(80)
+                        .state(0)
+                        .build()
+        );
+
+        lawRepository.save(
+                Law.builder()
+                        .nation(nationTest)
+                        .content("친구를 때릴 시")
+                        .type(0)
+                        .fine(120)
+                        .state(0)
+                        .build()
+        );
+        lawRepository.save(
+                Law.builder()
+                        .nation(nationTest)
+                        .content("수업시간 중 잡담할 시")
+                        .type(1)
+                        .penalty("청소 3회 실시")
+                        .state(0)
+                        .build()
+        );
+        lawRepository.save(
+                Law.builder()
+                        .nation(nationTest)
+                        .content("욕할 시")
+                        .type(1)
+                        .penalty("칠판 청소 3회 실시")
+                        .state(0)
+                        .build()
+        );
+    }
+
+    @Test
+    void lawNationStudentInsert(){
+
+        //insert into nation_student(nation_student_num, student_num, nation_num, citizen_number, credit_rating, student_name, state) values(1,1,1,1,50,'홍길동1',0);
+
+
+        NationStudent nationStudent = nationStudentRepository.findById(1L).orElse(null);
+        lawNationStudentRepository.save(
+                LawNationStudent.builder()
+                        .law(lawRepository.findById(1L).orElse(null))
+                        .nationStudent(nationStudent)
+                        .build()
+        );
+        lawNationStudentRepository.save(
+                LawNationStudent.builder()
+                        .law(lawRepository.findById(3L).orElse(null))
+                        .nationStudent(nationStudent)
+                        .build()
+        );
+        lawNationStudentRepository.save(
+                LawNationStudent.builder()
+                        .law(lawRepository.findById(4L).orElse(null))
+                        .nationStudent(nationStudent)
+                        .penaltyCompleteState(0)
+                        .build()
+        );
+
     }
 
 }

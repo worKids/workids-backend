@@ -22,6 +22,7 @@ public class NationTest {
     NationRepository nationRepository;
 
 
+
     @Test
     void nationInsert() {
         Teacher teacherTest = new Teacher(1L, "b1", "12", "김동글1", "ab1@naver.com", "010-1111-1112", 1, null);
@@ -43,6 +44,5 @@ public class NationTest {
         nationRepository.save(nation);
         Assertions.assertThat(nation.getName()).isEqualTo("일다수");
     }
-
 
 }

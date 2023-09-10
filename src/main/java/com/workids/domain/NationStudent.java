@@ -27,7 +27,7 @@ public class NationStudent {
 
     @ManyToOne(targetEntity = Nation.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "nation_num")
-    private Long NationNum;
+    private Nation nation;
 
     @Column(nullable = false)
     private int citizenNumber;
