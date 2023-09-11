@@ -19,13 +19,15 @@ public class LawController {
 
     @Autowired
     private LawService lawService;
+
     /**
      * 법 조회
      * */
-    @RequestMapping("law/list")
-    public ResponseEntity<BaseResponseDto<?>> getAllLaws(long nation_num){
+    @PostMapping("law/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getAllLaws(@RequestBody RequestLawDto dto){
 
-        List<ResponseLawDto> list = lawService.getAllLaws(nation_num);
+        List<ResponseLawDto> list = lawService.getAllLaws(dto);
 
         for(ResponseLawDto lawDto : list) {
             System.out.println(lawDto.toString());
@@ -39,10 +41,10 @@ public class LawController {
      * */
     @PostMapping("teacher/law")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> createLaw(@RequestParam long nation_num, @RequestBody RequestLawDto dto){
+    public ResponseEntity<BaseResponseDto<?>> createLaw(@RequestBody RequestLawDto dto){
 
         System.out.println("삽입할 법 "+ dto);
-        lawService.createLaw(nation_num, dto);
+        lawService.createLaw(dto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
     }
@@ -50,12 +52,12 @@ public class LawController {
     /**
      * 법 수정(벌금 가격만 가능)
      * */
-    @PatchMapping("teacher/law/update")
+    @PatchMapping("teacher/law")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> updateLaw(@RequestParam long law_num,@RequestParam int fine){
+    public ResponseEntity<BaseResponseDto<?>> updateLaw(@RequestBody RequestLawDto dto){
 
-        System.out.println("수정할 법 "+ law_num);
-        int result = lawService.updateLaw(law_num, fine);
+        System.out.println("수정할 법 "+ dto);
+        long result = lawService.updateLaw(dto);
         if(result!=0){
             System.out.println("수정 완료");
         }else{
@@ -68,12 +70,12 @@ public class LawController {
     /**
      * 법 삭제
      * */
-    @PatchMapping("teacher/law/delete")
+    @PatchMapping("teacher/law/hide")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> updateLawState(@RequestParam long law_num){
+    public ResponseEntity<BaseResponseDto<?>> updateLawState(@RequestBody RequestLawDto dto){
 
-        System.out.println("삭제할 법 "+ law_num);
-        int result = lawService.updateLawState(law_num);
+        System.out.println("삭제할 법 "+ dto);
+        long result = lawService.updateLawState(dto);
         if(result!=0){
             System.out.println("삭제 완료");
         }else{
@@ -86,8 +88,8 @@ public class LawController {
      * 벌금 부여 리스트
      */
     @PostMapping("teacher/law/fine/list")
-    public ResponseEntity<BaseResponseDto<?>> getFineLaws(@RequestParam long nation_num){
-        List<ResponseLawNationStudentDto> list = lawService.getFineLaws(nation_num);
+    public ResponseEntity<BaseResponseDto<?>> getFineLaws(@RequestBody RequestLawNationStudentDto dto){
+        List<ResponseLawNationStudentDto> list = lawService.getFineLaws(dto);
 
         for(ResponseLawNationStudentDto fineDto : list) {
             System.out.println(fineDto.toString());
@@ -111,9 +113,10 @@ public class LawController {
      * 벌금 부여 취소
      * */
     @DeleteMapping("teacher/law/fine")
-    public ResponseEntity<BaseResponseDto<?>> deleteFineStudent(@RequestParam long law_nation_student_num){
-        System.out.println("삭제할 벌금 부여 번호 "+ law_nation_student_num);
-        lawService.deleteFineStudent(law_nation_student_num);
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> deleteFineStudent(@RequestBody RequestLawNationStudentDto dto){
+        System.out.println("삭제할 벌금 부여 "+ dto);
+        lawService.deleteFineStudent(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
@@ -122,8 +125,8 @@ public class LawController {
      * 벌칙 부여 리스트
      */
     @PostMapping("teacher/law/penalty/list")
-    public ResponseEntity<BaseResponseDto<?>> getPenaltyLaws(@RequestParam long nation_num){
-        List<ResponseLawNationStudentDto> list = lawService.getPenaltyLaws(nation_num);
+    public ResponseEntity<BaseResponseDto<?>> getPenaltyLaws(@RequestBody RequestLawNationStudentDto dto){
+        List<ResponseLawNationStudentDto> list = lawService.getPenaltyLaws(dto);
 
         for(ResponseLawNationStudentDto penaltyDto : list) {
             System.out.println(penaltyDto.toString());
@@ -148,9 +151,9 @@ public class LawController {
      * 벌칙 부여 취소
      * */
     @DeleteMapping("teacher/law/penalty")
-    public ResponseEntity<BaseResponseDto<?>> deletePenaltyStudent(@RequestParam long law_nation_student_num){
-        System.out.println("삭제할 벌칙 부여 번호 "+ law_nation_student_num);
-        lawService.deletePenaltyStudent(law_nation_student_num);
+    public ResponseEntity<BaseResponseDto<?>> deletePenaltyStudent(@RequestBody RequestLawNationStudentDto dto){
+        System.out.println("삭제할 벌칙 부여 번호 "+ dto);
+        lawService.deletePenaltyStudent(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
@@ -160,9 +163,9 @@ public class LawController {
      * 벌칙 수행 확인여부
      * */
     @PostMapping("teacher/law/penalty/check")
-    public ResponseEntity<BaseResponseDto<?>> updatePenaltyCompleteState(@RequestParam long law_nation_student_num){
+    public ResponseEntity<BaseResponseDto<?>> updatePenaltyCompleteState(@RequestBody RequestLawNationStudentDto dto){
 
-        int result = lawService.updatePenaltyCompleteState(law_nation_student_num);
+        long result = lawService.updatePenaltyCompleteState(dto);
         if(result!=0){
             System.out.println("벌칙 수행 체크 완료");
         }else{
@@ -177,9 +180,9 @@ public class LawController {
      * 학생에게 부여된 벌금 내역 조회
      * */
     @PostMapping("student/law/fine/list")
-    public ResponseEntity<BaseResponseDto<?>> getStudentFineLaws(@RequestParam long nation_student_num){
+    public ResponseEntity<BaseResponseDto<?>> getStudentFineLaws(@RequestBody RequestLawNationStudentDto dto){
 
-        List<ResponseLawNationStudentDto> list = lawService.getStudentFineLaws(nation_student_num);
+        List<ResponseLawNationStudentDto> list = lawService.getStudentFineLaws(dto);
 
         for(ResponseLawNationStudentDto fineDto : list) {
             System.out.println(fineDto.toString());
@@ -193,9 +196,9 @@ public class LawController {
      * 학생에게 부여된 벌칙 내역 조회
      * */
     @PostMapping("student/law/penalty/list")
-    public ResponseEntity<BaseResponseDto<?>> getStudentPenaltyLaws(@RequestParam long nation_student_num){
+    public ResponseEntity<BaseResponseDto<?>> getStudentPenaltyLaws(@RequestBody RequestLawNationStudentDto dto){
 
-        List<ResponseLawNationStudentDto> list = lawService.getStudentPenaltyLaws(nation_student_num);
+        List<ResponseLawNationStudentDto> list = lawService.getStudentPenaltyLaws(dto);
 
         for(ResponseLawNationStudentDto penaltyDto : list) {
             System.out.println(penaltyDto.toString());
