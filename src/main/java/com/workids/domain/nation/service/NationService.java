@@ -5,6 +5,8 @@ import com.workids.domain.nation.dto.request.NationListALLDto;
 import com.workids.domain.nation.dto.response.NationListResponseDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.repository.NationRepository;
+import com.workids.domain.user.entity.Teacher;
+import com.workids.domain.user.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class NationService {
 
 
     private final NationRepository nationRepository;
+    private final TeacherRepository teacherRepository;
 
     @Transactional
     public List<NationListResponseDto> getListAll(Long teacherNum){
@@ -41,7 +44,9 @@ public class NationService {
             throw new IllegalArgumentException("이미 존재하는 나라이름입니다.");
         }
 
-        nationRepository.save(Nation.of(dto));
+        Teacher teacher = teacherRepository.findByTeacherNum(dto.getTeacherNum());
+
+        nationRepository.save(Nation.of(dto, teacher));
 
     }
 
