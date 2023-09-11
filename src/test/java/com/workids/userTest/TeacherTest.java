@@ -1,8 +1,7 @@
 package com.workids.userTest;
 
-import com.workids.domain.Student;
-import com.workids.domain.Teacher;
-import com.workids.repository.TeacherRepository;
+import com.workids.domain.teacher.user.dto.Teacher;
+import com.workids.domain.teacher.user.repository.TeacherRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
