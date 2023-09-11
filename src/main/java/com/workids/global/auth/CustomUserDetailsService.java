@@ -1,6 +1,6 @@
 package com.workids.global.auth;
 
-import com.workids.domain.student.user.repository.StudentRepository;
+import com.workids.domain.user.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

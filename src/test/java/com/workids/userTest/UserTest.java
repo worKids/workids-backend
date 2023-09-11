@@ -1,7 +1,7 @@
 package com.workids.userTest;
 
-import com.workids.domain.student.user.entity.Student;
-import com.workids.domain.student.user.repository.StudentRepository;
+import com.workids.domain.user.entity.Student;
+import com.workids.domain.user.repository.StudentRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
