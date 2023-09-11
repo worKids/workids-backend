@@ -1,5 +1,6 @@
 package com.workids.domain;
 
+import com.workids.domain.teacher.nation.entity.Nation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,10 +1,8 @@
 package com.workids.nationTest;
 
-import com.workids.domain.Nation;
-import com.workids.domain.Student;
-import com.workids.domain.Teacher;
-import com.workids.repository.NationRepository;
-import com.workids.repository.StudentRepository;
+import com.workids.domain.teacher.nation.entity.Nation;
+import com.workids.domain.teacher.user.dto.Teacher;
+import com.workids.domain.teacher.nation.repository.NationRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
