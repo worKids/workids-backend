@@ -1,6 +1,8 @@
 package com.workids.domain.nation.entity;
 
+import com.workids.domain.nation.dto.request.NationJoinDto;
 import com.workids.domain.user.entity.Teacher;
+import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Nation {
+public class Nation extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "nation_seq")
@@ -55,7 +57,7 @@ public class Nation {
 
     @Column(nullable = false)
     private int state;
-
+/*
     @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
@@ -65,8 +67,9 @@ public class Nation {
     private LocalDateTime endDate;
 
 
-/*
-    public static Nation of(Nation dto) {
+ */
+
+    public static Nation of(NationJoinDto dto) {
         return Nation.builder()
                 .name(dto.getName())
                 .moneyName(dto.getMoneyName())
@@ -81,5 +84,4 @@ public class Nation {
                 .build();
     }
 
- */
 }
