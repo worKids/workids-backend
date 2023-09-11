@@ -1,5 +1,6 @@
 package com.workids.domain.auction.entity;
 
+import com.workids.domain.auction.dto.request.RequestAuctionDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.global.config.TimeEntity;
 import com.workids.global.config.stateType.AuctionStateType;
@@ -28,23 +29,28 @@ public class Auction extends TimeEntity {
     private Nation nation;
 
     @Column(nullable = false)
-    private int row;
+    private int classRow;
 
     @Column(nullable = false)
-    private int column;
+    private int classColumn;
 
     @Column(nullable = false)
-    private int state;
+    private int totalSeat;
+
+    @Column(nullable = false)
+    private int auctionState;
 
     @Column(nullable = true)
     private LocalDate endDate;
 
-    public static Auction of(Auction auction) {
+    public static Auction of(RequestAuctionDto dto, Nation nation) {
         return Auction.builder()
-                .nation(auction.getNation())
-                .row(auction.getRow())
-                .column(auction.getColumn())
-                .state(AuctionStateType.IN_PROGRESS)
+                .nation(nation)
+                .classRow(dto.getRow())
+                .classColumn(dto.getColumn())
+                .totalSeat(dto.getTotalSeat())
+                .auctionState(AuctionStateType.IN_PROGRESS)
+
                 .build();
     }
 }
