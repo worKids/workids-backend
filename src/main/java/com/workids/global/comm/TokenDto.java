@@ -10,7 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TokenDto {
-
+    /**
+     * 학생 PK
+     * 나라 PK
+     * 나라 - 학생 PK
+     *
+     * 선생 PK
+     * 나라PK
+     *
+     */
     private String accessToken;
 
 }
