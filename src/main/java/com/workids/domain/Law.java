@@ -52,7 +52,7 @@ public class Law {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDate;
 
-    public static Law of(Nation nation, RequestLawDto dto) {
+    /*public static Law of(Nation nation, RequestLawDto dto) {
         return Law.builder()
                 .nation(nation)
                 .content(dto.getContent())
@@ -61,5 +61,5 @@ public class Law {
                 .penalty(dto.getPenalty())
                 .state(0)
                 .build();
-    }
+    }*/
 }

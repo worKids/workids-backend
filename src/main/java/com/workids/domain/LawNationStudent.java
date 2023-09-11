@@ -46,11 +46,11 @@ public class LawNationStudent {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime penaltyEndDate;
 
-    public static LawNationStudent of(Law law, NationStudent nationStudent, RequestLawNationStudentDto dto) {
+   /* public static LawNationStudent of(Law law, NationStudent nationStudent, RequestLawNationStudentDto dto) {
         return LawNationStudent.builder()
                 .law(law)
                 .nationStudent(nationStudent)
                 .penaltyCompleteState(dto.getPenaltyCompleteState())
                 .build();
-    }
+    }*/
 }

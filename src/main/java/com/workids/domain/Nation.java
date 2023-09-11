@@ -66,7 +66,7 @@ public class Nation {
     private LocalDateTime endDate;
 
 
-/*
+
     public static Nation of(Nation dto) {
         return Nation.builder()
                 .name(dto.getName())
@@ -82,5 +82,5 @@ public class Nation {
                 .build();
     }
 
- */
+
 }
