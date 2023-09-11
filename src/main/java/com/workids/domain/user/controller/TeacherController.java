@@ -1,8 +1,8 @@
 package com.workids.domain.user.controller;
 
-import com.workids.domain.user.dto.request.StudentJoinDto;
 import com.workids.domain.user.dto.request.LoginDto;
-import com.workids.domain.user.service.StudentService;
+import com.workids.domain.user.dto.request.TeacherJoinDto;
+import com.workids.domain.user.service.TeacherService;
 import com.workids.global.comm.BaseResponseDto;
 import com.workids.global.comm.TokenDto;
 import lombok.RequiredArgsConstructor;
@@ -16,21 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-
 @Controller
-@RequestMapping("/student")
+@RequestMapping("/teacher")
 @RequiredArgsConstructor
-public class StudentController {
+public class TeacherController {
 
-    private final StudentService studentService;
+    private final TeacherService teacherService;
 
     /**
      * 회원가입
      */
     @PostMapping("/account/join")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody StudentJoinDto dto){
-        studentService.join(dto);
+    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody TeacherJoinDto dto){
+        teacherService.join(dto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
 
@@ -42,7 +41,7 @@ public class StudentController {
     @PostMapping("/account/login")
     @ResponseBody
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto dto){
-        String token = studentService.login(dto);
+        String token = teacherService.login(dto);
 
 
         // 토큰을 Response Header, Body 모두에 넣어준다.

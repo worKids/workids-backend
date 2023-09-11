@@ -1,7 +1,9 @@
 package com.workids.domain.user.entity;
 
+import com.workids.domain.user.dto.request.StudentJoinDto;
 import com.workids.global.config.BaseTimeEntity;
 import com.workids.global.config.Role;
+import com.workids.global.config.stateType.UserStateType;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -60,20 +62,19 @@ public class Student extends BaseTimeEntity {
         this.password = passwordEncoder.encode(password);
     }
 
-    /*
-    public static Student of(JoinDto dto) {
+    @Builder
+    public static Student of(StudentJoinDto dto) {
         return Student.builder()
                 .id(dto.getId())
                 .password(dto.getPassword())
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
-                .state(dto.getState())
+                .state(UserStateType.ACTIVE)
                 .role(Role.STUDENT)
                 .registNumber(dto.getRegistNumber())
                 .build();
     }
 
-     */
 
 }

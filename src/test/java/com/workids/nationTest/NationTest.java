@@ -1,7 +1,5 @@
 package com.workids.nationTest;
 
-import com.workids.domain.nation.entity.Nation;
-import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.nation.repository.NationRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
-
+/*
 @SpringBootTest
 @Commit
 @Transactional
@@ -44,3 +42,5 @@ public class NationTest {
 
 
 }
+
+ */

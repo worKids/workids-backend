@@ -1,11 +1,16 @@
 package com.workids.domain.user.entity;
 
+import com.workids.domain.user.dto.request.TeacherJoinDto;
+import com.workids.global.config.BaseTimeEntity;
+import com.workids.global.config.Role;
+import com.workids.global.config.stateType.UserStateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Teacher {
+public class Teacher extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "teacher_seq")
     @SequenceGenerator(name="teacher_seq", sequenceName = "teacher_seq", allocationSize = 1)
@@ -24,7 +29,7 @@ public class Teacher {
     @Column(nullable = false, length = 40, unique = true)
     private String id;
 
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, length = 20)
@@ -39,20 +44,36 @@ public class Teacher {
     @Column(nullable = false)
     private int state;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    public void addUserAuthority() {
+        this.role = Role.TEACHER;
+    }
 
+
+    // password encoding
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
+
+
+    /*
     @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createDate;
+    private LocalDateT
 
 
-    public static Teacher of(Teacher dto) {
+     */
+    @Builder
+    public static Teacher of(TeacherJoinDto dto) {
         return Teacher.builder()
                 .id(dto.getId())
                 .password(dto.getPassword())
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .phone(dto.getPhone())
-                .state(dto.getState())
+                .state(UserStateType.ACTIVE)
+                .role(Role.TEACHER)
                 .build();
     }
 }
