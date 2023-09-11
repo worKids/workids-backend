@@ -44,10 +44,10 @@ public class Bank {
     private int productPeriod; // 상품 기간
 
     @Column(nullable = false)
-    private int interestRate; // 만기 이자율
+    private double interestRate; // 만기 이자율
 
     @Column(nullable = false)
-    private int cancelInterestRate; // 중도 해지 이자율
+    private double cancelInterestRate; // 중도 해지 이자율
 
     @Column(nullable = false)
     private int productState; // 상품 항목 상태
