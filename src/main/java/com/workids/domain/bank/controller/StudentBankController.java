@@ -1,5 +1,5 @@
 package com.workids.domain.bank.controller;
 
-public class tmp {
-}
+public class StudentBankController {
 
+}
