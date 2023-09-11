@@ -69,8 +69,9 @@ public class Nation extends TimeEntity {
 
  */
 
-    public static Nation of(NationJoinDto dto) {
+    public static Nation of(NationJoinDto dto, Teacher teacher) {
         return Nation.builder()
+                .teacher(teacher)
                 .name(dto.getName())
                 .moneyName(dto.getMoneyName())
                 .taxRate(dto.getTaxRate())
