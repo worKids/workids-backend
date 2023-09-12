@@ -1,19 +1,14 @@
 package com.workids.domain.nation.entity;
 
-import com.workids.domain.nation.dto.request.NationJoinDto;
+import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -57,19 +52,14 @@ public class Nation extends TimeEntity {
 
     @Column(nullable = false)
     private int state;
-/*
-    @CreationTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createDate;
 
-    @UpdateTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endDate;
+    private String startDate; // 나라 시작일
+    private String endDate; // 나라 종료일
 
 
- */
 
-    public static Nation of(NationJoinDto dto, Teacher teacher) {
+
+    public static Nation of(RequestNationJoinDto dto, Teacher teacher) {
         return Nation.builder()
                 .teacher(teacher)
                 .name(dto.getName())
@@ -82,6 +72,8 @@ public class Nation extends TimeEntity {
                 .classRoom(dto.getClassRoom())
                 .payDay(dto.getPayDay())
                 .state(dto.getState())
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
                 .build();
     }
 

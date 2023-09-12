@@ -32,11 +32,11 @@ public class TeacherService {
      */
     @Transactional
     public void join(TeacherJoinDto joinDto){
-        if (teacherRepository.findById(joinDto.getId()) != null){
+        if (teacherRepository.findById(joinDto.getId()).isPresent()){
             throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
         }
 
-        if (teacherRepository.findByEmail(joinDto.getEmail()) != null){
+        if (teacherRepository.findByEmail(joinDto.getEmail()).isPresent()){
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 

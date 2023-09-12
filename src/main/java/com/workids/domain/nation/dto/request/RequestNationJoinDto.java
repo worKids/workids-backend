@@ -1,19 +1,17 @@
 package com.workids.domain.nation.dto.request;
 
-import com.workids.domain.user.entity.Teacher;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class NationJoinDto {
+public class RequestNationJoinDto {
 
     private Long teacherNum;
 
@@ -34,4 +32,7 @@ public class NationJoinDto {
     private int payDay;
 
     private int state;
+
+    private String startDate; // 나라 시작일
+    private String endDate; // 나라 종료일
 }
