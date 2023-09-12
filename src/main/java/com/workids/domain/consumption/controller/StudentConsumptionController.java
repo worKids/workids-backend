@@ -2,7 +2,7 @@ package com.workids.domain.consumption.controller;
 
 import com.workids.domain.consumption.dto.request.RequestConsumptionNationStudentDto;
 import com.workids.domain.consumption.dto.response.ResponseConsumptionNationStudentDto;
-import com.workids.domain.consumption.service.ConsumptionService;
+import com.workids.domain.consumption.service.StudentConsumptionService;
 import com.workids.global.comm.BaseResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 public class StudentConsumptionController {
 
     @Autowired
-    private ConsumptionService consumptionService;
+    private StudentConsumptionService consumptionService;
 
     /**
      * 소비 신청

@@ -4,10 +4,8 @@ import com.workids.domain.consumption.dto.request.RequestConsumptionDto;
 import com.workids.domain.consumption.dto.request.RequestConsumptionNationStudentDto;
 import com.workids.domain.consumption.dto.response.ResponseConsumptionDto;
 import com.workids.domain.consumption.dto.response.ResponseConsumptionNationStudentDto;
-import com.workids.domain.consumption.exception.SearchWrongException;
-import com.workids.domain.consumption.service.ConsumptionService;
+import com.workids.domain.consumption.service.TeacherConsumptionService;
 import com.workids.global.comm.BaseResponseDto;
-import com.workids.global.exception.ExceptionEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +21,7 @@ import java.util.List;
 public class TeacherConsumptionController {
 
     @Autowired
-    private ConsumptionService consumptionService;
+    private TeacherConsumptionService consumptionService;
 
     /**
      * 소비 사용 중인 항목 조회
