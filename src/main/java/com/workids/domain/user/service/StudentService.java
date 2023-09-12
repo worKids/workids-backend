@@ -3,6 +3,8 @@ package com.workids.domain.user.service;
 import com.workids.domain.user.entity.Student;
 import com.workids.domain.user.dto.request.StudentJoinDto;
 import com.workids.domain.user.dto.request.LoginDto;
+import com.workids.global.exception.ApiException;
+import com.workids.global.exception.ExceptionEnum;
 import com.workids.global.security.JwtTokenProvider;
 import com.workids.domain.user.repository.StudentRepository;
 import lombok.NonNull;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,9 +70,20 @@ public class StudentService {
 
         System.out.println("로그인 성공");
         // 생성된 토큰 반환
-        return jwtTokenProvider.createToken(student.getId(), roles);
+        return jwtTokenProvider.createToken(Long.toString(student.getStudentNum()), roles);
 
 
+    }
+
+    /**
+     * 로그인 시 학생 이름 가져오기
+     * @param studentNum
+     * @return
+     */
+    public String getStudentName(String studentNum) {
+        Student student = studentRepository.findById(Long.parseLong(studentNum))
+                .orElseThrow(() -> new ApiException(ExceptionEnum.STUDENT_NOT_MATCH_EXCEPTION));
+        return student.getName();
     }
 
     /** 비밀번호 일치 확인 **/
