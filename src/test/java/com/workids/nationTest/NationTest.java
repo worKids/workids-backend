@@ -1,6 +1,12 @@
 package com.workids.nationTest;
 
+import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.repository.NationRepository;
+import com.workids.domain.user.dto.request.TeacherJoinDto;
+import com.workids.domain.user.entity.Teacher;
+import com.workids.global.config.Role;
+import com.workids.global.config.stateType.NationStateType;
+import com.workids.global.config.stateType.UserStateType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
-/*
+
 @SpringBootTest
 @Commit
 @Transactional
@@ -20,8 +26,8 @@ public class NationTest {
 
     @Test
     void nationInsert() {
-        Teacher teacherTest = new Teacher(1L, "b1", "12", "김동글1", "ab1@naver.com", "010-1111-1112", 1, null);
-
+        Teacher teacherTest =
+                new Teacher(1L, "b1", "12", "김동글1", "ab1@naver.com", "010-1111-1112", UserStateType.ACTIVE, Role.TEACHER);
 
         Nation nation = Nation.builder()
                 .teacher(teacherTest)
@@ -34,13 +40,10 @@ public class NationTest {
                 .grade(1)
                 .classRoom(1)
                 .payDay(1)
-                .state(1)
+                .state(NationStateType.IN_OPERATE)
                 .build();
         nationRepository.save(nation);
         Assertions.assertThat(nation.getName()).isEqualTo("일다수");
     }
-
-
 }
 
- */
