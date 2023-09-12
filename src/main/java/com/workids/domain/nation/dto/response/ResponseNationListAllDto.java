@@ -14,9 +14,12 @@ public class ResponseNationListAllDto {
 
     private String name;
 
+    private Long nationNum;
+
     public static ResponseNationListAllDto of(Nation nation){
         return ResponseNationListAllDto.builder()
                 .name(nation.getName())
+                .nationNum(nation.getNationNum())
                 .build();
     }
 
