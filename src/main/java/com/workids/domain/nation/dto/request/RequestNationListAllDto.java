@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NationListALLDto {
+public class RequestNationListAllDto {
     private Long teacherNum;
 
 }

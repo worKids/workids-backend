@@ -1,7 +1,6 @@
 package com.workids.domain.user.dto.request;
 
 import com.workids.global.config.Role;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

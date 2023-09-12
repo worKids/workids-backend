@@ -1,6 +1,5 @@
 package com.workids.domain.nation.dto.response;
 
-import com.workids.domain.nation.dto.request.NationListALLDto;
 import com.workids.domain.nation.entity.Nation;
 import lombok.*;
 
@@ -8,18 +7,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NationListResponseDto {
+public class ResponseNationListAllDto {
     /**
-     * 나라이름, 국민
+     * 생성된 나라 조회: 나라이름
      */
 
     private String name;
-    /**
-     * 나라 전체 조회
-     */
 
-    public static NationListResponseDto of(Nation nation){
-        return NationListResponseDto.builder()
+    public static ResponseNationListAllDto of(Nation nation){
+        return ResponseNationListAllDto.builder()
                 .name(nation.getName())
                 .build();
     }

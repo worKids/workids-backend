@@ -21,6 +21,8 @@ public enum ExceptionEnum {
     // 은행
     BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다.");
 
+
+
     private final HttpStatus status;
     private final String code;
     private final String message;
