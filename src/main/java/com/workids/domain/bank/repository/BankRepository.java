@@ -3,9 +3,8 @@ package com.workids.domain.bank.repository;
 
 import com.workids.domain.bank.entity.Bank;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-@Repository
-public interface BankRepository extends JpaRepository<Bank, Long> {
+public interface BankRepository extends JpaRepository<Bank, Long>, QuerydslPredicateExecutor<Bank>{
 
 }
