@@ -4,7 +4,7 @@ import com.workids.domain.law.dto.request.RequestLawDto;
 import com.workids.domain.law.dto.request.RequestLawNationStudentDto;
 import com.workids.domain.law.dto.response.ResponseLawDto;
 import com.workids.domain.law.dto.response.ResponseLawNationStudentDto;
-import com.workids.domain.law.service.LawService;
+import com.workids.domain.law.service.TeacherLawService;
 import com.workids.global.comm.BaseResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 public class TeacherLawController {
 
     @Autowired
-    private LawService lawService;
+    private TeacherLawService lawService;
 
     /**
      * 법 조회

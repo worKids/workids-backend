@@ -1,10 +1,8 @@
 package com.workids.domain.law.controller;
 
-import com.workids.domain.law.dto.request.RequestLawDto;
 import com.workids.domain.law.dto.request.RequestLawNationStudentDto;
-import com.workids.domain.law.dto.response.ResponseLawDto;
 import com.workids.domain.law.dto.response.ResponseLawNationStudentDto;
-import com.workids.domain.law.service.LawService;
+import com.workids.domain.law.service.StudentLawService;
 import com.workids.global.comm.BaseResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,7 @@ import java.util.List;
 public class StudentLawController {
 
     @Autowired
-    private LawService lawService;
+    private StudentLawService lawService;
 
     /**
      * 학생에게 부여된 벌금 내역 조회
