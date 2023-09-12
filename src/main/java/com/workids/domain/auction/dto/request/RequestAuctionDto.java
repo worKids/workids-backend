@@ -10,11 +10,9 @@ public class RequestAuctionDto {
 
     private Long teacherNum;
 
-    private int row;
+    private int classRow;
 
-    private int column;
+    private int classColumn;
 
     private int totalSeat;
-
-    private int state;
 }
