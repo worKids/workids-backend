@@ -16,10 +16,10 @@ public enum ExceptionEnum {
     NATION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "N0001", "나라가 존재하지 않습니다."),
     TEACHER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "T0001", "선생님이 일치하지 않습니다.."),
     STUDENT_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "S0001", "학생과 일치하지 않습니다."),
-    SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),
+    SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."), 
 
     // 은행
-    BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다.");
+    BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."); 
 
     private final HttpStatus status;
     private final String code;
