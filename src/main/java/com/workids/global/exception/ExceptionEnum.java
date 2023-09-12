@@ -18,6 +18,9 @@ public enum ExceptionEnum {
     STUDENT_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "S0001", "학생과 일치하지 않습니다."),
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."), 
 
+    // 나라-학생
+    NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "NS001", "해당 나라에 학생이 존재하지 않습니다."),
+
     // 은행
     BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."); 
 
