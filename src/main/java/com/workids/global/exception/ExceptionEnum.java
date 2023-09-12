@@ -16,12 +16,22 @@ public enum ExceptionEnum {
     NATION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "N0001", "나라가 존재하지 않습니다."),
     TEACHER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "T0001", "선생님이 일치하지 않습니다.."),
     STUDENT_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "S0001", "학생과 일치하지 않습니다."),
+
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),
 
+    // 나라-학생
+    NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "NS001", "나라와 연결된 해당 학생이 존재하지 않습니다."),
+
     // 은행
-    BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다.");
+    BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."),
 
+    //법
+    LAW_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 법이 존재하지 않습니다."),
+    LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "법 부여 내역이 존재하지 않습니다."),
 
+    //소비
+    CONSUMPTION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 소비 항목이 존재하지 않습니다."),
+    CONSUMPTION_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "소비 신청 내역이 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String code;

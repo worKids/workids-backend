@@ -46,11 +46,10 @@ public class Auction extends TimeEntity {
     public static Auction of(RequestAuctionDto dto, Nation nation) {
         return Auction.builder()
                 .nation(nation)
-                .classRow(dto.getRow())
-                .classColumn(dto.getColumn())
+                .classRow(dto.getClassRow())
+                .classColumn(dto.getClassColumn())
                 .totalSeat(dto.getTotalSeat())
                 .auctionState(AuctionStateType.IN_PROGRESS)
-
                 .build();
     }
 }
