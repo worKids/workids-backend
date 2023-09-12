@@ -1,0 +1,20 @@
+package com.workids.domain.nation.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RequestNationStudentJoinDto {
+    private Long studentNum;
+    private Long nationNum;
+    private int citizenNumber;
+    private int creditRating;
+    private String studentName;
+    private int state;
+
+}

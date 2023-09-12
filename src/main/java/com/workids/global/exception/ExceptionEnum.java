@@ -19,7 +19,10 @@ public enum ExceptionEnum {
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),
 
     // 은행
-    BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다.");
+    BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."),
+
+    // 나라
+    NATIONSTUDENT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N002", "나라에 가입할 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
