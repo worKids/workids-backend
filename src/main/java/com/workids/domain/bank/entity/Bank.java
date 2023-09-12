@@ -1,12 +1,9 @@
 package com.workids.domain.bank.entity;
 
+import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.nation.entity.Nation;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.workids.global.config.TimeEntity;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,7 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bank {
+@ToString
+public class Bank extends TimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bank_seq")
     @SequenceGenerator(name = "bank_seq", sequenceName = "bank_seq", allocationSize = 1)
@@ -52,11 +50,36 @@ public class Bank {
     @Column(nullable = false)
     private int productState; // 상품 항목 상태
 
+    /*
     @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime; // 생성일
 
+
     @UpdateTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime; // 수정일
+    */
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endDate; // 종료일
+
+    public static Bank of(RequestBankTeacherCreateDto dto, Nation nation, int state){
+        return Bank.builder()
+                .nation(nation)
+                .productType(dto.getProductType())
+                .productName(dto.getProductName())
+                .productContent(dto.getProductContent())
+                .productPeriod(dto.getProductPeriod())
+                .interestRate(dto.getInterestRate())
+                .cancelInterestRate(dto.getCancelInterestRate())
+                .productState(state)
+                .build();
+    }
+
+    // 은행 상품 삭제
+    public void updateState(int productState, LocalDateTime endDate){
+        this.productState = productState;
+        this.endDate = endDate;
+    }
 }
