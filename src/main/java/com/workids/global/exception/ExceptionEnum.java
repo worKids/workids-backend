@@ -32,6 +32,8 @@ public enum ExceptionEnum {
     BANK_NOT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0002", "만기일이 나라 종료일 이후로 해당 은행 상품을 가입할 수 없습니다."),
     BANK_NOT_ENOUNGH_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0003", "주거래 통장의 잔액이 충분하지 않아, 해당 은행 상품에 예치할 수 없습니다."),
 
+    BANKNATIONSTUDENT_NOT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0003", "계좌번호가 이미 존재합니다.(난수 발생 실패)"),
+
     // ===== 법 =====
     LAW_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 법이 존재하지 않습니다."),
     LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "법 부여 내역이 존재하지 않습니다."),
