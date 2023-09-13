@@ -21,4 +21,7 @@ public class TokenDto {
      */
     private String accessToken;
 
+    private String userNum;
+
+    private String userName;
 }
