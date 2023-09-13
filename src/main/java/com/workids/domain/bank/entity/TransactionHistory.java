@@ -1,13 +1,11 @@
 package com.workids.domain.bank.entity;
 
-import com.workids.domain.bank.entity.BankNationStudent;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -40,9 +38,19 @@ public class TransactionHistory {
     private int type; // 거래내역 유형
 
     @Column(nullable = false)
-    private int amount; // 금액
+    private Long amount; // 금액
 
     @CreationTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime transactionDate; // 거래일
+
+    public static TransactionHistory of(BankNationStudent bankNationStudent, String content, String category, int type, Long amount){
+        return TransactionHistory.builder()
+                .bankNationStudent(bankNationStudent)
+                .content(content)
+                .category(category)
+                .type(type)
+                .amount(amount)
+                .build();
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 @Commit
@@ -41,9 +42,10 @@ public class NationTest {
                 .classRoom(1)
                 .payDay(1)
                 .state(NationStateType.IN_OPERATE)
+                .startDate(LocalDateTime.of(2023, 9, 1, 0, 0, 0))
+                .endDate(LocalDateTime.of(2023, 9, 22, 23, 59, 59))
                 .build();
         nationRepository.save(nation);
         Assertions.assertThat(nation.getName()).isEqualTo("일다수");
     }
 }
-
