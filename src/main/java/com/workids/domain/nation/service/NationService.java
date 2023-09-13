@@ -37,9 +37,8 @@ public class NationService {
 
         List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getTeacherNum());
 
-        if(list.size() == 0){
-            throw new IllegalArgumentException("등록된 나라가 없습니다.");
-        }
+        if(list.size() == 0)
+            throw new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION);
 
 
         List<ResponseNationListAllDto> dtoList = new ArrayList<>();

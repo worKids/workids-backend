@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface NationRepository extends JpaRepository<Nation, Long>{
 
+    Nation findByNationNum(Long nationNum);
+
     Nation findByName(String name);
 
     List<Nation> findByTeacher_TeacherNum(Long teacherNum);
