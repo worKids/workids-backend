@@ -35,7 +35,7 @@ public class Nation extends TimeEntity {
     @Column(nullable = false, length = 60)
     private String moneyName;
 
-
+    @Column(nullable = false)
     private int taxRate;
 
     @Column(nullable = false, length = 60)
@@ -45,18 +45,25 @@ public class Nation extends TimeEntity {
     private String code;
 
 
-    @Column(length = 60)
+    @Column(nullable = true, length = 60)
     private String school;
+
+    @Column(nullable = true)
     private int grade;
+    @Column(nullable = true)
     private int classRoom;
 
+    @Column(nullable = true)
     private int payDay;
 
     @Column(nullable = false)
     private int state;
 
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime startDate; // 나라 시작일
+
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime endDate; // 나라 종료일
 
