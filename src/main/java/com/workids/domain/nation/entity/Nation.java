@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -53,27 +54,27 @@ public class Nation extends TimeEntity {
     @Column(nullable = false)
     private int state;
 
-    private String startDate; // 나라 시작일
-    private String endDate; // 나라 종료일
+    private LocalDateTime startDate; // 나라 시작일
+    private LocalDateTime endDate; // 나라 종료일
 
 
 
 
-    public static Nation of(RequestNationJoinDto dto, Teacher teacher) {
+    public static Nation of(RequestNationJoinDto dto, Teacher teacher, LocalDateTime startDateTime, LocalDateTime endDateTime, String code) {
         return Nation.builder()
                 .teacher(teacher)
                 .name(dto.getName())
                 .moneyName(dto.getMoneyName())
                 .taxRate(dto.getTaxRate())
                 .presidentName(dto.getPresidentName())
-                .code(dto.getCode())
+                .code(code)
                 .school(dto.getSchool())
                 .grade(dto.getGrade())
                 .classRoom(dto.getClassRoom())
                 .payDay(dto.getPayDay())
                 .state(dto.getState())
-                .startDate(dto.getStartDate())
-                .endDate(dto.getEndDate())
+                .startDate(startDateTime)
+                .endDate(endDateTime)
                 .build();
     }
 

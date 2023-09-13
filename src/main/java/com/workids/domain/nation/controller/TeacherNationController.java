@@ -12,7 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/teacher")
@@ -28,13 +31,18 @@ public class TeacherNationController {
     @PostMapping("/nation/join")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> join(@RequestBody RequestNationJoinDto dto){
-        nationService.join(dto);
+        // 참여코드 발급
+        String code = nationService.randomCode();
+
+        // 나라 등록
+        nationService.join(dto, code);
 
         System.out.println("나라 등록 완료");
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success", code));
 
     }
+
 
     /**
      * 참여중인 나라 조회
