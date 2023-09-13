@@ -1,15 +1,13 @@
 package com.workids.domain.job.entity;
 
+import com.workids.domain.job.dto.request.RequestStudentJobDto;
 import com.workids.domain.nation.entity.NationStudent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 /**
  * 직업-나라-학생
@@ -38,10 +36,19 @@ public class JobNationStudent {
     @Column(nullable = false)
     private int state; // 재직 상태
 
-    @CreationTimestamp
+    /*@CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate; // 생성일
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endDate; // 종료일
+    private LocalDateTime endDate; // 종료일*/
+
+    @Builder
+    public static JobNationStudent toEntity(Job job, NationStudent nationStudent, RequestStudentJobDto studentJobDto){
+        return JobNationStudent.builder()
+                .job(job)
+                .nationStudent(nationStudent)
+                .state(studentJobDto.getState())
+                .build();
+    }
 }
