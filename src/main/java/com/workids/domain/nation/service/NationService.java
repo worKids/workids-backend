@@ -33,8 +33,6 @@ public class NationService {
     private final TeacherRepository teacherRepository;
     private final NationStudentRepository nationStudentRepository;
 
-    private final CitizenService citizenService;
-
     /**
      * 나라 생성
      */
@@ -57,20 +55,19 @@ public class NationService {
 
     /**
      * teacher과 연결된 나라 전체 조회
-     * @return : 나라 PK, 나라 이름, 국민 총 수
      */
     @Transactional
     public List<ResponseTeacherNationListDto> getTeacherList(RequestNationListDto dto){
 
         List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getNum());
 
-        // 나라의 전체 학생 수
-        int totalCitizen = citizenService.citizenCount(dto.getNum());
 
-        // entity -> responseDto로 변환
+        int totalTeacher = list.size();
+        System.out.println("teacher size" + totalTeacher);
+
         List<ResponseTeacherNationListDto> dtoList = new ArrayList<>();
         for(Nation nation : list){
-            dtoList.add(ResponseTeacherNationListDto.of(nation, totalCitizen));
+            dtoList.add(ResponseTeacherNationListDto.of(nation, totalTeacher));
         }
 
         return dtoList;
