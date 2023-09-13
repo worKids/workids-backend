@@ -1,9 +1,8 @@
 package com.workids.domain.law.entity;
 
-import com.workids.domain.law.dto.request.RequestLawDto;
 import com.workids.domain.law.dto.request.RequestLawNationStudentDto;
 import com.workids.domain.nation.entity.NationStudent;
-import com.workids.global.config.BaseTimeEntity;
+import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LawNationStudent extends BaseTimeEntity {
+public class LawNationStudent extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "law_nation_student_seq")
@@ -35,14 +34,6 @@ public class LawNationStudent extends BaseTimeEntity {
     private NationStudent nationStudent;
 
     private int penaltyCompleteState;
-
-    /*@CreationTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createDate;
-
-    @UpdateTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime penaltyEndDate;*/
 
    public static LawNationStudent toEntity(Law law, NationStudent nationStudent, RequestLawNationStudentDto dto) {
         return LawNationStudent.builder()
