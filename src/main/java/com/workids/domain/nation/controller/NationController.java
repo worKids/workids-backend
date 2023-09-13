@@ -4,6 +4,9 @@ import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
+import com.workids.global.exception.ApiException;
+import com.workids.global.exception.ExceptionEnum;
+import com.workids.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/nation")
 @RequiredArgsConstructor
@@ -20,7 +25,7 @@ public class NationController {
 
 
     private final NationService nationService;
-
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 나라 정보 조회
@@ -28,7 +33,11 @@ public class NationController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<ResponseNationInfoDto>> getInfo(@RequestBody RequestNationInfoDto dto){
+    public ResponseEntity<BaseResponseDto<ResponseNationInfoDto>> getInfo(HttpServletRequest request, @RequestBody RequestNationInfoDto dto){
+
+        if (!jwtTokenProvider.validateToken(request.getHeader("Authorization"))) {
+            throw new ApiException(ExceptionEnum.MEMBER_ACCESS_EXCEPTION);
+        };
         ResponseNationInfoDto infoDto = nationService.getInfo(dto);
 
         return ResponseEntity.status(HttpStatus.OK)

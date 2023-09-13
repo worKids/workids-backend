@@ -2,8 +2,11 @@ package com.workids.domain.user.service;
 
 import com.workids.domain.user.dto.request.LoginDto;
 import com.workids.domain.user.dto.request.TeacherJoinDto;
+import com.workids.domain.user.entity.Student;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
+import com.workids.global.exception.ApiException;
+import com.workids.global.exception.ExceptionEnum;
 import com.workids.global.security.JwtTokenProvider;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -67,11 +70,21 @@ public class TeacherService {
 
         System.out.println("로그인 성공");
         // 생성된 토큰 반환
-        return jwtTokenProvider.createToken(teacher.getId(), roles);
+        return jwtTokenProvider.createToken(Long.toString(teacher.getTeacherNum()), roles);
 
 
     }
 
+    /**
+     * 로그인 시 선생님 이름 가져오기
+     * @param teacherNum
+     * @return
+     */
+    public String getTeacherName(String teacherNum) {
+        Teacher teacher = teacherRepository.findById(Long.parseLong(teacherNum))
+                .orElseThrow(() -> new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION));
+        return teacher.getName();
+    }
     /** 비밀번호 일치 확인 **/
     public boolean checkPassword(String password, String dbPassword) {
         return encoder.matches(password, dbPassword);
