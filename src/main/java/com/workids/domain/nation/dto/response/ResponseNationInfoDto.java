@@ -1,5 +1,6 @@
 package com.workids.domain.nation.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.entity.Nation;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,10 @@ public class ResponseNationInfoDto {
     private int taxRate;
     private String code;
 
-    private String startDate; // 나라 시작일
-    private String endDate; // 나라 종료일
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime startDate; // 나라 시작일
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime endDate; // 나라 종료일
 
     public static ResponseNationInfoDto toDto(Nation nation){
         return ResponseNationInfoDto.builder()

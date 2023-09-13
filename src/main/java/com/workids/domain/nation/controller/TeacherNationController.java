@@ -6,26 +6,23 @@ import com.workids.domain.nation.dto.response.ResponseNationListAllDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
-import com.workids.global.exception.ApiException;
-import com.workids.global.exception.ExceptionEnum;
-import com.workids.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/teacher")
 @RequiredArgsConstructor
 public class TeacherNationController {
 
-    private final JwtTokenProvider jwtTokenProvider;
+
     private final NationService nationService;
 
     /**
@@ -34,13 +31,18 @@ public class TeacherNationController {
     @PostMapping("/nation/join")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> join(@RequestBody RequestNationJoinDto dto){
-        nationService.join(dto);
+        // 참여코드 발급
+        String code = nationService.randomCode();
+
+        // 나라 등록
+        nationService.join(dto, code);
 
         System.out.println("나라 등록 완료");
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success", code));
 
     }
+
 
     /**
      * 참여중인 나라 조회
@@ -49,12 +51,8 @@ public class TeacherNationController {
 
     @PostMapping("/nation/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<List<ResponseNationListAllDto>>> getListAll(HttpServletRequest request,
-                                                                                      @RequestBody RequestNationListAllDto dto){
-        if (!jwtTokenProvider.validateToken(request.getHeader("Authorization"))) {
-            throw new ApiException(ExceptionEnum.MEMBER_ACCESS_EXCEPTION);
-        };
-        List<ResponseNationListAllDto> nationList = nationService.getListAll(dto);
+    public ResponseEntity<BaseResponseDto<List<ResponseNationListAllDto>>> getListAll(@RequestBody RequestNationListAllDto dto){
+         List<ResponseNationListAllDto> nationList = nationService.getListAll(dto);
 
         //List<ResponseNationListAllDto> list;
         return ResponseEntity.status(HttpStatus.OK)

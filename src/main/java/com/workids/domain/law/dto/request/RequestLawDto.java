@@ -10,11 +10,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class RequestLawDto {
+    //나라 고유 번호
     private Long nationNum;
+    //법 내용
     private String content;
+    //벌금, 벌칙 type
     private int type;
+    //벌금 금액
     private int fine;
+    //벌칙 내용
     private String penalty;
-    private Long lawNum; //수정할때 필요
+    //법 항목 고유 번호
+    private Long lawNum;
 
 }
