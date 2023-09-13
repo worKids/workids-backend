@@ -61,8 +61,6 @@ public class NationService {
 
         List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getNum());
 
-        if(list.size() == 0)
-            throw new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION);
 
         int totalTeacher = list.size();
         System.out.println("teacher size" + totalTeacher);
@@ -82,9 +80,6 @@ public class NationService {
     public List<ResponseStudentNationListDto> getStudentNationList(RequestNationListDto dto){
 
         List<NationStudent> list = nationStudentRepository.findByStudent_StudentNum(dto.getNum());
-
-        if(list.size() == 0)
-            throw new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION);
 
         int totalStudent = list.size();
         System.out.println("size: " + totalStudent);
