@@ -1,16 +1,14 @@
 package com.workids.domain.job.entity;
 
+import com.workids.domain.job.dto.request.RequestJobDto;
 import com.workids.domain.nation.entity.Nation;
+import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 /**
  * 직업
@@ -20,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Job {
+public class Job extends TimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_seq")
     @SequenceGenerator(name = "job_seq", sequenceName = "job_seq", allocationSize = 1)
@@ -40,11 +38,22 @@ public class Job {
     @Column(nullable = false)
     private int state; // 직업 항목 상태
 
-    @CreationTimestamp
+    /*@CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate; // 생성일
 
     @UpdateTimestamp
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateDate; // 수정일
+    private LocalDateTime updateDate; // 수정일*/
+    @Builder
+    public static Job toEntity(Nation nation, RequestJobDto jobDto){
+        return Job.builder()
+                .nation(nation)
+                .name(jobDto.getName())
+                .salary(jobDto.getSalary())
+                .state(jobDto.getState())
+                .build();
+    }
+
+
 }

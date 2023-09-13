@@ -59,6 +59,19 @@ public class BankTest {
                 .productType(BankStateType.DEPOSIT_ACCOUNT)
                 .productName("예금 통장2")
                 .productContent("예금 통장2입니다.")
+                .productPeriod(4)
+                .interestRate(4)
+                .cancelInterestRate(2)
+                .productState(BankStateType.IN_USE)
+                .build();
+
+        bankRepository.save(bank);
+
+        bank = Bank.builder()
+                .nation(nation)
+                .productType(BankStateType.DEPOSIT_ACCOUNT)
+                .productName("예금 통장3")
+                .productContent("예금 통장3입니다.")
                 .productPeriod(1)
                 .interestRate(2)
                 .cancelInterestRate(1)
