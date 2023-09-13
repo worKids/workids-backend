@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.job.dto.request.RequestJobDto;
 import com.workids.domain.job.dto.request.RequestStudentJobDto;
 import com.workids.domain.job.dto.response.ResponseJobDto;
+import com.workids.domain.job.dto.response.ResponseMyJobDto;
 import com.workids.domain.job.dto.response.ResponseStudentJobDto;
 import com.workids.domain.job.entity.QJob;
 import com.workids.domain.job.entity.QJobNationStudent;
@@ -51,16 +52,18 @@ public class StudentJobService {
     /**
      * 내직업조회
      */
-    public List<ResponseStudentJobDto> selectMyJob(RequestStudentJobDto studentJobDto) {
+    public List<ResponseMyJobDto> selectMyJob(RequestStudentJobDto studentJobDto) {
         QNationStudent nationStudent = QNationStudent.nationStudent;
         QJobNationStudent jobNationStudent = QJobNationStudent.jobNationStudent;
         QJob job = QJob.job;
 
-        List<ResponseStudentJobDto> myJobList = queryFactory.select(
+        List<ResponseMyJobDto> myJobList = queryFactory.select(
                         Projections.constructor(
-                                ResponseStudentJobDto.class,
+                                ResponseMyJobDto.class,
                                 job.name,
-                                job.salary
+                                job.salary,
+                                job.createdDate,
+                                job.updatedDate
                         )
                 )
 
