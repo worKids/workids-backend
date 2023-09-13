@@ -11,6 +11,7 @@ public class RequestStudentJobDto {
     Long nationStudentNum;
     Long jobNum;
     Long nationNum;
+    int citizenNumber;
     int state;
 
 }
