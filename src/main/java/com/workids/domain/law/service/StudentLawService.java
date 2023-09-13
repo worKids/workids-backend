@@ -37,9 +37,12 @@ public class StudentLawService {
                                 nationStudent.citizenNumber,
                                 nationStudent.studentName,
                                 law.content,
+                                law.type,
                                 law.fine,
                                 law.penalty,
-                                lawNationStudent.penaltyCompleteState
+                                lawNationStudent.penaltyCompleteState,
+                                lawNationStudent.createdDate,
+                                lawNationStudent.updatedDate
                         )
                 )
                 .from(lawNationStudent)
@@ -66,9 +69,12 @@ public class StudentLawService {
                                 nationStudent.citizenNumber,
                                 nationStudent.studentName,
                                 law.content,
+                                law.type,
                                 law.fine,
                                 law.penalty,
-                                lawNationStudent.penaltyCompleteState
+                                lawNationStudent.penaltyCompleteState,
+                                lawNationStudent.createdDate,
+                                lawNationStudent.updatedDate
                         )
                 )
                 .from(lawNationStudent)
