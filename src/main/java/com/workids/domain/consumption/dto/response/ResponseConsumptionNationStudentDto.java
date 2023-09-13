@@ -38,6 +38,7 @@ public class ResponseConsumptionNationStudentDto {
                 .amount(entity.getConsumption().getAmount())
                 .state(entity.getState())
                 .createdDate(entity.getCreatedDate())
+                .updatedDate(entity.getUpdatedDate())
                 .build();
     }
 }
