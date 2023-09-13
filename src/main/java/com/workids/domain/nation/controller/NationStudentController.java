@@ -1,9 +1,8 @@
 package com.workids.domain.nation.controller;
 
-import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
-import com.workids.domain.nation.service.CitizenService;
-import com.workids.domain.nation.service.NationService;
+import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
+import com.workids.domain.nation.service.NationStudentService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,31 +13,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 @Controller
-@RequestMapping("/teacher")
+@RequestMapping("/student")
 @RequiredArgsConstructor
-public class CitizenController {
-    private final CitizenService citizenService;
+public class NationStudentController {
+
+    private final NationStudentService nationStudentService;
 
     /**
-     * 국민 목록 등록
-     * POST: /teacher/citizen
+     * 학생 -> 나라 참여 시 생성
      */
-    @PostMapping("/citizen")
+    @PostMapping("/nation/join")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody List<RequestCitizenJoinDto> dtoList){
-        citizenService.join(dtoList);
+    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody RequestNationStudentJoinDto dto){
 
-        System.out.println("국민목록 등록 완료");
+        nationStudentService.join(dto);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
 
     }
-
-    /**
-     * 국민 목록 수정
-     * PATCH: /teacher/citizen
-     */
 }
