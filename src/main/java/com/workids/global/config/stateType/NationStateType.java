@@ -11,5 +11,5 @@ public class NationStateType {
 
     // 학생 나라 참여 상태
     public static final int IN_NATION = 0; // 참여중(가입 완료)
-    public static final int LEAVE_NATION = 1; // 미참여중(추방 or 탈퇴)
+    public static final int LEAVE_NATION = 1; // 미참여중(가입 전 or 추방 or 탈퇴)
 }
