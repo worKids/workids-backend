@@ -24,6 +24,7 @@ public enum ExceptionEnum {
 
     // 은행
     BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."),
+    BANK_NOT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0002", "만기일이 나라 종료일 이후로 해당 은행 상품을 가입할 수 없습니다."),
 
     //법
     LAW_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 법이 존재하지 않습니다."),
