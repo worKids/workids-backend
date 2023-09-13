@@ -1,12 +1,8 @@
 package com.workids.domain.nation.entity;
 
-import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
-import com.workids.domain.nation.dto.response.ResponseNationStudentJoinDto;
 import com.workids.domain.user.entity.Student;
-import com.workids.domain.user.entity.Teacher;
 import com.workids.global.config.BaseTimeEntity;
-import com.workids.global.config.stateType.NationStateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

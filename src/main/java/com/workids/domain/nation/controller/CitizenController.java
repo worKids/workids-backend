@@ -1,9 +1,7 @@
 package com.workids.domain.nation.controller;
 
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.service.CitizenService;
-import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

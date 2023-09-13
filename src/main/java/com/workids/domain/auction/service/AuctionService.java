@@ -21,7 +21,7 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
     @Transactional
     public void createAuction(RequestAuctionDto dto) {
-        Nation nation = nationRepository.findById(dto.getNationNum())
+        Nation nation = nationRepository.findByNationNum(dto.getNationNum())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
         if (!nation.getTeacher().getTeacherNum().equals(dto.getTeacherNum()))
             throw new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION);

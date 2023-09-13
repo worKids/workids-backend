@@ -1,9 +1,8 @@
 package com.workids.domain.nation.controller;
 
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationListAllDto;
-import com.workids.domain.nation.dto.response.ResponseNationListAllDto;
-import com.workids.domain.nation.entity.Nation;
+import com.workids.domain.nation.dto.request.RequestNationListDto;
+import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/teacher")
@@ -45,16 +41,15 @@ public class TeacherNationController {
 
 
     /**
-     * 참여중인 나라 조회
+     * 선생님이 개설한 나라 조회
      * POST: /teacher/nation/list
      */
 
     @PostMapping("/nation/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<List<ResponseNationListAllDto>>> getListAll(@RequestBody RequestNationListAllDto dto){
-         List<ResponseNationListAllDto> nationList = nationService.getListAll(dto);
+    public ResponseEntity<BaseResponseDto<List<ResponseTeacherNationListDto>>> getListAll(@RequestBody RequestNationListDto dto){
+         List<ResponseTeacherNationListDto> nationList = nationService.getTeacherList(dto);
 
-        //List<ResponseNationListAllDto> list;
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", nationList));
 

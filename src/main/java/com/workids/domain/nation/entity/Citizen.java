@@ -2,8 +2,6 @@ package com.workids.domain.nation.entity;
 
 
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationJoinDto;
-import com.workids.domain.user.entity.Teacher;
 import com.workids.global.config.BaseTimeEntity;
 import com.workids.global.config.stateType.NationStateType;
 import lombok.AllArgsConstructor;

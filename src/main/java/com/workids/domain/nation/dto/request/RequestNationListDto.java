@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequestNationListAllDto {
-    private Long teacherNum;
+public class RequestNationListDto {
+    /**
+     * teacher, student 공통 사용
+     * num : teacherNum or studentNum
+     */
+    private Long num;
 
 }

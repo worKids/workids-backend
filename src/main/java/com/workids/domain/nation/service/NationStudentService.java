@@ -1,6 +1,5 @@
 package com.workids.domain.nation.service;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
 import com.workids.domain.nation.entity.*;
 import com.workids.domain.nation.repository.CitizenRepository;
@@ -26,8 +25,6 @@ public class NationStudentService {
     private final StudentRepository studentRepository;
     private final NationRepository nationRepository;
 
-    private final JPAQueryFactory queryFactory;
-
     /**
      * 나라-학생 관계 등록
      * : 가입 여부 확인 후 생성
@@ -48,7 +45,8 @@ public class NationStudentService {
         }
 
         Student student = studentRepository.findByStudentNum(dto.getStudentNum());
-        Nation nation = nationRepository.findByNationNum(dto.getNationNum());
+        Nation nation = nationRepository.findByNationNum(dto.getNationNum())
+                .orElseThrow(() -> new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
 
         int citizenNumber = 0;
         for (Citizen citizen : citizens) {
