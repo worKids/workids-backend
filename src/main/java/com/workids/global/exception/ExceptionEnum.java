@@ -18,7 +18,7 @@ public enum ExceptionEnum {
     STUDENT_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "S0001", "학생과 일치하지 않습니다."),
 
     // 나라
-    NATIONSTUDENT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N002", "나라에 가입할 수 없습니다.");
+    NATIONSTUDENT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N002", "나라에 가입할 수 없습니다."),
 
 
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),

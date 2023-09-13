@@ -1,5 +1,6 @@
 package com.workids.domain.nation.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.global.config.TimeEntity;
@@ -54,7 +55,9 @@ public class Nation extends TimeEntity {
     @Column(nullable = false)
     private int state;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime startDate; // 나라 시작일
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime endDate; // 나라 종료일
 
 

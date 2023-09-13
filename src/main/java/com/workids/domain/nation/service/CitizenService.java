@@ -1,12 +1,10 @@
 package com.workids.domain.nation.service;
 
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.entity.Citizen;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationRepository;
-import com.workids.domain.user.entity.Teacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

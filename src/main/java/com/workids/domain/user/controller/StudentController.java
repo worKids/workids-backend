@@ -2,7 +2,6 @@ package com.workids.domain.user.controller;
 
 import com.workids.domain.user.dto.request.StudentJoinDto;
 import com.workids.domain.user.dto.request.LoginDto;
-import com.workids.domain.user.entity.Student;
 import com.workids.domain.user.service.StudentService;
 import com.workids.global.comm.BaseResponseDto;
 import com.workids.global.comm.TokenDto;

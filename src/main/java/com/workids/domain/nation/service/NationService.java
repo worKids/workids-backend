@@ -2,15 +2,17 @@ package com.workids.domain.nation.service;
 
 import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationListAllDto;
+import com.workids.domain.nation.dto.request.RequestNationListDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
-import com.workids.domain.nation.dto.response.ResponseNationListAllDto;
+import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
+import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Nation;
+import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.repository.NationRepository;
+import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
 import com.workids.global.exception.ApiException;
-import com.workids.global.exception.ApiExceptionEntity;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.workids.global.exception.ExceptionEnum.NATION_NOT_EXIST_EXCEPTION;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -31,6 +31,7 @@ public class NationService {
 
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
+    private final NationStudentRepository nationStudentRepository;
 
     /**
      * 나라 생성
@@ -56,17 +57,42 @@ public class NationService {
      * teacher과 연결된 나라 전체 조회
      */
     @Transactional
-    public List<ResponseNationListAllDto> getListAll(RequestNationListAllDto dto){
+    public List<ResponseTeacherNationListDto> getTeacherList(RequestNationListDto dto){
 
-        List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getTeacherNum());
+        List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getNum());
 
         if(list.size() == 0)
             throw new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION);
 
+        int totalTeacher = list.size();
+        System.out.println("teacher size" + totalTeacher);
 
-        List<ResponseNationListAllDto> dtoList = new ArrayList<>();
+        List<ResponseTeacherNationListDto> dtoList = new ArrayList<>();
         for(Nation nation : list){
-            dtoList.add(ResponseNationListAllDto.of(nation));
+            dtoList.add(ResponseTeacherNationListDto.of(nation, totalTeacher));
+        }
+
+        return dtoList;
+    }
+
+    /**
+     * student와 연결된 나라 전체 조회
+     */
+    @Transactional
+    public List<ResponseStudentNationListDto> getStudentNationList(RequestNationListDto dto){
+
+        List<NationStudent> list = nationStudentRepository.findByStudent_StudentNum(dto.getNum());
+
+        if(list.size() == 0)
+            throw new ApiException(ExceptionEnum.TEACHER_NOT_MATCH_EXCEPTION);
+
+        int totalStudent = list.size();
+        System.out.println("size: " + totalStudent);
+
+
+        List<ResponseStudentNationListDto> dtoList = new ArrayList<>();
+        for(NationStudent nationstudent : list){
+            dtoList.add(ResponseStudentNationListDto.of(nationstudent, totalStudent));
         }
 
         return dtoList;
@@ -121,7 +147,6 @@ public class NationService {
 
         String startDate = start+ " 00:00:00.000";
         String endDate = end + " 11:59:59.999";
-
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
