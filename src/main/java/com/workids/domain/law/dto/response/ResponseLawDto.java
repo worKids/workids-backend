@@ -12,20 +12,27 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class ResponseLawDto {
-
+    //법 항목 고유 번호
     private Long lawNum;
+    //법 내용
     private String content;
+    //벌금, 벌칙 type
     private int type;
+    //벌금 금액
     private int fine;
+    //벌칙 내용
     private String penalty;
+    //법 항목 생성일
+    private LocalDateTime createdDate;
 
     public ResponseLawDto toDto(Law entity){
         return ResponseLawDto.builder()
-                .lawNum(lawNum)
-                .content(content)
-                .type(type)
-                .fine(fine)
-                .penalty(penalty)
+                .lawNum(entity.getLawNum())
+                .content(entity.getContent())
+                .type(entity.getType())
+                .fine(entity.getFine())
+                .penalty(entity.getPenalty())
+                .createdDate(entity.getCreatedDate())
                 .build();
     }
 

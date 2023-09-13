@@ -22,8 +22,9 @@ public class StudentLawController {
     /**
      * 학생에게 부여된 벌금 내역 조회
      * */
-    @PostMapping("student/law/fine/list")
-    public ResponseEntity<BaseResponseDto<?>> getStudentFineLaws(@RequestBody RequestLawNationStudentDto dto){
+    @PostMapping("/student/law/fine/list")
+    public ResponseEntity<BaseResponseDto<List<ResponseLawNationStudentDto>>> getStudentFineLaws(@RequestBody RequestLawNationStudentDto dto){
+        //dto => nationStudentNum 필요
 
         List<ResponseLawNationStudentDto> list = lawService.getStudentFineLaws(dto);
 
@@ -32,14 +33,15 @@ public class StudentLawController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success",list));
     }
 
     /**
      * 학생에게 부여된 벌칙 내역 조회
      * */
-    @PostMapping("student/law/penalty/list")
-    public ResponseEntity<BaseResponseDto<?>> getStudentPenaltyLaws(@RequestBody RequestLawNationStudentDto dto){
+    @PostMapping("/student/law/penalty/list")
+    public ResponseEntity<BaseResponseDto<List<ResponseLawNationStudentDto>>> getStudentPenaltyLaws(@RequestBody RequestLawNationStudentDto dto){
+        //dto => nationStudentNum 필요
 
         List<ResponseLawNationStudentDto> list = lawService.getStudentPenaltyLaws(dto);
 
@@ -48,6 +50,6 @@ public class StudentLawController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success",list));
     }
 }

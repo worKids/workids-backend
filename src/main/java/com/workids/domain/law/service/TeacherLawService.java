@@ -18,6 +18,8 @@ import com.workids.domain.nation.entity.QNationStudent;
 import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.global.config.stateType.LawStateType;
+import com.workids.global.exception.ApiException;
+import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +49,10 @@ public class TeacherLawService {
     /**
      * 법 내역 조회
      * */
-    @Transactional
     public List<ResponseLawDto> getAllLaws(RequestLawDto dto){
+        //Exception 처리
+        Nation nation = nationRepository.findById(dto.getNationNum())
+                .orElseThrow(()->new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
 
         QLaw law = QLaw.law;
 
@@ -59,7 +63,8 @@ public class TeacherLawService {
                                 law.content,
                                 law.type,
                                 law.fine,
-                                law.penalty
+                                law.penalty,
+                                law.createdDate
                         )
                 )
                 .from(law)
@@ -72,9 +77,10 @@ public class TeacherLawService {
     /**
      * 법 등록
      * */
-    @Transactional
     public void createLaw(RequestLawDto dto){
-        Nation nation = nationRepository.findById(dto.getNationNum()).orElse(null);
+        //Exception 처리
+        Nation nation = nationRepository.findById(dto.getNationNum())
+                .orElseThrow(()->new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
 
         Law law = Law.toEntity(nation, dto);
         lawRepository.save(law);
@@ -83,22 +89,41 @@ public class TeacherLawService {
     /**
      * 법 수정(벌금 가격만 가능)
      * */
-    @Transactional
     public long updateLaw(RequestLawDto dto) {
+        //Exception 처리
+        Nation nation = nationRepository.findById(dto.getNationNum())
+                .orElseThrow(()->new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
+        //Exception 처리
+        Law entity = lawRepository.findById(dto.getLawNum()).orElse(null);
+        if(entity == null){
+            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+        }
+
+        //수정 내역으로 법 항목 추가
+        Law updateLaw = Law.toEntity(nation,dto);
+        lawRepository.save(updateLaw);
+        
+        //법 기존 내역 상태 수정하기
         QLaw law = QLaw.law;
         long reuslt = queryFactory
                 .update(law)
-                .set(law.fine, dto.getFine())
+                .set(law.state, LawStateType.UN_USE)
                 .where(law.lawNum.eq(dto.getLawNum()))
                 .execute();
+
         return reuslt;
     }
 
     /**
      * 법 삭제
      * */
-    @Transactional
     public long updateLawState(RequestLawDto dto){
+        //Exception 처리
+        Law entity = lawRepository.findById(dto.getLawNum()).orElse(null);
+        if(entity == null){
+            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+        }
+
         QLaw law = QLaw.law;
 
         long result = queryFactory
@@ -112,7 +137,6 @@ public class TeacherLawService {
     /**
      * 벌금부여 리스트
      */
-    @Transactional
     public List<ResponseLawNationStudentDto> getFineLaws(RequestLawNationStudentDto dto){
         QLawNationStudent lawNationStudent = QLawNationStudent.lawNationStudent;
         QNationStudent nationStudent = QNationStudent.nationStudent;
@@ -126,9 +150,12 @@ public class TeacherLawService {
                                 nationStudent.citizenNumber,
                                 nationStudent.studentName,
                                 law.content,
+                                law.type,
                                 law.fine,
                                 law.penalty,
-                                lawNationStudent.penaltyCompleteState
+                                lawNationStudent.penaltyCompleteState,
+                                lawNationStudent.createdDate,
+                                lawNationStudent.updatedDate
                         )
                 )
                 .from(lawNationStudent)
@@ -144,11 +171,17 @@ public class TeacherLawService {
     /**
      * 벌금 부여
      * */
-    @Transactional
     public void createFineStudent(RequestLawNationStudentDto dto){
-
+        //Exception 처리
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(dto.getCitizenNumber());
+        if(nationStudent == null){
+            throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
+        }
+        //Exception 처리
         Law law = lawRepository.findById(dto.getLawNum()).orElse(null);
+        if(law == null){
+            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+        }
 
         LawNationStudent lawNationStudent = LawNationStudent.toEntity(law, nationStudent,dto);
         lawNationStudentRepository.save(lawNationStudent);
@@ -160,8 +193,12 @@ public class TeacherLawService {
     /**
      * 벌금 부여 취소
      * */
-    @Transactional
     public void deleteFineStudent(RequestLawNationStudentDto dto){
+        //Exception 처리
+        LawNationStudent entity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
+        if(entity == null){
+            throw new ApiException(ExceptionEnum.LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION);
+        }
 
         //벌금 다시 되돌리는 작동 추가적으로 구현
 
@@ -171,7 +208,6 @@ public class TeacherLawService {
     /**
      * 벌칙 부여 리스트
      */
-    @Transactional
     public List<ResponseLawNationStudentDto> getPenaltyLaws(RequestLawNationStudentDto dto){
 
         QLawNationStudent lawNationStudent = QLawNationStudent.lawNationStudent;
@@ -186,9 +222,12 @@ public class TeacherLawService {
                                 nationStudent.citizenNumber,
                                 nationStudent.studentName,
                                 law.content,
+                                law.type,
                                 law.fine,
                                 law.penalty,
-                                lawNationStudent.penaltyCompleteState
+                                lawNationStudent.penaltyCompleteState,
+                                lawNationStudent.createdDate,
+                                lawNationStudent.updatedDate
                         )
                 )
                 .from(lawNationStudent)
@@ -204,10 +243,17 @@ public class TeacherLawService {
     /**
      * 벌칙 부여
      * */
-    @Transactional
     public void createPenaltyStudent(RequestLawNationStudentDto dto){
+        //Exception 처리
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(dto.getCitizenNumber());
+        if(nationStudent == null){
+            throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
+        }
+        //Exception 처리
         Law law = lawRepository.findById(dto.getLawNum()).orElse(null);
+        if(law == null){
+            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+        }
 
         LawNationStudent lawNationStudent = LawNationStudent.toEntity(law, nationStudent,dto);
         lawNationStudentRepository.save(lawNationStudent);
@@ -217,6 +263,12 @@ public class TeacherLawService {
      * 벌칙 부여 취소
      * */
     public void deletePenaltyStudent(RequestLawNationStudentDto dto){
+        //Exception 처리
+        LawNationStudent entity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
+        if(entity == null){
+            throw new ApiException(ExceptionEnum.LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION);
+        }
+
         lawNationStudentRepository.deleteById(dto.getLawNationStudentNum());
     };
 
@@ -224,6 +276,12 @@ public class TeacherLawService {
      * 벌칙 수행 확인여부
      * */
     public long updatePenaltyCompleteState(RequestLawNationStudentDto dto){
+        //Exception 처리
+        LawNationStudent entity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
+        if(entity == null){
+            throw new ApiException(ExceptionEnum.LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION);
+        }
+
         QLawNationStudent lawNationStudent = QLawNationStudent.lawNationStudent;
 
         long result = queryFactory
