@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Controller
@@ -29,6 +30,7 @@ public class TeacherConsumptionController {
     @PostMapping("consumption/list")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<List<ResponseConsumptionDto>>> getAllConsumptions(@RequestBody RequestConsumptionDto dto){
+        //dto -> nationNum 필요
         List<ResponseConsumptionDto> list = consumptionService.getAllConsumptions(dto);
 
         for (ResponseConsumptionDto consumptionDtoDto : list) {
@@ -44,7 +46,7 @@ public class TeacherConsumptionController {
      * */
     @PostMapping("teacher/consumption")
     public ResponseEntity<BaseResponseDto<?>> createConsumption(@RequestBody RequestConsumptionDto dto){
-
+        //nationNum, content, amount
         System.out.println("삽입할 소비 항목 "+ dto);
         consumptionService.createConsumption(dto);
 
@@ -57,7 +59,7 @@ public class TeacherConsumptionController {
      * */
     @PatchMapping("teacher/consumption")
     public ResponseEntity<BaseResponseDto<?>> updateConsumption(@RequestBody RequestConsumptionDto dto){
-
+        //dto =>nationNum, consumptionNum, content, amount 필요
         long result = consumptionService.updateConsumption(dto);
 
         if(result!=0){
@@ -75,6 +77,7 @@ public class TeacherConsumptionController {
      * */
     @PatchMapping("teacher/consumption/hide")
     public ResponseEntity<BaseResponseDto<?>> updateConsumptionState(@RequestBody RequestConsumptionDto dto){
+        //dto =>consumptionNum 필요
         long result = consumptionService.updateConsumptionState(dto);
         if(result!=0){
             System.out.println("삭제 완료");
@@ -91,6 +94,7 @@ public class TeacherConsumptionController {
     @PostMapping("teacher/consumption/citizen/outstanding/list")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<List<ResponseConsumptionNationStudentDto>>> getOutStandingConsumptions(@RequestBody RequestConsumptionNationStudentDto dto){
+        //dto =>nationNum 필요
         List<ResponseConsumptionNationStudentDto> list = consumptionService.getOutStandingConsumptions(dto);
 
         for(ResponseConsumptionNationStudentDto consumptionNationStudentDto : list) {
@@ -107,6 +111,7 @@ public class TeacherConsumptionController {
     @PostMapping("teacher/consumption/citizen/approval/list")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<List<ResponseConsumptionNationStudentDto>>> getApprovalConsumptions(@RequestBody RequestConsumptionNationStudentDto dto){
+        //dto =>nationNum 필요
         List<ResponseConsumptionNationStudentDto> list = consumptionService.getApprovalConsumptions(dto);
 
         for(ResponseConsumptionNationStudentDto consumptionNationStudentDto : list) {
@@ -122,6 +127,7 @@ public class TeacherConsumptionController {
      * */
     @PostMapping("teacher/consumption/citizen/outstanding/process")
     public ResponseEntity<BaseResponseDto<?>> updateConsumptionNationStudentStateByTeacher(@RequestBody RequestConsumptionNationStudentDto dto){
+        //dto =>consumptionNationStudentNum, state 필요
         long result = consumptionService.updateConsumptionNationStudentStateByTeacher(dto);
         if(result!=0){
             System.out.println("처리 완료");

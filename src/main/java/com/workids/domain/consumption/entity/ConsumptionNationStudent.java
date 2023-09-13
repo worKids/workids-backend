@@ -1,7 +1,7 @@
 package com.workids.domain.consumption.entity;
 
 import com.workids.domain.nation.entity.NationStudent;
-import com.workids.global.config.BaseTimeEntity;
+import com.workids.global.config.TimeEntity;
 import com.workids.global.config.stateType.ConsumptionStateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConsumptionNationStudent extends BaseTimeEntity {
+public class ConsumptionNationStudent extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "consumption_nation_student_seq")

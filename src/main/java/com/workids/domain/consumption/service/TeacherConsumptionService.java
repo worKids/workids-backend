@@ -66,7 +66,6 @@ public class TeacherConsumptionService {
     /**
      * 소비 항목 추가
      * */
-    @Transactional
     public void createConsumption(RequestConsumptionDto dto){
         Nation nation = nationRepository.findById(dto.getNationNum())
                 .orElseThrow(()->new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
@@ -78,27 +77,37 @@ public class TeacherConsumptionService {
     /**
      * 소비 항목 수정
      * */
-    @Transactional
     public long updateConsumption(RequestConsumptionDto dto){
+        //Exception 처리
+        Nation nation = nationRepository.findById(dto.getNationNum())
+                .orElseThrow(()->new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
+
+        //Exception 처리
         Consumption entity = consumptionRepository.findById(dto.getConsumptionNum()).orElse(null);
         if(entity == null){
             throw new ApiException(ExceptionEnum.CONSUMPTION_NOT_EXIST_EXCEPTION);
         }
 
+        //수정 내역으로 소비 항목 추가
+        Consumption updateConsumption = Consumption.toEntity(nation, dto);//content, amount 보내기
+        consumptionRepository.save(updateConsumption);
+
+        //소비 기존 내역 상태 수정하기
         QConsumption consumption = QConsumption.consumption;
         long result = queryFactory
                 .update(consumption)
-                .set(consumption.amount, dto.getAmount())
+                .set(consumption.state, ConsumptionStateType.UN_USE)
                 .where(consumption.consumptionNum.eq(dto.getConsumptionNum()))
                 .execute();
+
         return result;
     }
 
     /**
      * 소비 항목 삭제
      * */
-    @Transactional
     public long updateConsumptionState(RequestConsumptionDto dto){
+        //Exception 처리
         Consumption entity = consumptionRepository.findById(dto.getConsumptionNum()).orElse(null);
         if(entity == null){
             throw new ApiException(ExceptionEnum.CONSUMPTION_NOT_EXIST_EXCEPTION);
@@ -117,7 +126,6 @@ public class TeacherConsumptionService {
     /**
      * 소비 신청 항목(미결재)조회
      * */
-    @Transactional
     public List<ResponseConsumptionNationStudentDto> getOutStandingConsumptions(RequestConsumptionNationStudentDto dto){
         QNationStudent nationStudent = QNationStudent.nationStudent;
         QConsumption consumption = QConsumption.consumption;
@@ -132,7 +140,8 @@ public class TeacherConsumptionService {
                                 consumption.content,
                                 consumption.amount,
                                 consumptionNationStudent.state,
-                                consumptionNationStudent.createdDate
+                                consumptionNationStudent.createdDate,
+                                consumptionNationStudent.updatedDate
                         )
                 )
                 .from(consumptionNationStudent)
@@ -141,13 +150,13 @@ public class TeacherConsumptionService {
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(consumptionNationStudent.state.eq(ConsumptionStateType.BEFORE_CHECK)))
                 .orderBy(consumptionNationStudent.createdDate.desc())
                 .fetch();
+        System.out.println(list.size());
         return list;
     }
 
     /**
      * 소비 신청 항목(결재)조회
      * */
-    @Transactional
     public List<ResponseConsumptionNationStudentDto> getApprovalConsumptions(RequestConsumptionNationStudentDto dto){
         QNationStudent nationStudent = QNationStudent.nationStudent;
         QConsumption consumption = QConsumption.consumption;
@@ -162,7 +171,8 @@ public class TeacherConsumptionService {
                                 consumption.content,
                                 consumption.amount,
                                 consumptionNationStudent.state,
-                                consumptionNationStudent.createdDate
+                                consumptionNationStudent.createdDate,
+                                consumptionNationStudent.updatedDate
                         )
                 )
                 .from(consumptionNationStudent)
@@ -177,8 +187,8 @@ public class TeacherConsumptionService {
     /**
      * 소비 신청 미결재 처리
      * */
-    @Transactional
     public long updateConsumptionNationStudentStateByTeacher(RequestConsumptionNationStudentDto dto){
+        //Exception 처리
         ConsumptionNationStudent entity = consumptionNationStudentRepository.findById(dto.getConsumptionNationStudentNum()).orElse(null);
         if(entity == null){
             throw new ApiException(ExceptionEnum.CONSUMPTION_NATION_STUDENT_NOT_EXIST_EXCEPTION);
@@ -191,7 +201,7 @@ public class TeacherConsumptionService {
                 .where(consumptionNationStudent.consumptionNationStudentNum.eq(dto.getConsumptionNationStudentNum()))
                 .execute();
         
-        if(dto.getState() == ConsumptionStateType.APPROVAL){
+        if(dto.getState() == ConsumptionStateType.APPROVAL){//승인이면 학생 돈 빼기
             //학생 계좌에서 돈 빼가는 로직 하기
         }
         

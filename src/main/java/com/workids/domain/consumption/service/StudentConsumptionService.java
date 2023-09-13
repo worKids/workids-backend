@@ -43,11 +43,11 @@ public class StudentConsumptionService {
      * 소비 신청
      * */
     public void createStudentConsumption(@RequestBody RequestConsumptionNationStudentDto dto){
-
+        //Exception 처리
         Consumption consumption = consumptionRepository.findById(dto.getConsumptionNum())
                 .orElseThrow(()->new ApiException(ExceptionEnum.CONSUMPTION_NOT_EXIST_EXCEPTION));
-
-        NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(dto.getCitizenNumber());
+        //Exception 처리
+        NationStudent nationStudent = nationStudentRepository.findById(dto.getNationStudentNum()).orElse(null);
         if(nationStudent == null){
             throw new ApiException(ExceptionEnum.CONSUMPTION_NOT_EXIST_EXCEPTION);
         }
@@ -60,6 +60,7 @@ public class StudentConsumptionService {
      * 내 소비 신청 내역 조회(대기, 취소, 승인 거절)
      * */
     public List<ResponseConsumptionNationStudentDto> getStudentConsumptions(RequestConsumptionNationStudentDto dto){
+        //Exception 처리
         NationStudent entity = nationStudentRepository.findById(dto.getNationStudentNum()).orElse(null);
         if(entity == null){
             throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
@@ -78,7 +79,8 @@ public class StudentConsumptionService {
                                 consumption.content,
                                 consumption.amount,
                                 consumptionNationStudent.state,
-                                consumptionNationStudent.createdDate
+                                consumptionNationStudent.createdDate,
+                                consumptionNationStudent.updatedDate
                         )
                 )
                 .from(consumptionNationStudent)
@@ -110,12 +112,12 @@ public class StudentConsumptionService {
      * 소비 승인 완료 내역 조회(승인)
      * */
     public List<ResponseConsumptionNationStudentDto> getCompleteStudentConsumptions(RequestConsumptionNationStudentDto dto){
-
+        //Exception 처리
         NationStudent entity = nationStudentRepository.findById(dto.getNationStudentNum()).orElse(null);
-
         if(entity == null){
             throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
         }
+
         QNationStudent nationStudent = QNationStudent.nationStudent;
         QConsumption consumption = QConsumption.consumption;
         QConsumptionNationStudent consumptionNationStudent = QConsumptionNationStudent.consumptionNationStudent;
@@ -129,7 +131,8 @@ public class StudentConsumptionService {
                                 consumption.content,
                                 consumption.amount,
                                 consumptionNationStudent.state,
-                                consumptionNationStudent.createdDate
+                                consumptionNationStudent.createdDate,
+                                consumptionNationStudent.updatedDate
                         )
                 )
                 .from(consumptionNationStudent)

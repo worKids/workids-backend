@@ -11,9 +11,13 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class ResponseConsumptionDto {
+    //소비 항목 고유 번호
     private long consumptionNum;
+    //소비 항목 내용
     private String content;
+    //소비 항목 금액
     private int amount;
+    //소비 항목 생성일
     private LocalDateTime createdDate;
 
     public ResponseConsumptionDto toDto(Consumption entity){

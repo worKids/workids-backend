@@ -25,7 +25,7 @@ public class StudentConsumptionController {
      * */
     @PostMapping("student/consumption")
     public ResponseEntity<BaseResponseDto<?>> createStudentConsumption(@RequestBody RequestConsumptionNationStudentDto dto){
-
+        //dto => consumptionNum, nationStudentNum 필요
         consumptionService.createStudentConsumption(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -33,10 +33,11 @@ public class StudentConsumptionController {
     }
 
     /**
-     * 내 소비 신청 내역 조회(대기, 취소, 승인 거절)
+     * 내 소비 신청 내역 조회(대기, 취소, 승인, 거절)
      * */
     @PostMapping("student/consumption/list")
     public ResponseEntity<BaseResponseDto<List<ResponseConsumptionNationStudentDto>>> getStudentConsumptions(@RequestBody RequestConsumptionNationStudentDto dto){
+        //dto => nationStudentNum 필요
         List<ResponseConsumptionNationStudentDto>  list = consumptionService.getStudentConsumptions(dto);
 
         for(ResponseConsumptionNationStudentDto studentConsumptionDto : list) {
@@ -51,7 +52,7 @@ public class StudentConsumptionController {
      * */
     @PatchMapping("student/consumption/cancel")
     public ResponseEntity<BaseResponseDto<?>> updateConsumptionNationStudentStateByStudent(@RequestBody RequestConsumptionNationStudentDto dto){
-
+        //dto => consumptionNationStudentNum 필요
         long result = consumptionService.updateConsumptionNationStudentStateByStudent(dto);
 
         if(result!=0){
@@ -69,6 +70,7 @@ public class StudentConsumptionController {
      * */
     @PostMapping("student/consumption/complete/list")
     public ResponseEntity<BaseResponseDto<List<ResponseConsumptionNationStudentDto>>> getCompleteStudentConsumptions(@RequestBody RequestConsumptionNationStudentDto dto){
+        //dto => nationStudentNum 필요
         List<ResponseConsumptionNationStudentDto>  list = consumptionService.getCompleteStudentConsumptions(dto);
 
         for(ResponseConsumptionNationStudentDto studentConsumptionDto : list) {
