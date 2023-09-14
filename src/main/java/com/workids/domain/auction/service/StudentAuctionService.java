@@ -47,7 +47,7 @@ public class StudentAuctionService {
         }
         // 입력한 자리가 옥션 자리에 없으면 에러
         if (auction.getTotalSeat() < dto.getSubmitSeat() || dto.getSubmitSeat() <= 0) {
-            throw new ApiException(ExceptionEnum.AUCTION_SEAT_NOT_EXIST);
+            throw new ApiException(ExceptionEnum.AUCTION_SEAT_NOT_EXIST_EXCEPTION);
         }
 
         // 나라학생 가져오고 없으면 에러

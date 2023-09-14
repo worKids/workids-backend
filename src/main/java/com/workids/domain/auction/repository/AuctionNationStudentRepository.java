@@ -9,5 +9,8 @@ import java.util.Optional;
 public interface AuctionNationStudentRepository extends JpaRepository<AuctionNationStudent, Long> {
     List<AuctionNationStudent> findAllBySubmitSeatNumberAndAuction_AuctionNum(int seat, Long auctionNum);
 
-    AuctionNationStudent findTopByAuction_AuctionNumAndSubmitSeatNumberOrderBySubmitPriceDescNationStudent_CreditRatingDescUpdatedDateDesc(Long auctionNum, int seat);
+    List<AuctionNationStudent> findAllByAuction_AuctionNumAndAndResultType(Long auctionNum, int state);
+
+    List<AuctionNationStudent> findAllByAuction_AuctionNum(Long auctionNum);
+    //AuctionNationStudent findTopByAuction_AuctionNumAndSubmitSeatNumberOrderBySubmitPriceDescNationStudent_CreditRatingDescUpdatedDateDesc(Long auctionNum, int seat);
 }
