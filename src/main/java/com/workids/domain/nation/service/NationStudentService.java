@@ -80,10 +80,7 @@ public class NationStudentService {
            throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
         }
 
-        // 국민 수
-        int totalCitizen = citizenService.citizenCount(dto.getNationNum());
-
-        NationStudent nationStudent = NationStudent.of(dto, student, nation, totalCitizen);
+        NationStudent nationStudent = NationStudent.of(dto, student, nation);
         nationStudentRepository.save(nationStudent);
         System.out.println("nationStudent 등록 완료");
 
@@ -105,21 +102,6 @@ public class NationStudentService {
 
     }
 
-    /**
-     * 가입 여부 확인
-     * : citizen 테이블에 학급번호 존재하면 가입 가능
-     */
-    /*
-    public boolean isJoin(Citizen citizens, int citizenNumber){
-        for(Citizen citizen : citizens){
-            if(citizen.getCitizenNum() == citizenNumber){
-                return true;
-            }
-        }
-        return false;
-    }
-
-     */
 
     /**
      * 나라코드 일치 확인

@@ -1,6 +1,7 @@
 package com.workids.domain.nation.controller;
 
 import com.workids.domain.nation.dto.request.RequestNationInfoDto;
+import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
@@ -11,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,6 +48,20 @@ public class NationController {
      * 나라 정보 수정
      * PATCH: /nation
      */
+    @PatchMapping("/update")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> updateNation(@RequestBody RequestNationUpdateDto dto){
+
+        System.out.println("들어오나?");
+
+        nationService.update(dto);
+
+        System.out.println("nation 업데이트 성공");
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+
+    }
+
 
     /**
      * 나라 삭제
