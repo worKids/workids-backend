@@ -3,6 +3,7 @@ package com.workids.domain.job.controller;
 import com.workids.domain.job.dto.request.RequestJobDto;
 import com.workids.domain.job.dto.request.RequestStudentJobDto;
 import com.workids.domain.job.dto.response.ResponseJobDto;
+import com.workids.domain.job.dto.response.ResponseJobKindDto;
 import com.workids.domain.job.dto.response.ResponseStudentJobDto;
 import com.workids.domain.job.service.TeacherJobService;
 import com.workids.global.comm.BaseResponseDto;
@@ -94,12 +95,30 @@ public class TeacherJobController {
     public ResponseEntity<BaseResponseDto<?>> citizenJobList(Model model,@RequestBody RequestStudentJobDto studentJobDto) {
 
         List<ResponseStudentJobDto> jobList = jobService.studentJobList(studentJobDto);
+        List<ResponseJobKindDto> jobKind = jobService.jobKindList(studentJobDto);
         System.out.println("jobList = " +jobList);
-        model.addAttribute("jobList", jobList);
+        System.out.println("jobKind = " + jobKind);
+        model.addAttribute("jobKind" , jobKind);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", jobList));
     }
+    /**
+     * 직업 종류
+     *
+     * {
+     *     "nationNum" : 1
+     * }
+     */
 
+    @PostMapping("/teacher/job/kind/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> JobKindList(Model model,@RequestBody RequestStudentJobDto studentJobDto) {
+
+        List<ResponseJobKindDto> jobKindList = jobService.jobKindList(studentJobDto);
+        model.addAttribute("jobKindList" , jobKindList);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", jobKindList));
+    }
 
 
     /**
