@@ -26,6 +26,9 @@ public class TeacherJobController {
 
     /**
      * 나라의 직업전체조회
+     * {
+     *     "nationNum" : 1
+     * }
      */
    @PostMapping("/job/list")
     @ResponseBody
@@ -34,11 +37,26 @@ public class TeacherJobController {
        model.addAttribute("job", job);
        System.out.println("job = " + job);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success", job));
     }
 
     /**
      * 직업 생성
+     * {
+     *     "nationNum" : 1,
+     *     "name" : "한전직원",
+     *     "salary" : 100,
+     *     "state" : 0,
+     *     "content" : "불끄기"
+     * },
+     * {
+     *      "nationNum" : 1,
+     *      "name" : "DJ",
+     *      "salary" : 100,
+     *      "state" : 0,
+     *      "content" : "노래틀기"
+     * }
+     *
      */
     @PostMapping("/teacher/job")
     @ResponseBody
@@ -51,6 +69,9 @@ public class TeacherJobController {
 
     /**
      * 직업 삭제
+     * {
+     *     "jobNum" : 1
+     * }
      */
     @PatchMapping("/teacher/job/citizen/hide")
     @ResponseBody
@@ -64,6 +85,9 @@ public class TeacherJobController {
 
     /**
      * 직업부여리스트
+     * {
+     *     "nationNum" : 1
+     * }
      */
     @PostMapping("/teacher/job/citizen/list")
     @ResponseBody
@@ -73,13 +97,19 @@ public class TeacherJobController {
         System.out.println("jobList = " +jobList);
         model.addAttribute("jobList", jobList);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
+                .body(new BaseResponseDto<>(200, "success", jobList));
     }
 
 
 
     /**
      * 직업부여수정
+     * {
+     *     "citizenNum" : 1,
+     *     "jobNum" : 2,
+     *     "nationNum" : 1,
+     *     "state" : 0
+     * }
      */
     @PatchMapping("/teacher/job/citizen")
     @ResponseBody

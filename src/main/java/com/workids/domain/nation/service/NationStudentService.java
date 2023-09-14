@@ -142,7 +142,7 @@ public class NationStudentService {
 
         Bank bank = bankRepository.findById(1L).orElse(null); // default 은행상품 PK = 1
 
-        bankNationStudentRepository.save(BankNationStudent.of(bank, nationStudent, accountNumber, 0, 0, createDate, endDate));
+        bankNationStudentRepository.save(BankNationStudent.of(bank, nationStudent, accountNumber, 0L, 0, createDate, endDate));
 
     }
 
