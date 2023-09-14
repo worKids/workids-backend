@@ -2,8 +2,10 @@ package com.workids.domain.auction.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.auction.dto.MatchSeat;
+import com.workids.domain.auction.dto.request.RequestAuctionDetailDto;
 import com.workids.domain.auction.dto.request.RequestAuctionDoneDto;
 import com.workids.domain.auction.dto.request.RequestAuctionDto;
+import com.workids.domain.auction.dto.response.ResponseAuctionDetailDto;
 import com.workids.domain.auction.entity.Auction;
 import com.workids.domain.auction.entity.AuctionNationStudent;
 import com.workids.domain.auction.entity.QAuctionNationStudent;
@@ -25,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.workids.domain.auction.entity.QAuction.auction;
+import static java.util.stream.Collectors.toList;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -74,6 +78,12 @@ public class TeacherAuctionService {
         if (auction==null) {
             throw new ApiException(ExceptionEnum.AUCTION_NOT_EXIST_EXCEPTION);
         }
+        // 경매가 진행중인 것만 수정 추가
+        if (auction.getAuctionState()==AuctionStateType.CLOSE
+                || auction.getAuctionState()==AuctionStateType.DELETE) {
+            throw new ApiException(ExceptionEnum.AUCTION_NOT_CONTINUE_EXCEPTION);
+        }
+
         updateState(dto);
         List<Integer> seats = new ArrayList<>();
         for (int i = 1; i<=auction.getTotalSeat();i++) {
@@ -97,10 +107,33 @@ public class TeacherAuctionService {
         for (MatchSeat seat : matchResult) {
             updateLoseResult(seat.getUserNum(), seat.getSeat());
         }
-
-
     }
 
+    /**
+     * 경매 디테일 조회
+     * @param dto
+     * @return
+     */
+    public List<ResponseAuctionDetailDto> getDetail(RequestAuctionDetailDto dto) {
+        Auction auction = auctionRepository.findByAuctionNum(dto.getAuctionNum());
+        // 경매 없을 때 에러
+        if (auction==null) {
+            throw new ApiException(ExceptionEnum.AUCTION_NOT_EXIST_EXCEPTION);
+        }
+        // 0일 때 => 미참여, 1 => 성공, 2 => 실패 3=> 전체 조회
+        if (dto.getAuctionState() == 3) {
+            List<AuctionNationStudent> list = auctionNationStudentRepository
+                    .findAllByAuction_AuctionNum(dto.getAuctionNum());
+            return list.stream().map(a ->
+                    ResponseAuctionDetailDto.toDto(a, a.getNationStudent())).collect(toList());
+        } else {
+            List<AuctionNationStudent> list = auctionNationStudentRepository
+                    .findAllByAuction_AuctionNumAndAndResultType(dto.getAuctionNum(), dto.getAuctionState());
+
+            return list.stream().map(a ->
+                    ResponseAuctionDetailDto.toDto(a, a.getNationStudent())).collect(toList());
+        }
+    }
 
 
     /**
