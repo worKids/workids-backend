@@ -1,16 +1,16 @@
 package com.workids.domain.citizen.dto.response;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
+@Builder
 public class ResponseCitizenDto {
             int citizenNumber;
             String studentName;
             String jobName;
-            int 자산;
+            Long asset;
             int credit_rating;
 }
