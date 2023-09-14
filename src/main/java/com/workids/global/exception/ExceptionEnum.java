@@ -40,8 +40,11 @@ public enum ExceptionEnum {
 
     // ===== 소비 =====
     CONSUMPTION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 소비 항목이 존재하지 않습니다."),
-    CONSUMPTION_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "소비 신청 내역이 존재하지 않습니다.");
+    CONSUMPTION_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "소비 신청 내역이 존재하지 않습니다."),
 
+    //부동산
+    AUCTION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "A0001", "해당 경매 항목이 존재하지 않습니다."),
+    AUCTION_SEAT_NOT_EXIST(HttpStatus.NOT_FOUND, "A0002", "경매 자리가 존재하지 않습니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;
