@@ -1,25 +1,29 @@
 package com.workids.domain.law.repository;
 
+import com.workids.domain.law.dto.response.ResponseLawNationStudentDto;
 import com.workids.domain.law.entity.LawNationStudent;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
+import java.util.List;
 
 public interface LawNationStudentRepository extends JpaRepository<LawNationStudent, Long>, QuerydslPredicateExecutor<LawNationStudent> {
 
     /**
      * 벌금 부여 리스트
      * */
-    /*@Query("select new com.workids.dto.response.ResponseLawNationStudentDto(a.lawNationStudentNum, c.citizenNumber, c.studentName, b.content, b.fine, b.penalty, a.penaltyCompleteState) " +
-            "FROM LawNationStudent a join Law b on a.law.lawNum = b.lawNum " +
-            "join NationStudent c on b.nation.nationNum = c.nation.nationNum where c.nation.nationNum=?1 and b.type=0 order by a.createDate desc")
+    /*@Query("select new com.workids.domain.law.dto.response.ResponseLawNationStudentDto(b.lawNationStudentNum, c.citizenNumber, c.studentName, a.content, a.type,a.fine, a.penalty, b.penaltyCompleteState,b.createdDate, b.updatedDate) " +
+            "FROM Law a join LawNationStudent b on a.lawNum = b.law.lawNum " +
+            "join NationStudent c on b.nationStudent.nationStudentNum = c.nationStudentNum where c.nation.nationNum=?1 and a.type=0 order by a.createdDate desc")
     List<ResponseLawNationStudentDto> findFineByNation(long nationNum);*/
 
     /**
      * 벌칙 부여 리스트
      * */
-    /*@Query("select new com.workids.dto.response.ResponseLawNationStudentDto(a.lawNationStudentNum, c.citizenNumber, c.studentName, b.content, b.fine, b.penalty, a.penaltyCompleteState) " +
-            "FROM LawNationStudent a join Law b on a.law.lawNum = b.lawNum " +
-            "join NationStudent c on b.nation.nationNum = c.nation.nationNum where c.nation.nationNum=?1 and b.type=1 order by a.createDate desc")
+    /*@Query("select new com.workids.domain.law.dto.response.ResponseLawNationStudentDto(b.lawNationStudentNum, c.citizenNumber, c.studentName, a.content, a.type,a.fine, a.penalty, b.penaltyCompleteState,b.createdDate, b.updatedDate) " +
+            "FROM Law a join LawNationStudent b on a.lawNum = b.law.lawNum " +
+            "join NationStudent c on b.nationStudent.nationStudentNum = c.nationStudentNum where c.nation.nationNum=?1 and b.type=1 order by a.createDate desc")
     List<ResponseLawNationStudentDto> findPenaltyByNation(long nationNum);*/
 
     /**
@@ -32,17 +36,17 @@ public interface LawNationStudentRepository extends JpaRepository<LawNationStude
     /**
      * 벌금 부여 리스트
      * */
-    /*@Query("select new com.workids.dto.response.ResponseLawNationStudentDto(a.lawNationStudentNum, c.citizenNumber, c.studentName, b.content, b.fine, b.penalty, a.penaltyCompleteState) " +
-            "FROM LawNationStudent a join Law b on a.law.lawNum = b.lawNum " +
-            "join NationStudent c on b.nation.nationNum = c.nation.nationNum where c.nationStudentNum = ?1 and b.type=0 order by a.createDate desc")
+    /*@Query("select new com.workids.domain.law.dto.response.ResponseLawNationStudentDto(b.lawNationStudentNum, c.citizenNumber, c.studentName, a.content, a.type,a.fine, a.penalty, b.penaltyCompleteState,b.createdDate, b.updatedDate) " +
+            "FROM Law a join LawNationStudent b on a.lawNum = b.law.lawNum " +
+            "join NationStudent c on b.nationStudent.nationStudentNum = c.nationStudentNum  where c.nationStudentNum = ?1 and b.type=0 order by a.createDate desc")
     List<ResponseLawNationStudentDto> findStudentFine(long nationStudentNum);*/
 
     /**
      * 벌칙 부여 리스트
      * */
-    /*@Query("select new com.workids.dto.response.ResponseLawNationStudentDto(a.lawNationStudentNum, c.citizenNumber, c.studentName, b.content, b.fine, b.penalty, a.penaltyCompleteState) " +
-            "FROM LawNationStudent a join Law b on a.law.lawNum = b.lawNum " +
-            "join NationStudent c on b.nation.nationNum = c.nation.nationNum where c.nationStudentNum = ?1 and b.type=1 order by a.createDate desc")
+    /*@Query("select new com.workids.domain.law.dto.response.ResponseLawNationStudentDto(b.lawNationStudentNum, c.citizenNumber, c.studentName, a.content, a.type,a.fine, a.penalty, b.penaltyCompleteState,b.createdDate, b.updatedDate) " +
+            "FROM Law a join LawNationStudent b on a.lawNum = b.law.lawNum " +
+            "join NationStudent c on b.nationStudent.nationStudentNum = c.nationStudentNum  where c.nationStudentNum = ?1 and b.type=1 order by a.createDate desc")
     List<ResponseLawNationStudentDto> findStudentPenalty(long nationStudentNum);*/
 
 
