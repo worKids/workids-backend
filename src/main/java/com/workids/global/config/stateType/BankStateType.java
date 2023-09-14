@@ -20,4 +20,24 @@ public class BankStateType {
     // 거래 유형
     public static final int DEPOSIT = 0; // 입금
     public static final int WITHDRAW = 1; // 출금
+
+    // 거래 카테고리
+    // 소비
+    public static final String CATEGORY_CONSUMPTION = "소비";
+    
+    // 법
+    public static final String CATEGORY_FINE = "벌금";
+    
+    // 부동산
+    public static final String CATEGORY_AUCTION = "경매";
+    
+    // 직업
+    public static final String CATEGORY_SALARY = "월급";
+    
+    // 은행
+    public static final String CATEGORY_JOIN = "가입";
+    public static final String CATEGORY_INTEREST = "이자";
+
+    // 기타
+    public static final String CATEGORY_ETC = "기타";
 }
