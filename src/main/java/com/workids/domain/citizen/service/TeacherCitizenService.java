@@ -1,6 +1,5 @@
 package com.workids.domain.citizen.service;
 
-
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.entity.QBankNationStudent;
@@ -36,6 +35,7 @@ public class TeacherCitizenService {
         QJob job = QJob.job;
         QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
 
+
         List<ResponseCitizenDto> citizenList = queryFactory.select(
                         Projections.constructor(
                                 ResponseCitizenDto.class,
@@ -51,6 +51,12 @@ public class TeacherCitizenService {
                 .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
                 .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)))
+                .groupBy(
+                        nationStudent.citizenNumber,
+                        nationStudent.studentName,
+                        job.name,
+                        nationStudent.creditRating
+                )
                 .fetch();
         return citizenList;
     }
@@ -83,6 +89,10 @@ public class TeacherCitizenService {
         citizenRepository.update(citizenDto.getCreditRating(), citizenDto.getNationNum(), citizenDto.getCitizenNumber());
 
     }
+
+    /**
+     * 이민자
+     */
 }
 
 
