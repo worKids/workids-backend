@@ -71,6 +71,8 @@ public class Nation extends TimeEntity {
 
 
 
+
+
     public static Nation of(RequestNationJoinDto dto, Teacher teacher, LocalDateTime startDateTime, LocalDateTime endDateTime, String code) {
         return Nation.builder()
                 .teacher(teacher)
@@ -90,24 +92,14 @@ public class Nation extends TimeEntity {
     }
 
     // 나라 정보 수정
-    public static Nation update(RequestNationUpdateDto dto, LocalDateTime now) {
-        return Nation.builder()
-                .name(dto.getName())
-                .moneyName(dto.getMoneyName())
-                .taxRate(dto.getTaxRate())
-                .presidentName(dto.getPresidentName())
-                .payDay(dto.getPayDay())
-                .endDate(now)
-                .build();
-    }
-
-    public void updateState(RequestNationUpdateDto dto, LocalDateTime now){
+    public void updateState(RequestNationUpdateDto dto, LocalDateTime start, LocalDateTime end, LocalDateTime now){
         this.name = dto.getName();
         this.moneyName = dto.getMoneyName();
         this.taxRate = dto.getTaxRate();
         this.presidentName = dto.getPresidentName();
         this.payDay = dto.getPayDay();
-        this.endDate = now;
+        this.startDate = start;
+        this.endDate = end;
 
     }
 
