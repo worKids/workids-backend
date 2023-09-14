@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface NationStudentRepository extends JpaRepository<NationStudent, Long>, QuerydslPredicateExecutor<NationStudent> {
 
-
     Nation findByNation_NationNum(Long nationNum);
 
     NationStudent findByCitizenNumber(int citizenNumber);

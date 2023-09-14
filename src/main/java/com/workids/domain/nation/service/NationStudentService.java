@@ -23,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-//import static com.workids.domain.bank.entity.QBankNationStudent.bankNationStudent;
+
+import static com.workids.domain.nation.entity.QCitizen.citizen;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,49 +39,51 @@ public class NationStudentService {
 
     private final BankNationStudentRepository bankNationStudentRepository;
 
-    //private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
     //private final QBankNationStudent bankNationStudent;
+
+    private final CitizenService citizenService;
+
+
 
     /**
      * 나라-학생 관계 등록
-     * : 가입 여부 확인 후 생성
+     * : 가입 여부 확인 후 생성(나라코드, 학생존재, 국민목록에 존재 여부 확인)
      */
     @Transactional
     public void join(RequestNationStudentJoinDto dto) {
 
-        List<Citizen> citizens = citizenRepository.findByNation_NationNum(dto.getNationNum());
 
-        System.out.println(citizens.toString());
-        for (Citizen citizen : citizens) {
-            System.out.println("citizen: " + citizen.getCitizenNum());
-        }
-        // 가입여부 확인
-        if (!isJoin(citizens, dto.getCitizenNumber())) {
-            // 가입 불가능
-            throw new ApiException(ExceptionEnum.NATIONSTUDENT_JOIN_EXCEPTION);
-        }
-
-        Student student = studentRepository.findByStudentNum(dto.getStudentNum());
-        if(student == null){
-            // 임시 예외
-            throw new IllegalAccessError("stdent를 찾지 못함");
-        }
         Nation nation = nationRepository.findByNationNum(dto.getNationNum())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
 
-        if(citizens.isEmpty()){
-            throw new IllegalAccessError("citizens이 없음");
-        }
-        int citizenNumber = 0;
-        for (Citizen citizen : citizens) {
-            if (citizen.getName().equals(student.getName())) {
-                citizenNumber = citizen.getCitizenNumber();
-                break;
-            }
+        // 나라코드 일치여부 확인
+        if (!checkNationCode(nation.getCode(), dto.getCode())) {
+            throw new ApiException(ExceptionEnum.NATION_CODE_NOT_MATCH_EXCEPTION);
         }
 
+        // 가입여부 확인
+        Student student = studentRepository.findByStudentNum(dto.getStudentNum());
+        if(student == null){
+            throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
+        }
 
-        NationStudent nationStudent = NationStudent.of(dto, student, nation, citizenNumber);
+        Citizen citizen = citizenRepository.findByCitizenNumber(dto.getCitizenNumber());
+        if(citizen == null){
+            throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
+        }
+
+        String[] birth = student.getRegistNumber().split("-"); // 생년월일
+
+        // 생년월일(고유키)로 확인
+        if(!citizen.getBirthDate().equals(birth[0])){
+           throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
+        }
+
+        // 국민 수
+        int totalCitizen = citizenService.citizenCount(dto.getNationNum());
+
+        NationStudent nationStudent = NationStudent.of(dto, student, nation, totalCitizen);
         nationStudentRepository.save(nationStudent);
         System.out.println("nationStudent 등록 완료");
 
@@ -91,20 +94,8 @@ public class NationStudentService {
         // 계좌번호 중복 체크
         while(checkAccountNumber(accountNumber)){
             // 계좌번호 중복(난수 발생 실패) -> 계좌번호 생성 재시도
-            //new ApiException(ExceptionEnum.BANKNATIONSTUDENT_NOT_CREATE_EXCEPTION);
             accountNumber = AccountNumberGenerator.createRandomNumber(nation.getNationNum().intValue(), 1, nationStudent.getNationStudentNum().intValue());
         }
-
-/*
-        BankNationStudent bns = queryFactory.selectFrom(bankNationStudent)
-                .where(bankNationStudent.accountNumber.eq(accountNumber))
-                .fetchOne();
-
-        while(bns == null){
-            accountNumber = AccountNumberGenerator.createRandomNumber(nation.getNationNum().intValue(), 1, nationStudent.getNationStudentNum().intValue());
-        }
-
- */
 
         // 은행-나라-학생 생성(주거래통장 생성)
         createMainAcount(nationStudent, accountNumber, nationStudent.getCreatedDate(), nation.getEndDate());
@@ -118,7 +109,8 @@ public class NationStudentService {
      * 가입 여부 확인
      * : citizen 테이블에 학급번호 존재하면 가입 가능
      */
-    public boolean isJoin(List<Citizen> citizens, int citizenNumber){
+    /*
+    public boolean isJoin(Citizen citizens, int citizenNumber){
         for(Citizen citizen : citizens){
             if(citizen.getCitizenNum() == citizenNumber){
                 return true;
@@ -127,9 +119,25 @@ public class NationStudentService {
         return false;
     }
 
+     */
+
+    /**
+     * 나라코드 일치 확인
+     */
+    @Transactional
+    public boolean checkNationCode(String dbCode, String code){
+        if(dbCode.equals(code)){
+            return true;
+        }
+        return false;
+
+    }
+
+
     /**
      * 은행-나라-학생 생성(주거래통장 생성)
      */
+    @Transactional
     public void createMainAcount(NationStudent nationStudent, String accountNumber, LocalDateTime createDate, LocalDateTime endDate){
 
         Bank bank = bankRepository.findById(1L).orElse(null); // default 은행상품 PK = 1
@@ -151,5 +159,6 @@ public class NationStudentService {
         return true;
 
     }
+
 
 }

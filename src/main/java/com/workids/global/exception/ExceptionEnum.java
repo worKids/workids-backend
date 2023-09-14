@@ -13,12 +13,15 @@ public enum ExceptionEnum {
     API_METHOD_NOT_ALLOWED_EXCEPTION(HttpStatus.METHOD_NOT_ALLOWED, "E0004", "지원하지 않는 Method 입니다."),
     API_PARAMETER_EXCEPTION(HttpStatus.BAD_REQUEST, "E0005", "파라미터 타입과 값을 확인하세요."),
     MEMBER_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "M0001", "접근 권한이 없습니다."),
-    NATION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "N0001", "나라가 존재하지 않습니다."),
     TEACHER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "T0001", "선생님이 일치하지 않습니다.."),
     STUDENT_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "S0001", "학생과 일치하지 않습니다."),
 
     // 나라
+    NATION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "N0001", "나라가 존재하지 않습니다."),
     NATIONSTUDENT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N002", "나라에 가입할 수 없습니다."),
+    NATION_CODE_NOT_MATCH_EXCEPTION(HttpStatus.FORBIDDEN, "N003", "나라코드가 일치하지 않습니다."),
+    NATION_NOT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N004", "가입 권한이 없습니다."),
+    CITIZEN_NOT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N005", "학생의 학급번호 중복입니다."),
 
 
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),
