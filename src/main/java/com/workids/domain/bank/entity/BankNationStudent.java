@@ -64,4 +64,9 @@ public class BankNationStudent {
                 .endDate(endDate)
                 .build();
     }
+
+    // 잔액 변경
+    public void updateBalance(Long balance){
+        this.balance = balance;
+    }
 }
