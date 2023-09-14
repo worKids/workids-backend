@@ -1,10 +1,14 @@
 package com.workids.domain.job.repository;
 
 
+import com.workids.domain.job.dto.request.RequestStudentJobDto;
+import com.workids.domain.job.dto.response.ResponseJobKindDto;
 import com.workids.domain.job.entity.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface JobRepository extends JpaRepository<Job, Long> {
 
@@ -15,4 +19,5 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query(value =  "UPDATE JOB SET STATE = 1 WHERE JOB_NUM = ?1", nativeQuery = true)
     @Modifying
     void delete(Long jobNum);
+
 }

@@ -29,9 +29,9 @@ public class TeacherBankController {
      */
     @PostMapping("")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> createBank(@RequestBody RequestBankTeacherCreateDto bankDto) {
+    public ResponseEntity<BaseResponseDto<?>> createBank(@RequestBody RequestBankTeacherCreateDto dto) {
         // 은행 상품 등록
-        teacherBankService.createBank(bankDto);
+        teacherBankService.createBank(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
@@ -43,9 +43,9 @@ public class TeacherBankController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> getBankList(@RequestBody RequestBankListDto nationDto){
-        // 모든 은행 상품 조회
-        List<ResponseTeacherBankDto> list = teacherBankService.getBankList(nationDto.getNationNum());
+    public ResponseEntity<BaseResponseDto<?>> getBankList(@RequestBody RequestBankListDto dto){
+        // 전체 은행 상품 조회
+        List<ResponseTeacherBankDto> list = teacherBankService.getBankList(dto.getNationNum());
 
         // 결과 확인
         for (ResponseTeacherBankDto bankTeacherDto : list){
@@ -61,10 +61,10 @@ public class TeacherBankController {
      */
     @PatchMapping("/hide")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> updateBankState(@RequestBody RequestBankUpdateStateDto bankDto){
+    public ResponseEntity<BaseResponseDto<?>> updateBankState(@RequestBody RequestBankUpdateStateDto dto){
         try {
             // 은행 상품 삭제
-            teacherBankService.updateBankState(bankDto.getProductNum());
+            teacherBankService.updateBankState(dto.getProductNum());
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new BaseResponseDto<>(200, "success"));
         } catch (ApiException e){

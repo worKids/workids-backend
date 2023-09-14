@@ -1,5 +1,6 @@
 package com.workids.domain.bank.controller;
 
+import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankListDto;
 import com.workids.domain.bank.dto.response.ResponseStudentBankDto;
 import com.workids.domain.bank.service.StudentBankService;
@@ -25,14 +26,14 @@ public class StudentBankController {
     private final StudentBankService studentBankService;
 
     /**
-     * 전체 은행 상품 조회(현재 사용중 모두 조회)
+     * 전체 은행 상품 조회(현재 사용중 모두 조회, 주거래 통장 상품 제외)
      * POST: /student/bank/list
      */
     @PostMapping("/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> getBankList(@RequestBody RequestBankListDto nationDto){
-        // 모든 은행 상품 조회
-        List<ResponseStudentBankDto> list = studentBankService.getBankList(nationDto.getNationNum());
+    public ResponseEntity<BaseResponseDto<?>> getBankList(@RequestBody RequestBankListDto dto){
+        // 전체 은행 상품 조회
+        List<ResponseStudentBankDto> list = studentBankService.getBankList(dto.getNationNum());
 
         // 결과 확인
         for (ResponseStudentBankDto bankStudentDto : list){
@@ -46,7 +47,13 @@ public class StudentBankController {
      * 은행 상품 가입(예금)
      * POST: /student/bank/deposit
      */
-/*    @PostMapping("/deposit")
+    @PostMapping("/deposit")
     @ResponseBody
-*/
+    public ResponseEntity<BaseResponseDto<?>> createBankDeposit(@RequestBody RequestBankStudentCreateDto dto){
+        // 은행 상품 가입
+        studentBankService.createBankDeposit(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
 }
