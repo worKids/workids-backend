@@ -62,4 +62,11 @@ public class TeacherAuctionController {
                 .body(new BaseResponseDto<>(200, "success", teacherAuctionService.getDetail(dto)));
     }
 
+    @PostMapping("/auction/delete")
+    public ResponseEntity<BaseResponseDto<?>> deleteAuction (@RequestBody RequestAuctionDoneDto dto) {
+        teacherAuctionService.deleteAuction(dto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+
 }
