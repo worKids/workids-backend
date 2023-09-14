@@ -6,6 +6,7 @@ import com.workids.domain.bank.entity.QBankNationStudent;
 import com.workids.domain.citizen.dto.request.RequestCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenCreditDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenDto;
+import com.workids.domain.citizen.dto.response.ResponseCitizenInfoDto;
 import com.workids.domain.job.entity.*;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.entity.QNationStudent;
@@ -26,7 +27,7 @@ public class TeacherCitizenService {
 
 
     /**
-     * 나라의 직업전체조회
+     * 국민전체조회
      */
     @Transactional
     public List<ResponseCitizenDto> citizenList(RequestCitizenDto citizenDto) {
@@ -91,8 +92,75 @@ public class TeacherCitizenService {
     }
 
     /**
+     * 각각의 개인정보
+     */
+        @Transactional
+        public List<ResponseCitizenInfoDto> citizenInfoList(RequestCitizenDto citizenDto) {
+            QNationStudent nationStudent = QNationStudent.nationStudent;
+            QJobNationStudent jobNationStudent = QJobNationStudent.jobNationStudent;
+            QJob job = QJob.job;
+
+            List<ResponseCitizenInfoDto> citizenInfoList = queryFactory.select(
+                            Projections.constructor(
+                                    ResponseCitizenInfoDto.class,
+                                    nationStudent.citizenNumber,
+                                    nationStudent.studentName,
+                                    job.name,
+                                    nationStudent.creditRating
+                            )
+                    )
+                    .from(nationStudent)
+                    .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
+                    .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
+                    .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)))
+                    .fetch();
+            return citizenInfoList;
+        }
+
+    /**
      * 이민자
      */
+    public List<ResponseCitizenDto> selectImmigrant(RequestCitizenDto citizenDto) {
+        QNationStudent nationStudent = QNationStudent.nationStudent;
+        QJobNationStudent jobNationStudent = QJobNationStudent.jobNationStudent;
+        QJob job = QJob.job;
+        QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
+
+
+        List<ResponseCitizenDto> immigrant = queryFactory.select(
+                        Projections.constructor(
+                                ResponseCitizenDto.class,
+                                nationStudent.citizenNumber,
+                                nationStudent.studentName,
+                                job.name,
+                                bankNationStudent.balance.sum(),
+                                nationStudent.creditRating
+                        )
+                )
+                .from(nationStudent)
+                .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
+                .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
+                .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
+                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)))
+                .groupBy(
+                        nationStudent.citizenNumber,
+                        nationStudent.studentName,
+                        job.name,
+                        nationStudent.creditRating
+                )
+                .fetch();
+        return immigrant;
+    }
+
+    public void immigrantLeave(RequestCitizenDto citizenDto) {
+        QNationStudent nationStudent = QNationStudent.nationStudent;
+
+                queryFactory.delete(nationStudent)
+                .where(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber()))
+                .execute();
+
+    }
+
 }
 
 
