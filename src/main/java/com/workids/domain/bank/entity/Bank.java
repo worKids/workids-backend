@@ -1,11 +1,10 @@
 package com.workids.domain.bank.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.global.config.TimeEntity;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -61,7 +60,7 @@ public class Bank extends TimeEntity {
     private LocalDateTime updateTime; // 수정일
     */
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime endDate; // 종료일
 
     public static Bank of(RequestBankTeacherCreateDto dto, Nation nation, int state){

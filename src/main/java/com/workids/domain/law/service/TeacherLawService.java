@@ -158,9 +158,9 @@ public class TeacherLawService {
                                 lawNationStudent.updatedDate
                         )
                 )
-                .from(lawNationStudent)
-                .join(law).on(lawNationStudent.law.lawNum.eq(law.lawNum))
-                .join(nationStudent).on(law.nation.nationNum.eq(nationStudent.nation.nationNum))
+                .from(law)
+                .join(lawNationStudent).on(law.lawNum.eq(lawNationStudent.law.lawNum))
+                .join(nationStudent).on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(law.type.eq(LawStateType.FINE)))
                 .orderBy(lawNationStudent.createdDate.desc())
                 .fetch();
@@ -230,9 +230,9 @@ public class TeacherLawService {
                                 lawNationStudent.updatedDate
                         )
                 )
-                .from(lawNationStudent)
-                .join(law).on(lawNationStudent.law.lawNum.eq(law.lawNum))
-                .join(nationStudent).on(law.nation.nationNum.eq(nationStudent.nation.nationNum))
+                .from(law)
+                .join(lawNationStudent).on(law.lawNum.eq(lawNationStudent.law.lawNum))
+                .join(nationStudent).on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(law.type.eq(LawStateType.PENALTY)))
                 .orderBy(lawNationStudent.createdDate.desc())
                 .fetch();

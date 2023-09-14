@@ -1,5 +1,6 @@
 package com.workids.domain.job.entity;
 
+import com.workids.domain.job.dto.request.RequestJobDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,4 +29,12 @@ public class JobToDo {
 
     @Column(nullable = false, length = 4000)
     private String jobToDoContent; // 할 일 내용
+
+    @Builder
+    public static JobToDo toEntity( Job jobInfo, RequestJobDto jobdto){
+        return JobToDo.builder()
+                .job(jobInfo)
+                .jobToDoContent(jobdto.getContent())
+                .build();
+    }
 }

@@ -2,6 +2,7 @@ package com.workids.domain.nation.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
+import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class Nation extends TimeEntity {
     @Column(nullable = false, length = 60)
     private String moneyName;
 
-
+    @Column(nullable = false)
     private int taxRate;
 
     @Column(nullable = false, length = 60)
@@ -45,20 +46,29 @@ public class Nation extends TimeEntity {
     private String code;
 
 
-    @Column(length = 60)
+    @Column(nullable = true, length = 60)
     private String school;
+
+    @Column(nullable = true)
     private int grade;
+    @Column(nullable = true)
     private int classRoom;
 
+    @Column(nullable = true)
     private int payDay;
 
     @Column(nullable = false)
     private int state;
 
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime startDate; // 나라 시작일
+
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime endDate; // 나라 종료일
+
+
 
 
 
@@ -79,6 +89,18 @@ public class Nation extends TimeEntity {
                 .startDate(startDateTime)
                 .endDate(endDateTime)
                 .build();
+    }
+
+    // 나라 정보 수정
+    public void updateState(RequestNationUpdateDto dto, LocalDateTime start, LocalDateTime end, LocalDateTime now){
+        this.name = dto.getName();
+        this.moneyName = dto.getMoneyName();
+        this.taxRate = dto.getTaxRate();
+        this.presidentName = dto.getPresidentName();
+        this.payDay = dto.getPayDay();
+        this.startDate = start;
+        this.endDate = end;
+
     }
 
 }

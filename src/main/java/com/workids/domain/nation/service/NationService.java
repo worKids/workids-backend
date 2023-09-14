@@ -1,17 +1,23 @@
 package com.workids.domain.nation.service;
 
+import com.workids.domain.law.dto.request.RequestLawDto;
+import com.workids.domain.law.entity.Law;
+import com.workids.domain.law.entity.QLaw;
 import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNationListDto;
+import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
+import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
+import com.workids.global.config.stateType.LawStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +38,7 @@ public class NationService {
     private final NationRepository nationRepository;
     private final TeacherRepository teacherRepository;
     private final NationStudentRepository nationStudentRepository;
+    private final CitizenService citizenService;
 
     /**
      * 나라 생성
@@ -54,6 +61,29 @@ public class NationService {
     }
 
     /**
+     * 나라 정보 수정
+     */
+    @Transactional
+    public void update(RequestNationUpdateDto dto) {
+
+        // 나라 찾기
+        Nation nation = nationRepository.findByNationNum(dto.getNationNum()).orElse(null);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // 타입 변환
+        LocalDateTime[] times = toLocalDateTime(dto.getStartDate(), dto.getEndDate());
+
+        nation.updateState(dto, times[0], times[1], now);
+
+        System.out.println("나라 정보 수정 완료");
+
+    }
+
+
+
+
+    /**
      * teacher과 연결된 나라 전체 조회
      */
     @Transactional
@@ -62,12 +92,12 @@ public class NationService {
         List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getNum());
 
 
-        int totalTeacher = list.size();
-        System.out.println("teacher size" + totalTeacher);
-
         List<ResponseTeacherNationListDto> dtoList = new ArrayList<>();
+        int totalCitizen = 0;
         for(Nation nation : list){
-            dtoList.add(ResponseTeacherNationListDto.of(nation, totalTeacher));
+            // 국민 수
+            totalCitizen = citizenService.citizenCount(nation.getNationNum());
+            dtoList.add(ResponseTeacherNationListDto.of(nation, totalCitizen));
         }
 
         return dtoList;

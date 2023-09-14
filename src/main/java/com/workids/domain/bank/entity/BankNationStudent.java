@@ -1,13 +1,11 @@
 package com.workids.domain.bank.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.nation.entity.NationStudent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import lombok.NoArgsConstructor; 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -39,19 +37,36 @@ public class BankNationStudent {
     private String accountNumber; // 계좌 번호
 
     @Column(nullable = false)
-    private int balance; // 잔액
+    private Long balance; // 잔액
 
     @Column(nullable = false)
     private int state; // 상품 가입 상태
 
-    @CreationTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createDate; // 개설일
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @Column(nullable = false)
+    private LocalDateTime createdDate; // 개설일
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @Column(nullable = false)
     private LocalDateTime endDate; // 만기일
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime cancelDate; // 중도 해지일
+
+    public static BankNationStudent of(Bank bank, NationStudent nationStudent, String accountNumber, Long balance, int state, LocalDateTime createdDate, LocalDateTime endDate){
+        return BankNationStudent.builder()
+                .bank(bank)
+                .nationStudent(nationStudent)
+                .accountNumber(accountNumber)
+                .balance(balance)
+                .state(state)
+                .createdDate(createdDate)
+                .endDate(endDate)
+                .build();
+    }
+
+    // 잔액 변경
+    public void updateBalance(Long balance){
+        this.balance = balance;
+    }
 }
