@@ -3,6 +3,7 @@ package com.workids.domain.citizen.controller;
 import com.workids.domain.citizen.dto.request.RequestCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenCreditDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenDto;
+import com.workids.domain.citizen.dto.response.ResponseCitizenInfoDto;
 import com.workids.domain.citizen.service.TeacherCitizenService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,14 +40,14 @@ public class TeacherCitizenController {
     /**
      * 각각의 개인정보
      */
-    /*@PostMapping("/teacher/citizen/info/list")
+    @PostMapping("/teacher/citizen/info/list")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> info(Model model, @RequestBody RequestCitizenDto citizenDto) {
         List<ResponseCitizenInfoDto> info = citizenService.citizenInfoList(citizenDto);
         model.addAttribute("citizen", info);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", info));
-    }*/
+    }
 
     /**
      * 신용도 전체조회
@@ -78,7 +76,7 @@ public class TeacherCitizenController {
     @PatchMapping("/teacher/citizen/credit")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> updateCredit(Model model, @RequestBody RequestCitizenDto citizenDto) {
-       citizenService.updateCredit(citizenDto);
+         citizenService.updateCredit(citizenDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
@@ -87,23 +85,27 @@ public class TeacherCitizenController {
     /**
      * 이민자 학급번호로 조회
      */
-
-    /**
-     * 취득신고
-     */
-    /*
-    @PostMapping("/teacher/citizen/immigrant/acquire")
+    @PostMapping("/teacher/citizen/immigrant")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> updateCedit(Model model, @RequestBody RequestCitizenDto citizenDto) {
-        citizenService.updateCredit(citizenDto);
+    public ResponseEntity<BaseResponseDto<?>> selectImmigrant(Model model, @RequestBody RequestCitizenDto citizenDto) {
+        List<ResponseCitizenDto> immigrant = citizenService.selectImmigrant(citizenDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success"));
-    }*/
+                .body(new BaseResponseDto<>(200, "success",immigrant));
+    }
 
     /**
      * 국적이탈
      */
+    @DeleteMapping("/teacher/citizen/immigrant/leave")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> immigrantLeave(Model model, @RequestBody RequestCitizenDto citizenDto) {
+        citizenService.immigrantLeave(citizenDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+
 
 
 
