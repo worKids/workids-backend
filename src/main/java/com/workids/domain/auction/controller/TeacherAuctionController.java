@@ -1,9 +1,11 @@
 package com.workids.domain.auction.controller;
 
+import com.workids.domain.auction.dto.request.RequestAuctionDoneDto;
 import com.workids.domain.auction.dto.request.RequestAuctionDto;
 import com.workids.domain.auction.dto.request.RequestAuctionListDto;
 import com.workids.domain.auction.dto.response.ResponseAuctionListDto;
 import com.workids.domain.auction.service.AuctionService;
+import com.workids.domain.auction.service.TeacherAuctionService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherAuctionController {
 
-    private final AuctionService auctionService;
+    private final TeacherAuctionService teacherAuctionService;
 
     /**
      * 경매 생성
@@ -29,11 +31,16 @@ public class TeacherAuctionController {
      */
     @PostMapping("/auction")
     public ResponseEntity<BaseResponseDto<?>> createAuction(@RequestBody RequestAuctionDto dto) {
-        auctionService.createAuction(dto);
+        teacherAuctionService.createAuction(dto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(201, "success"));
     }
 
-
+    @PostMapping("/auction/done")
+    public ResponseEntity<BaseResponseDto<?>> auctionDone(@RequestBody RequestAuctionDoneDto dto) {
+        teacherAuctionService.auctionDone(dto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
 
 }

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuctionNationStudent extends BaseTimeEntity {
+public class AuctionNationStudent extends TimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auction_nation_student_seq")
     @SequenceGenerator(name = "auction_nation_student_seq", sequenceName = "auction_nation_student_seq", allocationSize = 1)

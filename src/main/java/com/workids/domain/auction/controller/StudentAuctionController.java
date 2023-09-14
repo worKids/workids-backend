@@ -2,6 +2,7 @@ package com.workids.domain.auction.controller;
 
 import com.workids.domain.auction.dto.request.RequestStudentAuctionDto;
 import com.workids.domain.auction.service.AuctionService;
+import com.workids.domain.auction.service.StudentAuctionService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class StudentAuctionController {
 
-    private final AuctionService auctionService;
+    private final StudentAuctionService studentAuctionService;
 
     /**
      * 학생 부동산 입찰
@@ -25,7 +26,7 @@ public class StudentAuctionController {
      */
     @PostMapping("/auction")
     public ResponseEntity<BaseResponseDto<?>> bidSeat(@RequestBody RequestStudentAuctionDto dto) {
-        auctionService.bidSeat(dto);
+        studentAuctionService.bidSeat(dto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(201, "success"));
     }
