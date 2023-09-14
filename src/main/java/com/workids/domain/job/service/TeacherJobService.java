@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.job.dto.request.RequestJobDto;
 import com.workids.domain.job.dto.request.RequestStudentJobDto;
 import com.workids.domain.job.dto.response.ResponseJobDto;
+import com.workids.domain.job.dto.response.ResponseJobKindDto;
 import com.workids.domain.job.dto.response.ResponseStudentJobDto;
 import com.workids.domain.job.entity.*;
 import com.workids.domain.job.repository.JobNationStudentRepository;
@@ -112,7 +113,23 @@ public class TeacherJobService {
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
 
         JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent,studentjobDto);
-        jobNationStudentRepository.update(nationStudent.getNationStudentNum(),job.getJobNum() );
+        jobNationStudentRepository.update(nationStudent.getNationStudentNum(),job.getJobNum());
 
+    }
+
+    public List<ResponseJobKindDto> jobKindList(RequestStudentJobDto studentJobDto) {
+        QJob job = QJob.job;
+
+        List<ResponseJobKindDto> jobKindList = queryFactory.select(
+                        Projections.constructor(
+                                ResponseJobKindDto.class,
+                                job.jobNum,
+                                job.name
+                        )
+                )
+                .from(job)
+                .where(job.nation.nationNum.eq(studentJobDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)))
+                .fetch();
+        return jobKindList;
     }
 }
