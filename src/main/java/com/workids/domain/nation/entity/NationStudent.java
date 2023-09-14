@@ -42,11 +42,11 @@ public class NationStudent extends BaseTimeEntity {
     @Column(nullable = false)
     private int state;
 
-    public static NationStudent of(RequestNationStudentJoinDto dto, Student student, Nation nation, int citizenNumber) {
+    public static NationStudent of(RequestNationStudentJoinDto dto, Student student, Nation nation) {
         return NationStudent.builder()
                 .student(student)
                 .nation(nation)
-                .citizenNumber(citizenNumber)
+                .citizenNumber(dto.getCitizenNumber())
                 .creditRating(50) // default 50
                 .studentName(student.getName())
                 .state(student.getState()) // 가입완료: 1

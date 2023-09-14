@@ -2,6 +2,7 @@ package com.workids.domain.nation.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
+import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
@@ -86,6 +87,28 @@ public class Nation extends TimeEntity {
                 .startDate(startDateTime)
                 .endDate(endDateTime)
                 .build();
+    }
+
+    // 나라 정보 수정
+    public static Nation update(RequestNationUpdateDto dto, LocalDateTime now) {
+        return Nation.builder()
+                .name(dto.getName())
+                .moneyName(dto.getMoneyName())
+                .taxRate(dto.getTaxRate())
+                .presidentName(dto.getPresidentName())
+                .payDay(dto.getPayDay())
+                .endDate(now)
+                .build();
+    }
+
+    public void updateState(RequestNationUpdateDto dto, LocalDateTime now){
+        this.name = dto.getName();
+        this.moneyName = dto.getMoneyName();
+        this.taxRate = dto.getTaxRate();
+        this.presidentName = dto.getPresidentName();
+        this.payDay = dto.getPayDay();
+        this.endDate = now;
+
     }
 
 }
