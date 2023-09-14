@@ -1,9 +1,12 @@
 package com.workids.domain.auction.entity;
 
+import com.workids.domain.auction.dto.request.RequestAuctionDto;
+import com.workids.domain.auction.dto.request.RequestStudentAuctionDto;
 import com.workids.domain.auction.entity.Auction;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.global.config.BaseTimeEntity;
 import com.workids.global.config.TimeEntity;
+import com.workids.global.config.stateType.AuctionStateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,4 +45,18 @@ public class AuctionNationStudent extends BaseTimeEntity {
 
     @Column(nullable = false)
     private int resultType;
+
+    public static AuctionNationStudent of(Auction auction,
+                                          NationStudent nationStudent) {
+
+        return AuctionNationStudent.builder()
+                .auction(auction)
+                .nationStudent(nationStudent)
+                .submitSeatNumber(0)
+                .submitPrice(0)
+                .resultSeatNumber(0)
+                .resultPrice(0)
+                .resultType(AuctionStateType.NOT_SUBMITTER)
+                .build();
+    }
 }
