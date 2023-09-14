@@ -120,12 +120,32 @@ public class TeacherJobController {
                 .body(new BaseResponseDto<>(200, "success", jobKindList));
     }
 
+    /**
+     * 직업부여
+     * {
+     *     "citizenNumber" : 1,
+     *     "jobNum" : 2,
+     *     "nationNum" : 1,
+     *     "state" : 0
+     * }
+     *
+     */
+    @PostMapping("/teacher/job/citizen/join")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> studentJobJoin(@RequestBody RequestStudentJobDto studentjobDto) {
+
+        jobService.studentJobJoin(studentjobDto);
+        System.out.println("success");
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+
 
     /**
      * 직업부여수정
      * {
-     *     "citizenNum" : 1,
-     *     "jobNum" : 2,
+     *     "citizenNumber" : 1,
+     *     "jobNum" : 1,
      *     "nationNum" : 1,
      *     "state" : 0
      * }
