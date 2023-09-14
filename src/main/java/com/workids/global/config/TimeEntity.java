@@ -20,5 +20,6 @@ public class TimeEntity {
     private LocalDateTime createdDate;
 
     @LastModifiedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
 } 

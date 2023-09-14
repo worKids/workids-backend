@@ -1,5 +1,6 @@
 package com.workids.domain.auction.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.auction.dto.request.RequestAuctionDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.global.config.TimeEntity;
@@ -41,6 +42,7 @@ public class Auction extends TimeEntity {
     private int auctionState;
 
     @Column(nullable = true)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDate endDate;
 
     public static Auction of(RequestAuctionDto dto, Nation nation) {
