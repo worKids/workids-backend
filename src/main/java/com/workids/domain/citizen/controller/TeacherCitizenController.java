@@ -34,18 +34,18 @@ public class TeacherCitizenController {
     public ResponseEntity<BaseResponseDto<?>> citizenList(Model model, @RequestBody RequestCitizenDto citizenDto) {
         List<ResponseCitizenDto> citizenList = citizenService.citizenList(citizenDto);
        model.addAttribute("citizen", citizenList);
-       System.out.println("citizen = " + citizenList);
+       System.out.println("citizenList = " + citizenList);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", citizenList));
     }
 
     /**
-     * 자산 조회
+     * 각각의 개인정보
      */
-   /* @PostMapping("/teacher/citizen/asset/list")
+    /*@PostMapping("/teacher/citizen/info/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> asset(Model model, @RequestBody RequestCitizenDto citizenDto) {
-        List<ResponseCitizenInfoDto> info = citizenService.citizenList(citizenDto);
+    public ResponseEntity<BaseResponseDto<?>> info(Model model, @RequestBody RequestCitizenDto citizenDto) {
+        List<ResponseCitizenInfoDto> info = citizenService.citizenInfoList(citizenDto);
         model.addAttribute("citizen", info);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", info));
@@ -84,6 +84,26 @@ public class TeacherCitizenController {
                 .body(new BaseResponseDto<>(200, "success"));
     }
 
+    /**
+     * 이민자 학급번호로 조회
+     */
+
+    /**
+     * 취득신고
+     */
+    /*
+    @PostMapping("/teacher/citizen/immigrant/acquire")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> updateCedit(Model model, @RequestBody RequestCitizenDto citizenDto) {
+        citizenService.updateCredit(citizenDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }*/
+
+    /**
+     * 국적이탈
+     */
 
 
 
