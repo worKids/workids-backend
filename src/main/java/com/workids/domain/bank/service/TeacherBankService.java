@@ -13,9 +13,7 @@ import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import static com.workids.domain.bank.entity.QBank.bank;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,23 +26,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherBankService {
     private final BankRepository bankRepository;
-
     private final NationRepository nationRepository;
-
     private final JPAQueryFactory queryFactory;
 
     /**
      * 은행 상품 등록
      */
     @Transactional
-    public void createBank(RequestBankTeacherCreateDto bankDto){
+    public void createBank(RequestBankTeacherCreateDto dto){
         // 나라 정보 조회
-        Nation nation = nationRepository.findById(bankDto.getNationNum()).orElse(null);
+        Nation nation = nationRepository.findById(dto.getNationNum()).orElse(null);
         
         // 은행 상품 정보 생성
-        Bank bank = Bank.of(bankDto, nation, BankStateType.IN_USE);
-
-        Bank bankResult = bankRepository.save(bank);
+        Bank newBank = Bank.of(dto, nation, BankStateType.IN_USE);
+        
+        // 은행 상품 등록
+        Bank bankResult = bankRepository.save(newBank);
     }
 
     /**
@@ -52,11 +49,11 @@ public class TeacherBankService {
      */
     @Transactional
     public List<ResponseTeacherBankDto> getBankList(Long nationNum){
-        // 모든 항목 조회(사용중, 미사용중)-상품 유형, 상품 항목 상태로 정렬
+        // 전체 항목 조회(사용중, 미사용중)-상품 유형, 상품 항목 상태, 상품 고유 번호로 정렬
         // Entity 리스트로 결과
         List<Bank> bankProductList = queryFactory.selectFrom(bank)
                         .where(bank.nation.nationNum.eq(nationNum))
-                        .orderBy(bank.productType.asc(), bank.productState.asc())
+                        .orderBy(bank.productType.asc(), bank.productState.asc(), bank.productNum.asc())
                         .fetch();
 
         // Dto 리스트로 변환
