@@ -1,5 +1,8 @@
 package com.workids.domain.nation.service;
 
+import com.workids.domain.law.dto.request.RequestLawDto;
+import com.workids.domain.law.entity.Law;
+import com.workids.domain.law.entity.QLaw;
 import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNationListDto;
@@ -14,6 +17,7 @@ import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
+import com.workids.global.config.stateType.LawStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -67,11 +71,16 @@ public class NationService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        nation.updateState(dto, now);
+        // 타입 변환
+        LocalDateTime[] times = toLocalDateTime(dto.getStartDate(), dto.getEndDate());
+
+        nation.updateState(dto, times[0], times[1], now);
 
         System.out.println("나라 정보 수정 완료");
 
     }
+
+
 
 
     /**
