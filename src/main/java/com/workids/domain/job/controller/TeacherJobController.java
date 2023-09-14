@@ -105,7 +105,7 @@ public class TeacherJobController {
     /**
      * 직업부여수정
      * {
-     *     "nationStudentNum" : 1,
+     *     "citizenNum" : 1,
      *     "jobNum" : 2,
      *     "nationNum" : 1,
      *     "state" : 0
