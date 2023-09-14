@@ -16,13 +16,17 @@ import java.time.LocalDateTime;
 public class ResponseAuctionListDto {
     private Long auctionNum;
 
+    private int auctionState;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
+
 
     public static ResponseAuctionListDto toDto(Auction auction) {
         return ResponseAuctionListDto.builder()
                 .auctionNum(auction.getAuctionNum())
                 .createdDate(auction.getCreatedDate())
+                .auctionState(auction.getAuctionState())
                 .build();
     }
 }

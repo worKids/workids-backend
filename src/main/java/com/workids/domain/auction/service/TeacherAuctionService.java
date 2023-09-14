@@ -84,7 +84,7 @@ public class TeacherAuctionService {
             throw new ApiException(ExceptionEnum.AUCTION_NOT_CONTINUE_EXCEPTION);
         }
 
-        updateState(dto);
+        updateState(dto.getAuctionNum(), AuctionStateType.CLOSE);
         List<Integer> seats = new ArrayList<>();
         for (int i = 1; i<=auction.getTotalSeat();i++) {
             List<AuctionNationStudent> candidate = getSameSeatList(dto.getAuctionNum(), i);
@@ -135,6 +135,18 @@ public class TeacherAuctionService {
         }
     }
 
+    /**
+     * 경매 삭제
+     * @param dto
+     */
+    public void deleteAuction(RequestAuctionDoneDto dto) {
+        Auction auction = auctionRepository.findByAuctionNum(dto.getAuctionNum());
+        // 경매 없을 때 에러
+        if (auction==null) {
+            throw new ApiException(ExceptionEnum.AUCTION_NOT_EXIST_EXCEPTION);
+        }
+        updateState(dto.getAuctionNum(), AuctionStateType.DELETE);
+    }
 
     /**
      * querydsl 함수들
@@ -142,12 +154,13 @@ public class TeacherAuctionService {
 
     /**
      * 경매 상태 변경
-     * @param dto
+     * @param auctionNum
+     * @param state
      */
-    private void updateState(RequestAuctionDoneDto dto) {
+    private void updateState(Long auctionNum, int state) {
         queryFactory.update(auction)
-                .set(auction.auctionState, AuctionStateType.CLOSE)
-                .where(auction.auctionNum.eq(dto.getAuctionNum()))
+                .set(auction.auctionState, state)
+                .where(auction.auctionNum.eq(auctionNum))
                 .execute();
     }
 
