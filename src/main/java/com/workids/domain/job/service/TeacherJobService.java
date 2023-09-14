@@ -106,6 +106,18 @@ public class TeacherJobService {
     }
 
     /**
+     * 직업부여
+     */
+    public void studentJobJoin(RequestStudentJobDto studentjobDto) {
+        Job job =jobRepository.findById(studentjobDto.getJobNum()).orElse(null);
+        NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
+
+        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent,studentjobDto);
+        jobNationStudentRepository.save(jobNationStudent);
+
+    }
+
+    /**
      * 직업부여수정
      */
     public void studentJobUpdate(RequestStudentJobDto studentjobDto) {
