@@ -109,10 +109,10 @@ public class TeacherJobService {
      */
     public void studentJobUpdate(RequestStudentJobDto studentjobDto) {
         Job job =jobRepository.findById(studentjobDto.getJobNum()).orElse(null);
-        NationStudent nationStudent = nationStudentRepository.findById(studentjobDto.getNationStudentNum()).orElse(null);
+        NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
 
         JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent,studentjobDto);
-        jobNationStudentRepository.save(jobNationStudent);
+        jobNationStudentRepository.update(nationStudent.getNationStudentNum(),job.getJobNum() );
 
     }
 }
