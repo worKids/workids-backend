@@ -9,6 +9,8 @@ import lombok.ToString;
 @ToString
 public class RequestCitizenDto {
     Long nationNum;
+    int citizenNumber;
+    int creditRating;
 
 
 }
