@@ -51,7 +51,8 @@ public class CitizenService {
 
         for(RequestCitizenJoinDto dto : dtoList){
             // 학급번호 중복 불가
-            if(citizenRepository.findByCitizenNumber(dto.getCitizenNumber()) != null){
+            if(citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(),
+                    dto.getNationNum()) != null){
                 throw new ApiException(ExceptionEnum.CITIZEN_NOT_JOIN_EXCEPTION);
             }
             // 국민목록 등록

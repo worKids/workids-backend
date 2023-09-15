@@ -68,7 +68,7 @@ public class NationStudentService {
             throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
         }
 
-        Citizen citizen = citizenRepository.findByCitizenNumber(dto.getCitizenNumber());
+        Citizen citizen = citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(), dto.getNationNum());
         if(citizen == null){
             throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
         }

@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface CitizenRepository extends JpaRepository<Citizen, Long>, QuerydslPredicateExecutor<Citizen> {
     List<Citizen> findByNation_NationNum(Long nationNum);
 
+    Citizen findByCitizenNumberAndNation_NationNum(int nationNumber, Long nationNum);
+
     Citizen findByCitizenNumber(int nationNumber);
 
     @Query(value =  "UPDATE NATION_STUDENT SET CREDIT_RATING = ?1 WHERE NATION_NUM = ?2 AND CITIZEN_NUMBER = ?3", nativeQuery = true)
