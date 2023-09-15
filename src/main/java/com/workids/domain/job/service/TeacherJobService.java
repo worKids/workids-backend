@@ -76,7 +76,7 @@ public class TeacherJobService {
      */
     public void delete(RequestJobDto jobDto) {
 
-       jobRepository.delete(jobDto.getJobNum());
+       jobRepository.delete(jobDto.getJobNum(), jobDto.getNationNum());
     }
 
     /**

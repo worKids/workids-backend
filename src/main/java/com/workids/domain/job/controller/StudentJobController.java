@@ -26,11 +26,8 @@ public class StudentJobController {
 
     /**
      * 나라의 직업전체조회
-     * {
-     *     "nationNum" :1
-     * }
      */
-    @PostMapping("student/job/list")
+    @PostMapping("/student/job/list")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> selectByNation(Model model, @RequestBody RequestJobDto jobDto) {
         List<ResponseJobDto> job = jobService.selectByNation(jobDto);
@@ -42,12 +39,8 @@ public class StudentJobController {
 
     /**
      * 내 직업 조회
-     {
-     "nationNum" :1,
-     "nationStudentNum" : 1
-     }
      */
-    @PostMapping("student/job/my/list")
+    @PostMapping("/student/job/my/list")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> selectMyJob(Model model, @RequestBody RequestStudentJobDto studentjobDto) {
         List<ResponseMyJobDto> myjob = jobService.selectMyJob(studentjobDto);

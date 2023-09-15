@@ -27,9 +27,6 @@ public class TeacherJobController {
 
     /**
      * 나라의 직업전체조회
-     * {
-     *     "nationNum" : 1
-     * }
      */
    @PostMapping("/job/list")
     @ResponseBody
@@ -43,21 +40,6 @@ public class TeacherJobController {
 
     /**
      * 직업 생성
-     * {
-     *     "nationNum" : 1,
-     *     "name" : "한전직원",
-     *     "salary" : 100,
-     *     "state" : 0,
-     *     "content" : "불끄기"
-     * },
-     * {
-     *      "nationNum" : 1,
-     *      "name" : "DJ",
-     *      "salary" : 100,
-     *      "state" : 0,
-     *      "content" : "노래틀기"
-     * }
-     *
      */
     @PostMapping("/teacher/job")
     @ResponseBody
@@ -70,9 +52,6 @@ public class TeacherJobController {
 
     /**
      * 직업 삭제
-     * {
-     *     "jobNum" : 1
-     * }
      */
     @PatchMapping("/teacher/job/citizen/hide")
     @ResponseBody
@@ -86,9 +65,6 @@ public class TeacherJobController {
 
     /**
      * 직업부여리스트
-     * {
-     *     "nationNum" : 1
-     * }
      */
     @PostMapping("/teacher/job/citizen/list")
     @ResponseBody
@@ -104,10 +80,6 @@ public class TeacherJobController {
     }
     /**
      * 직업 종류
-     *
-     * {
-     *     "nationNum" : 1
-     * }
      */
 
     @PostMapping("/teacher/job/kind/list")
@@ -122,13 +94,6 @@ public class TeacherJobController {
 
     /**
      * 직업부여
-     * {
-     *     "citizenNumber" : 1,
-     *     "jobNum" : 2,
-     *     "nationNum" : 1,
-     *     "state" : 0
-     * }
-     *
      */
     @PostMapping("/teacher/job/citizen/join")
     @ResponseBody
@@ -143,12 +108,6 @@ public class TeacherJobController {
 
     /**
      * 직업부여수정
-     * {
-     *     "citizenNumber" : 1,
-     *     "jobNum" : 1,
-     *     "nationNum" : 1,
-     *     "state" : 0
-     * }
      */
     @PatchMapping("/teacher/job/citizen")
     @ResponseBody
