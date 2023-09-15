@@ -22,7 +22,8 @@ public enum ExceptionEnum {
     NATION_CODE_NOT_MATCH_EXCEPTION(HttpStatus.FORBIDDEN, "N003", "나라코드가 일치하지 않습니다."),
     NATION_NOT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N004", "가입 권한이 없습니다."),
     CITIZEN_NOT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N005", "학생의 학급번호 중복입니다."),
-
+    NATION_NOT_DELETE_EXCEPTION(HttpStatus.FORBIDDEN, "N006", "나라에 가입된 학생이 있어 나라를 삭제할 수 없습니다."),
+    NATION_EXIST_EXCEPTION(HttpStatus.CONFLICT, "N0007","중복된 나라 이름입니다"),
 
     SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),
 

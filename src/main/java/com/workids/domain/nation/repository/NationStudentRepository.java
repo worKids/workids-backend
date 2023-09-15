@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface NationStudentRepository extends JpaRepository<NationStudent, Long>{
 
-    Nation findByNation_NationNum(Long nationNum);
+    List<NationStudent> findByNation_NationNum(Long nationNum);
 
     NationStudent findByCitizenNumber(int citizenNumber);
 

@@ -1,7 +1,6 @@
 package com.workids.domain.nation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.entity.Nation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
