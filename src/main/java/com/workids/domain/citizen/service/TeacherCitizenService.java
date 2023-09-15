@@ -93,9 +93,11 @@ public class TeacherCitizenService {
      * 신용도 수정
      */
     public void updateCredit(RequestCitizenDto citizenDto) {
-
-        citizenRepository.update(citizenDto.getCreditRating(), citizenDto.getNationNum(), citizenDto.getCitizenNumber());
-
+        QNationStudent nationStudent = QNationStudent.nationStudent;
+        queryFactory.update(nationStudent)
+                .set(nationStudent.creditRating, citizenDto.getCreditRating())
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())))
+                .execute();
     }
 
     /**
@@ -159,12 +161,18 @@ public class TeacherCitizenService {
         return immigrant;
     }
 
+    /**
+     * 국적이탈
+     * @param citizenDto
+     */
     public void immigrantLeave(RequestCitizenDto citizenDto) {
         QNationStudent nationStudent = QNationStudent.nationStudent;
 
-                queryFactory.delete(nationStudent)
+                queryFactory.update(nationStudent)
+                        .set(nationStudent.state, 2)
                 .where(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber()))
                 .execute();
+
 
     }
 
