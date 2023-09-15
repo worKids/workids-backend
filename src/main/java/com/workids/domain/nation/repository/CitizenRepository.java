@@ -27,5 +27,6 @@ public interface CitizenRepository extends JpaRepository<Citizen, Long>, Queryds
 
     void deleteAllInBatch(Iterable<Citizen> citizens);
 
+    Citizen findByCitizenNumAndNation_NationNum(Long citizenNum, Long nationNum);
 
 }

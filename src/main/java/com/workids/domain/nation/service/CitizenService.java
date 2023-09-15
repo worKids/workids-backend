@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.workids.domain.nation.entity.QCitizen.citizen;
@@ -77,15 +78,27 @@ public class CitizenService {
      * 국민목록 수정
      */
     @Transactional
-    public void update(RequestCitizenUpdateDto dto) {
+    public void update(List<RequestCitizenUpdateDto> dtoList){
 
-        // 국민목록 찾기
-        Citizen citizen = citizenRepository.findByCitizenNum(dto.getCitizenNum());
-        if(citizen != null){
-            throw new ApiException(ExceptionEnum.CITIZEN_NOT_JOIN_EXCEPTION);
+
+        // citizenNumber 중복여부 확인
+        List<Integer> citizenNumberArr = new ArrayList<>();
+        for(RequestCitizenUpdateDto dto : dtoList) {
+            if(citizenNumberArr.contains(dto.getCitizenNumber())){
+                throw new ApiException(ExceptionEnum.CITIZEN_NOT_JOIN_EXCEPTION);
+            }else{
+                citizenNumberArr.add(dto.getCitizenNumber());
+            }
         }
 
-        citizen.updateState(dto);
+        for(RequestCitizenUpdateDto dto : dtoList) {
+            // 국민목록 찾기
+            Citizen citizen = citizenRepository.findByCitizenNumAndNation_NationNum(dto.getCitizenNum(), dto.getNationNum());
+            if (citizen == null) {
+                throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
+            }
+            citizen.updateState(dto);
+        }
 
         System.out.println("국민목록 수정 완료");
 

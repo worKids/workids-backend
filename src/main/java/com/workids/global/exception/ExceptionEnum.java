@@ -55,7 +55,8 @@ public enum ExceptionEnum {
     //부동산
     AUCTION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "A0001", "해당 경매 항목이 존재하지 않습니다."),
     AUCTION_SEAT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "A0002", "경매 자리가 존재하지 않습니다."),
-    AUCTION_NOT_CONTINUE_EXCEPTION(HttpStatus.NOT_FOUND, "A0003", "진행 중인 경매가 아닙니다.");
+    AUCTION_NOT_CONTINUE_EXCEPTION(HttpStatus.NOT_FOUND, "A0003", "진행 중인 경매가 아닙니다."),
+    AUCTION_NOT_ENOUGH_AMOUNT_EXCEPTION(HttpStatus.NOT_FOUND, "A0004", "잔액이 부족합니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;
