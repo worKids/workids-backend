@@ -93,6 +93,17 @@ public class TeacherCitizenController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",immigrant));
     }
+    /**
+     * 취득신고
+     */
+    @PatchMapping("/teacher/citizen/immigrant/acquire")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> immigrantJoin(Model model, @RequestBody RequestCitizenDto citizenDto) {
+        citizenService.immigrantJoin(citizenDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
 
     /**
      * 국적이탈
