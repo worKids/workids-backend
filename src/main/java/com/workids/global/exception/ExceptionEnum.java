@@ -12,11 +12,15 @@ public enum ExceptionEnum {
     API_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "E0003", "존재하지 않는 API 입니다."),
     API_METHOD_NOT_ALLOWED_EXCEPTION(HttpStatus.METHOD_NOT_ALLOWED, "E0004", "지원하지 않는 Method 입니다."),
     API_PARAMETER_EXCEPTION(HttpStatus.BAD_REQUEST, "E0005", "파라미터 타입과 값을 확인하세요."),
+
+    SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "SE001", "서비스가 연결되지 않았습니다."),
+
+    // user
     MEMBER_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "M0001", "접근 권한이 없습니다."),
     TEACHER_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "T0001", "선생님이 일치하지 않습니다.."),
     STUDENT_NOT_MATCH_EXCEPTION(HttpStatus.CREATED, "S0001", "학생과 일치하지 않습니다."),
 
-    // 나라
+    // ===== 나라 =====
     NATION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "N0001", "나라가 존재하지 않습니다."),
     NATIONSTUDENT_JOIN_EXCEPTION(HttpStatus.FORBIDDEN, "N002", "나라에 가입할 수 없습니다."),
     NATION_CODE_NOT_MATCH_EXCEPTION(HttpStatus.FORBIDDEN, "N003", "나라코드가 일치하지 않습니다."),
@@ -25,10 +29,9 @@ public enum ExceptionEnum {
     NATION_NOT_DELETE_EXCEPTION(HttpStatus.FORBIDDEN, "N006", "나라에 가입된 학생이 있어 나라를 삭제할 수 없습니다."),
     NATION_EXIST_EXCEPTION(HttpStatus.CONFLICT, "N0007","중복된 나라 이름입니다"),
 
-    SERVER_NOT_CONNECT_EXCEPTION(HttpStatus.SERVICE_UNAVAILABLE, "S0001", "서비스가 연결되지 않았습니다."),
-
     // 나라-학생
     NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "NS001", "나라와 연결된 해당 학생이 존재하지 않습니다."),
+    NATION_STUDENT_EXIST_EXCEPTION(HttpStatus.CONFLICT, "NS002","이미 해당 나라에 가입한 학생입니다."),
 
     // ===== 은행 =====
     BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."),

@@ -39,7 +39,7 @@ public class CitizenController {
      * 국민 목록 수정
      * PATCH: /teacher/citizen
      */
-    @PatchMapping("/teacher/citizen")
+    @PatchMapping("/citizen")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> update(@RequestBody RequestCitizenUpdateDto dto){
 
@@ -53,7 +53,7 @@ public class CitizenController {
     /**
      * 국민목록 삭제
      */
-    @DeleteMapping("/teacher/citizen")
+    @DeleteMapping("/citizen")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> delete(@RequestBody RequestNumDto dto){
 
