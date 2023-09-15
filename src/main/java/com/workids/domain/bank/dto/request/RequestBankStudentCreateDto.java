@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 은행 상품 가입(예금) RequestDto
+ * 은행 상품 가입(예금) RequestDto - Student
  */
 @Getter
 @NoArgsConstructor

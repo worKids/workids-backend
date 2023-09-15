@@ -2,7 +2,11 @@ package com.workids.domain.bank.controller;
 
 import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankListDto;
-import com.workids.domain.bank.dto.response.ResponseStudentBankDto;
+import com.workids.domain.bank.dto.request.RequestBankStudentJoinListDto;
+import com.workids.domain.bank.dto.request.RequestBankTransactionListDto;
+import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
+import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
+import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
 import com.workids.domain.bank.service.StudentBankService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +37,10 @@ public class StudentBankController {
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> getBankList(@RequestBody RequestBankListDto dto){
         // 전체 은행 상품 조회
-        List<ResponseStudentBankDto> list = studentBankService.getBankList(dto.getNationNum());
+        List<ResponseBankStudentListDto> list = studentBankService.getBankList(dto.getNationNum());
 
         // 결과 확인
-        for (ResponseStudentBankDto bankStudentDto : list){
+        for (ResponseBankStudentListDto bankStudentDto : list){
             System.out.println(bankStudentDto);
         }
         return ResponseEntity.status(HttpStatus.OK)
@@ -55,5 +59,59 @@ public class StudentBankController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
+    }
+
+    /**
+     * 예금 계좌 목록 조회
+     * POST: /student/bank/deposit/list
+     */
+    @PostMapping("/deposit/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getDepositList(@RequestBody RequestBankStudentJoinListDto dto){
+        // 예금 계좌 목록 조회
+        List<ResponseBankStudentJoinListDto> list = studentBankService.getDepositList(dto.getNationStudentNum());
+
+        // 결과 확인
+        for (ResponseBankStudentJoinListDto bankStudentDto : list){
+            System.out.println(bankStudentDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", list));
+    }
+
+    /**
+     * 주거래 계좌 목록 조회
+     * POST: /student/bank/main/list
+     */
+    @PostMapping("/main/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getMainList(@RequestBody RequestBankStudentJoinListDto dto){
+        // 주거래 계좌 목록 조회
+        List<ResponseBankStudentJoinListDto> list = studentBankService.getMainList(dto.getNationStudentNum());
+
+        // 결과 확인
+        for (ResponseBankStudentJoinListDto bankStudentDto : list){
+            System.out.println(bankStudentDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", list));
+    }
+
+    /**
+     * 계좌 상세 거래내역 조회
+     * POST: /student/bank/transaction/list
+     */
+    @PostMapping("/transaction/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getTransactionList(@RequestBody RequestBankTransactionListDto dto){
+        // 계좌 상세 거래내역 조회
+        List<ResponseBankTransactionListDto> list = studentBankService.getTransactionList(dto.getBankNationStudentNum());
+
+        // 결과 확인
+        for (ResponseBankTransactionListDto transactionDto : list){
+            System.out.println(transactionDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", list));
     }
 }

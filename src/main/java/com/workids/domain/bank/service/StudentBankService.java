@@ -1,8 +1,11 @@
 package com.workids.domain.bank.service;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
-import com.workids.domain.bank.dto.response.ResponseStudentBankDto;
+import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
+import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
+import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.entity.BankNationStudent;
 import com.workids.domain.bank.entity.TransactionHistory;
@@ -27,6 +30,7 @@ import java.util.List;
 
 import static com.workids.domain.bank.entity.QBank.bank;
 import static com.workids.domain.bank.entity.QBankNationStudent.bankNationStudent;
+import static com.workids.domain.bank.entity.QTransactionHistory.transactionHistory;
 
 /**
  * Student 은행 Service
@@ -47,7 +51,7 @@ public class StudentBankService {
      * 전체 은행 상품 조회(현재 사용중 모두 조회, 주거래 통장 상품 제외)
      */
     @Transactional
-    public List<ResponseStudentBankDto> getBankList(Long nationNum){
+    public List<ResponseBankStudentListDto> getBankList(Long nationNum){
         // 전체 항목 조회(사용중, 주거래 통장 상품 제외)-상품 유형으로 정렬
         // Entity 리스트로 결과
         List<Bank> bankProductList = queryFactory.selectFrom(bank)
@@ -58,12 +62,11 @@ public class StudentBankService {
                 .fetch();
 
         // Dto 리스트로 변환
-        List<ResponseStudentBankDto> resultList = new ArrayList<>();
+        List<ResponseBankStudentListDto> resultList = new ArrayList<>();
         bankProductList.forEach(b-> {
             System.out.println(b); // 결과 확인
-            // 만기일이 나라 종료일을 지나면 개설 불가하도록
-
-            resultList.add(ResponseStudentBankDto.toDto(b));
+            // 만기일이 나라 종료일을 지나면 노출 안되고 자동으로 미사용으로 변경
+            resultList.add(ResponseBankStudentListDto.toDto(b));
         });
 
         return resultList;
@@ -162,10 +165,98 @@ public class StudentBankService {
         // 주거래 통장에서 예금 금액만큼 이체
         mainAccountBankNationStudent.updateBalance(mainAccountBalance-depositAmount);
 
+        // 주거래 통장 transaction 생성
+        TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, "예금 신규 가입 출금", BankStateType.CATEGORY_TRANSFER, BankStateType.WITHDRAW, depositAmount);
+        transactionHistoryRepository.save(mainTransactionHistory);
+
         // 예금 통장 transaction 생성
         TransactionHistory newTransactionHistory = TransactionHistory.of(newBankNationStudent, "예금 신규 가입", BankStateType.CATEGORY_JOIN, BankStateType.DEPOSIT, depositAmount);
         transactionHistoryRepository.save(newTransactionHistory);
     }
+
+    /**
+     * 예금 계좌 목록 조회
+     */
+    @Transactional
+    public List<ResponseBankStudentJoinListDto> getDepositList(Long nationStudentNum){
+        // 예금 계좌 목록 조회
+        List<ResponseBankStudentJoinListDto> resultList;
+        resultList= queryFactory.select(
+                        Projections.constructor(
+                                ResponseBankStudentJoinListDto.class,
+                                bankNationStudent.bankNationStudentNum,
+                                bankNationStudent.accountNumber,
+                                bank.productName,
+                                bankNationStudent.balance,
+                                bank.interestRate,
+                                bankNationStudent.createdDate,
+                                bankNationStudent.endDate
+                        )
+                )
+                .from(bankNationStudent)
+                .join(bank).on(bankNationStudent.bank.productNum.eq(bank.productNum))
+                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
+                        bankNationStudent.state.eq(BankStateType.MAINTAIN),
+                        bank.productType.eq(BankStateType.DEPOSIT_ACCOUNT))
+                .fetch();
+
+        return resultList;
+    }
+
+    /**
+     * 주거래 계좌 목록 조회
+     */
+    @Transactional
+    public List<ResponseBankStudentJoinListDto> getMainList(Long nationStudentNum){
+        // 주거래 계좌 목록 조회
+        List<ResponseBankStudentJoinListDto> resultList;
+        resultList= queryFactory.select(
+                        Projections.constructor(
+                                ResponseBankStudentJoinListDto.class,
+                                bankNationStudent.bankNationStudentNum,
+                                bankNationStudent.accountNumber,
+                                bank.productName,
+                                bankNationStudent.balance,
+                                bank.interestRate,
+                                bankNationStudent.createdDate,
+                                bankNationStudent.endDate
+                        )
+                )
+                .from(bankNationStudent)
+                .join(bank).on(bankNationStudent.bank.productNum.eq(bank.productNum))
+                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
+                        bankNationStudent.state.eq(BankStateType.MAINTAIN),
+                        bank.productType.eq(BankStateType.MAIN_ACCOUNT))
+                .fetch();
+
+        return resultList;
+    }
+
+    /**
+     * 계좌 상세 거래내역 조회
+     */
+    @Transactional
+    public List<ResponseBankTransactionListDto> getTransactionList(Long bankNationStudentNum){
+        // 예금 계좌 상세 거래내역 조회-거래일 내림차순으로 정렬
+        List<ResponseBankTransactionListDto> resultList;
+        resultList= queryFactory.select(
+                        Projections.constructor(
+                                ResponseBankTransactionListDto.class,
+                                transactionHistory.transactionHistoryNum,
+                                transactionHistory.content,
+                                transactionHistory.category,
+                                transactionHistory.type,
+                                transactionHistory.amount,
+                                transactionHistory.transactionDate
+                        )
+                )
+                .from(transactionHistory)
+                .where(transactionHistory.bankNationStudent.bankNationStudentNum.eq(bankNationStudentNum))
+                .orderBy(transactionHistory.transactionDate.desc())
+                .fetch();
+
+        return resultList;
+
     /**
      * 주거래 통장 찾기
      * */
