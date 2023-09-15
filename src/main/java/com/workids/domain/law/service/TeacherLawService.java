@@ -209,7 +209,7 @@ public class TeacherLawService {
         QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
         BankNationStudent bankNationStudentEntity = studentBankService.findByNationStudentNum(nationStudent.getNationStudentNum());
         if(bankNationStudentEntity.getBalance() < lawEntity.getFine()){//학생 잔액이 벌금보다 적으면
-            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+            throw new ApiException(ExceptionEnum.LAW_NOT_ENOUGH_AMOUNT_EXCEPTION);
         }else {
             //학생 잔액에서 벌금 빼감
             queryFactory
