@@ -83,9 +83,9 @@ public class StudentConsumptionService {
                                 consumptionNationStudent.updatedDate
                         )
                 )
-                .from(consumptionNationStudent)
-                .join(consumption).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
-                .join(nationStudent).on(consumption.nation.nationNum.eq(nationStudent.nation.nationNum))
+                .from(consumption)
+                .join(consumptionNationStudent).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
+                .join(nationStudent).on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nationStudentNum.eq(dto.getNationStudentNum()))
                 .orderBy(consumptionNationStudent.createdDate.desc())
                 .fetch();
@@ -135,9 +135,9 @@ public class StudentConsumptionService {
                                 consumptionNationStudent.updatedDate
                         )
                 )
-                .from(consumptionNationStudent)
-                .join(consumption).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
-                .join(nationStudent).on(consumption.nation.nationNum.eq(nationStudent.nation.nationNum))
+                .from(consumption)
+                .join(consumptionNationStudent).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
+                .join(nationStudent).on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nationStudentNum.eq(dto.getNationStudentNum()).and(consumptionNationStudent.state.eq(ConsumptionStateType.APPROVAL)))
                 .orderBy(consumptionNationStudent.createdDate.desc())
                 .fetch();

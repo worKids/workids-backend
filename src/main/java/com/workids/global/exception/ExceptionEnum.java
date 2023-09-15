@@ -39,12 +39,14 @@ public enum ExceptionEnum {
     //BANKNATIONSTUDENT_NOT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0003", "계좌번호가 이미 존재합니다.(난수 발생 실패)"),
 
     // ===== 법 =====
-    LAW_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 법이 존재하지 않습니다."),
-    LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "법 부여 내역이 존재하지 않습니다."),
+    LAW_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "L0001", "해당 법이 존재하지 않습니다."),
+    LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "L0002", "법 부여 내역이 존재하지 않습니다."),
+    LAW_NOT_ENOUGH_AMOUNT_EXCEPTION(HttpStatus.CONFLICT, "L0003", "주거래 통장의 잔액이 충분하지 않아, 벌금을 부여할 수 없습니다."),
 
     // ===== 소비 =====
     CONSUMPTION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0001", "해당 소비 항목이 존재하지 않습니다."),
     CONSUMPTION_NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "C0002", "소비 신청 내역이 존재하지 않습니다."),
+    CONSUMPTION_NOT_ENOUGH_AMOUNT_EXCEPTION(HttpStatus.CONFLICT, "C0003", "주거래 통장의 잔액이 충분하지 않아, 소비 내역을 승인할 수 없습니다."),
 
     //부동산
     AUCTION_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "A0001", "해당 경매 항목이 존재하지 않습니다."),
