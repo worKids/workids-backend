@@ -1,6 +1,5 @@
 package com.workids.domain.nation.dto.response;
 
-import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
 import com.workids.global.config.stateType.NationStateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

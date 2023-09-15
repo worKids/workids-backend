@@ -1,6 +1,5 @@
 package com.workids.domain.nation.controller;
 
-import com.workids.domain.nation.dto.request.RequestCitizenUpdateDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;

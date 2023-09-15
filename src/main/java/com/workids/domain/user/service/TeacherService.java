@@ -2,7 +2,6 @@ package com.workids.domain.user.service;
 
 import com.workids.domain.user.dto.request.LoginDto;
 import com.workids.domain.user.dto.request.TeacherJoinDto;
-import com.workids.domain.user.entity.Student;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
 import com.workids.global.exception.ApiException;

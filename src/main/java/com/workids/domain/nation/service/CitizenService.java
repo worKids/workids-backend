@@ -1,28 +1,21 @@
 package com.workids.domain.nation.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.workids.domain.bank.dto.response.ResponseStudentBankDto;
-import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
 import com.workids.domain.nation.dto.request.RequestCitizenUpdateDto;
-import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.entity.Citizen;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationRepository;
-import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.workids.domain.bank.entity.QBank.bank;
 import static com.workids.domain.nation.entity.QCitizen.citizen;
 
 @Service
