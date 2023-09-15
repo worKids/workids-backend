@@ -62,12 +62,19 @@ public class NationStudentService {
             throw new ApiException(ExceptionEnum.NATION_CODE_NOT_MATCH_EXCEPTION);
         }
 
-        // 가입여부 확인
+        // 학생 가입여부 확인
         Student student = studentRepository.findByStudentNum(dto.getStudentNum());
         if(student == null){
             throw new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION);
         }
 
+        // nationStudent에 가입된 회원인지 확인
+        NationStudent ns = nationStudentRepository.findByStudent_StudentNumAndNation_NationNum(dto.getNationNum(), dto.getStudentNum());
+        if(ns != null){
+            throw new ApiException(ExceptionEnum.NATION_STUDENT_EXIST_EXCEPTION);
+        }
+
+        // 나라, 학급번호로 가입 가능 여부 확인
         Citizen citizen = citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(), dto.getNationNum());
         if(citizen == null){
             throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
