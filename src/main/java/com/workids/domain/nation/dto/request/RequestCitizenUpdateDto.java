@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RequestCitizenUpdateDto {
+
     private Long citizenNum; // PK
+    private Long nationNum; // FK
 
     private int citizenNumber; // 학급번호
 

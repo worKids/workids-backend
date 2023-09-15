@@ -40,9 +40,9 @@ public class CitizenController {
      */
     @PatchMapping("/citizen")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> update(@RequestBody RequestCitizenUpdateDto dto){
+    public ResponseEntity<BaseResponseDto<?>> update(@RequestBody List<RequestCitizenUpdateDto> dtoList){
 
-        citizenService.update(dto);
+        citizenService.update(dtoList);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
