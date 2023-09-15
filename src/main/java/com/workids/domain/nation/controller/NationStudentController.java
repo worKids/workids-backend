@@ -1,6 +1,6 @@
 package com.workids.domain.nation.controller;
 
-import com.workids.domain.nation.dto.request.RequestNationListDto;
+import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
 import com.workids.domain.nation.service.NationService;
@@ -47,7 +47,7 @@ public class NationStudentController {
 
     @PostMapping("/nation/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<List<ResponseStudentNationListDto>>> getListAll(@RequestBody RequestNationListDto dto){
+    public ResponseEntity<BaseResponseDto<List<ResponseStudentNationListDto>>> getListAll(@RequestBody RequestNumDto dto){
         List<ResponseStudentNationListDto> nationList = nationService.getStudentNationList(dto);
 
         return ResponseEntity.status(HttpStatus.OK)

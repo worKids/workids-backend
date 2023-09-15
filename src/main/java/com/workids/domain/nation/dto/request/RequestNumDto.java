@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequestNationListDto {
+public class RequestNumDto {
     /**
      * teacher, student 공통 사용
      * num : teacherNum or studentNum
