@@ -1,5 +1,8 @@
 package com.workids.domain.nation.service;
 
+import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
+import com.workids.domain.bank.entity.Bank;
+import com.workids.domain.bank.repository.BankRepository;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
@@ -8,11 +11,11 @@ import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
-import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
+import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +37,7 @@ public class NationService {
     private final TeacherRepository teacherRepository;
     private final NationStudentRepository nationStudentRepository;
     private final CitizenService citizenService;
-    private final CitizenRepository citizenRepository;
+    private final BankRepository bankRepository;
 
 
     /**
@@ -52,7 +55,12 @@ public class NationService {
 
         Teacher teacher = teacherRepository.findByTeacherNum(dto.getTeacherNum());
 
-        nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code));
+        Nation nation = nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code));
+
+        // 나라 가입 시 주거래 통장 생성
+        Bank newBank = Bank.baseOf(nation, 0, "주거래 통장", "주거래 통장입니다.", 0, 0, nation.getEndDate());
+        // 은행 상품 등록
+        bankRepository.save(newBank);
 
     }
 
