@@ -2,6 +2,12 @@ package com.workids.domain.law.service;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.workids.domain.bank.entity.BankNationStudent;
+import com.workids.domain.bank.entity.QBankNationStudent;
+import com.workids.domain.bank.entity.TransactionHistory;
+import com.workids.domain.bank.repository.BankNationStudentRepository;
+import com.workids.domain.bank.repository.TransactionHistoryRepository;
+import com.workids.domain.bank.service.StudentBankService;
 import com.workids.domain.law.dto.request.RequestLawDto;
 import com.workids.domain.law.dto.request.RequestLawNationStudentDto;
 import com.workids.domain.law.dto.response.ResponseLawDto;
@@ -17,6 +23,7 @@ import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.entity.QNationStudent;
 import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
+import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.config.stateType.LawStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
@@ -43,6 +50,12 @@ public class TeacherLawService {
 
     @Autowired
     private NationRepository nationRepository;
+
+    @Autowired
+    private StudentBankService studentBankService;
+
+    @Autowired
+    private TransactionHistoryRepository transactionHistoryRepository;
 
     private final JPAQueryFactory queryFactory;
 
@@ -183,10 +196,33 @@ public class TeacherLawService {
             throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
         }
 
-        LawNationStudent lawNationStudent = LawNationStudent.toEntity(law, nationStudent,dto);
-        lawNationStudentRepository.save(lawNationStudent);
+        LawNationStudent lawNationStudentEntity = LawNationStudent.toEntity(law, nationStudent,dto);
+        lawNationStudentRepository.save(lawNationStudentEntity);
 
-        //벌금 빼가는 작동 추가적으로 구현
+        //Exception
+        Law lawEntity = lawRepository.findById(dto.getLawNum()).orElse(null);
+        if(lawEntity == null){
+            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+        }
+
+        //벌금 빼가는 작동
+        QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
+        BankNationStudent bankNationStudentEntity = studentBankService.findByNationStudentNum(nationStudent.getNationStudentNum());
+        if(bankNationStudentEntity.getBalance() < lawEntity.getFine()){//학생 잔액이 벌금보다 적으면
+            throw new ApiException(ExceptionEnum.LAW_NOT_EXIST_EXCEPTION);
+        }else {
+            //학생 잔액에서 벌금 빼감
+            queryFactory
+                    .update(bankNationStudent)
+                    .set(bankNationStudent.balance, bankNationStudentEntity.getBalance()-lawEntity.getFine())
+                    .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudent.getNationStudentNum()))
+                    .execute();
+
+            //계좌에 내역 남기기
+            String content = lawEntity.getContent();
+            TransactionHistory transactionHistory = TransactionHistory.of(bankNationStudentEntity, content,BankStateType.CATEGORY_FINE, BankStateType.WITHDRAW, (long) lawEntity.getFine());
+            transactionHistoryRepository.save(transactionHistory);
+        }
 
     };
 
