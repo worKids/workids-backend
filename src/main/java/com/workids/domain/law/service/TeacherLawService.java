@@ -231,13 +231,31 @@ public class TeacherLawService {
      * */
     public void deleteFineStudent(RequestLawNationStudentDto dto){
         //Exception 처리
-        LawNationStudent entity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
-        if(entity == null){
+        LawNationStudent lawNationStudentEntity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
+        if(lawNationStudentEntity == null){
             throw new ApiException(ExceptionEnum.LAW_NATION_STUDENT_NOT_EXIST_EXCEPTION);
         }
 
-        //벌금 다시 되돌리는 작동 추가적으로 구현
+        NationStudent nationStudentEntity = lawNationStudentEntity.getNationStudent();
+        Law lawEntity = lawNationStudentEntity.getLaw();
 
+        //벌금 다시 되돌리는 작동 추가적으로 구현
+        QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
+        BankNationStudent bankNationStudentEntity = studentBankService.findByNationStudentNum(nationStudentEntity.getNationStudentNum());
+
+        //학생 잔액에 벌금 다시 입금
+        queryFactory
+                .update(bankNationStudent)
+                .set(bankNationStudent.balance, bankNationStudentEntity.getBalance()+lawEntity.getFine())
+                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentEntity.getNationStudentNum()))
+                .execute();
+
+        //계좌에 내역 남기기
+        String content = "벌금 부여 취소";
+        TransactionHistory transactionHistory = TransactionHistory.of(bankNationStudentEntity, content,BankStateType.CATEGORY_FINE, BankStateType.DEPOSIT, (long) lawEntity.getFine());
+        transactionHistoryRepository.save(transactionHistory);
+
+        //벌금 부여 내역 삭제
         lawNationStudentRepository.deleteById(dto.getLawNationStudentNum());
     };
 
