@@ -4,6 +4,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.dto.response.ResponseStudentBankDto;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
+import com.workids.domain.nation.dto.request.RequestCitizenUpdateDto;
+import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
+import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.entity.Citizen;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.repository.CitizenRepository;
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,5 +77,38 @@ public class CitizenService {
         int count = citizenList.size();
 
         return count;
+    }
+
+    /**
+     * 국민목록 수정
+     */
+    @Transactional
+    public void update(RequestCitizenUpdateDto dto) {
+
+        // 국민목록 찾기
+        Citizen citizen = citizenRepository.findByCitizenNum(dto.getCitizenNum());
+        if(citizen != null){
+            throw new ApiException(ExceptionEnum.CITIZEN_NOT_JOIN_EXCEPTION);
+        }
+
+        citizen.updateState(dto);
+
+        System.out.println("국민목록 수정 완료");
+
+    }
+
+    /**
+     * 국민목록 삭제
+     */
+    @Transactional
+    public void delete(RequestNumDto dto) {
+
+        // 국민목록 찾기
+        Citizen citizen = citizenRepository.findByCitizenNum(dto.getNum());
+
+        citizenRepository.delete(citizen);
+
+        System.out.println("국민목록에서 해당 국민 삭제 완료");
+
     }
 }

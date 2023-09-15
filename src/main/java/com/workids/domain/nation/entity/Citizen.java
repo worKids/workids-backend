@@ -2,7 +2,9 @@ package com.workids.domain.nation.entity;
 
 
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
-import com.workids.global.config.BaseTimeEntity;
+import com.workids.domain.nation.dto.request.RequestCitizenUpdateDto;
+import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
+import com.workids.global.config.TimeEntity;
 import com.workids.global.config.stateType.NationStateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +12,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Citizen extends BaseTimeEntity {
+public class Citizen extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "citizen_seq")
@@ -49,4 +52,11 @@ public class Citizen extends BaseTimeEntity {
                 .state(NationStateType.LEAVE_NATION)
                 .build();
     }
+
+    // 국민목록 수정
+    public void updateState(RequestCitizenUpdateDto dto){
+        this.name = dto.getName();
+        this.citizenNumber = dto.getCitizenNumber();
+    }
+
 }
