@@ -1,7 +1,6 @@
 package com.workids.domain.nation.dto.response;
 
 import com.workids.domain.nation.entity.Nation;
-import com.workids.domain.nation.entity.NationStudent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

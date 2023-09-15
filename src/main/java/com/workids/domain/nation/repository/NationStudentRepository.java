@@ -1,6 +1,5 @@
 package com.workids.domain.nation.repository;
 
-import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import org.springframework.data.jpa.repository.JpaRepository;
 

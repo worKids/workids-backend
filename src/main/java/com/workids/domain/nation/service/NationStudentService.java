@@ -3,7 +3,6 @@ package com.workids.domain.nation.service;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.entity.BankNationStudent;
-import com.workids.domain.bank.entity.QBankNationStudent;
 import com.workids.domain.bank.module.AccountNumberGenerator;
 import com.workids.domain.bank.repository.BankNationStudentRepository;
 import com.workids.domain.bank.repository.BankRepository;
@@ -14,7 +13,6 @@ import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Student;
 import com.workids.domain.user.repository.StudentRepository;
-import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import static com.workids.domain.nation.entity.QCitizen.citizen;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,11 +33,6 @@ public class NationStudentService {
     private final BankRepository bankRepository;
 
     private final BankNationStudentRepository bankNationStudentRepository;
-
-    private final JPAQueryFactory queryFactory;
-    //private final QBankNationStudent bankNationStudent;
-
-    private final CitizenService citizenService;
 
 
 
