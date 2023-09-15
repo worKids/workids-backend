@@ -112,7 +112,7 @@ public class TeacherJobService {
         Job job =jobRepository.findById(studentjobDto.getJobNum()).orElse(null);
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
 
-        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent,studentjobDto);
+        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent);
         jobNationStudentRepository.save(jobNationStudent);
 
     }
@@ -124,7 +124,7 @@ public class TeacherJobService {
         Job job =jobRepository.findById(studentjobDto.getJobNum()).orElse(null);
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
 
-        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent,studentjobDto);
+        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent);
         jobNationStudentRepository.update(nationStudent.getNationStudentNum(),job.getJobNum());
 
     }

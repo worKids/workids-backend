@@ -1,5 +1,6 @@
 package com.workids.domain.auction.service;
 
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.auction.dto.MatchSeat;
 import com.workids.domain.auction.dto.request.RequestAuctionDetailDto;
@@ -11,17 +12,24 @@ import com.workids.domain.auction.entity.AuctionNationStudent;
 import com.workids.domain.auction.entity.QAuctionNationStudent;
 import com.workids.domain.auction.repository.AuctionNationStudentRepository;
 import com.workids.domain.auction.repository.AuctionRepository;
+import com.workids.domain.bank.entity.BankNationStudent;
+import com.workids.domain.bank.entity.QBankNationStudent;
+import com.workids.domain.bank.entity.TransactionHistory;
+import com.workids.domain.bank.repository.BankNationStudentRepository;
+import com.workids.domain.bank.repository.TransactionHistoryRepository;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.global.config.stateType.AuctionStateType;
+import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -38,8 +46,9 @@ public class TeacherAuctionService {
     private final AuctionRepository auctionRepository;
     private final AuctionNationStudentRepository auctionNationStudentRepository;
     private final NationStudentRepository nationStudentRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
     private final JPAQueryFactory queryFactory;
-
+    private final BankNationStudentRepository bankNationStudentRepository;
     /**
      * 경매 생성
      * @param dto
@@ -146,6 +155,14 @@ public class TeacherAuctionService {
             throw new ApiException(ExceptionEnum.AUCTION_NOT_EXIST_EXCEPTION);
         }
         updateState(dto.getAuctionNum(), AuctionStateType.DELETE);
+
+        // 학생들 데이터 삭제
+        List<AuctionNationStudent> list = auctionNationStudentRepository
+                .findAllByAuction_AuctionNum(dto.getAuctionNum());
+
+        for (AuctionNationStudent student : list) {
+            deleteBid(student.getAuctionNationStudentNum());
+        }
     }
 
     /**
@@ -178,6 +195,33 @@ public class TeacherAuctionService {
                 .set(student.resultType, AuctionStateType.SUCCESSFUL_BIDDER)
                 .where(student.auctionNationStudentNum.eq(studentNum))
                 .execute();
+        System.out.println("업데이트 경매 결과");
+        // 주거래 통장에서 낙찰 금액만큼 이체
+
+        Long stNum = queryFactory.select(student.nationStudent.nationStudentNum)
+                .from(student)
+                .where(student.auctionNationStudentNum.eq(studentNum))
+                .fetchOne();
+        System.out.println("stNum = " + stNum);
+
+        BankNationStudent account =  bankNationStudentRepository
+                .findByNationStudent_NationStudentNumAndBank_ProductType(stNum, BankStateType.MAIN_ACCOUNT);
+        account.updateBalance(account.getBalance() - price);
+
+        System.out.println("주거래 변경");
+        QBankNationStudent qBankNationStudent = QBankNationStudent.bankNationStudent;
+        BankNationStudent bankNationStudent = queryFactory.selectFrom(qBankNationStudent)
+                .where(qBankNationStudent.nationStudent.nationStudentNum
+                        .eq(JPAExpressions.select(student.nationStudent.nationStudentNum)
+                                .from(student)
+                                .where(student.auctionNationStudentNum.eq(studentNum)))
+                        .and(qBankNationStudent.bank.productType.eq(BankStateType.MAIN_ACCOUNT)))
+                .fetchOne();
+
+        // 예금 통장 transaction 생성
+        TransactionHistory newTransactionHistory = TransactionHistory.of(bankNationStudent, "부동산 경매 낙찰", BankStateType.CATEGORY_AUCTION, BankStateType.WITHDRAW, (long) price);
+        transactionHistoryRepository.save(newTransactionHistory);
+
     }
 
     /**
@@ -202,6 +246,11 @@ public class TeacherAuctionService {
         }
     }
 
+    /**
+     * 경매 참여 여부 체크
+     * @param studentNum
+     * @return
+     */
     private int checkBid(Long studentNum) {
         QAuctionNationStudent student = QAuctionNationStudent.auctionNationStudent;
 
@@ -260,6 +309,14 @@ public class TeacherAuctionService {
                         .and(auctionNationStudent.resultSeatNumber.eq(0)))
                 .fetch();
         return list;
+    }
+
+    void deleteBid(Long studentNum) {
+        QAuctionNationStudent auctionNationStudent = QAuctionNationStudent.auctionNationStudent;
+
+        queryFactory.delete(auctionNationStudent)
+                .where(auctionNationStudent.auctionNationStudentNum.eq(studentNum))
+                .execute();
     }
 }
 
