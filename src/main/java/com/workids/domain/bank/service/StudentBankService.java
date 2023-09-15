@@ -236,10 +236,10 @@ public class StudentBankService {
      * 계좌 상세 거래내역 조회
      */
     @Transactional
-    public List<ResponseBankTransactionListDto> getTransactionList(Long bankNationStudentNum){
+    public List<ResponseBankTransactionListDto> getTransactionList(Long bankNationStudentNum) {
         // 예금 계좌 상세 거래내역 조회-거래일 내림차순으로 정렬
         List<ResponseBankTransactionListDto> resultList;
-        resultList= queryFactory.select(
+        resultList = queryFactory.select(
                         Projections.constructor(
                                 ResponseBankTransactionListDto.class,
                                 transactionHistory.transactionHistoryNum,
@@ -256,6 +256,7 @@ public class StudentBankService {
                 .fetch();
 
         return resultList;
+    }
 
     /**
      * 주거래 통장 찾기
