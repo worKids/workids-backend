@@ -3,7 +3,7 @@ package com.workids.domain.bank.controller;
 import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankListDto;
 import com.workids.domain.bank.dto.request.RequestBankUpdateStateDto;
-import com.workids.domain.bank.dto.response.ResponseTeacherBankDto;
+import com.workids.domain.bank.dto.response.ResponseBankTeacherListDto;
 import com.workids.domain.bank.service.TeacherBankService;
 import com.workids.global.comm.BaseResponseDto;
 import com.workids.global.exception.ApiException;
@@ -45,10 +45,10 @@ public class TeacherBankController {
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> getBankList(@RequestBody RequestBankListDto dto){
         // 전체 은행 상품 조회
-        List<ResponseTeacherBankDto> list = teacherBankService.getBankList(dto.getNationNum());
+        List<ResponseBankTeacherListDto> list = teacherBankService.getBankList(dto.getNationNum());
 
         // 결과 확인
-        for (ResponseTeacherBankDto bankTeacherDto : list){
+        for (ResponseBankTeacherListDto bankTeacherDto : list){
             System.out.println(bankTeacherDto);
         }
         return ResponseEntity.status(HttpStatus.OK)

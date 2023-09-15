@@ -2,7 +2,7 @@ package com.workids.domain.bank.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
-import com.workids.domain.bank.dto.response.ResponseTeacherBankDto;
+import com.workids.domain.bank.dto.response.ResponseBankTeacherListDto;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.repository.BankRepository;
 import com.workids.domain.nation.entity.Nation;
@@ -48,7 +48,7 @@ public class TeacherBankService {
      * 전체 은행 상품 조회(현재 사용중, 미사용중 모두 조회)
      */
     @Transactional
-    public List<ResponseTeacherBankDto> getBankList(Long nationNum){
+    public List<ResponseBankTeacherListDto> getBankList(Long nationNum){
         // 전체 항목 조회(사용중, 미사용중)-상품 유형, 상품 항목 상태, 상품 고유 번호로 정렬
         // Entity 리스트로 결과
         List<Bank> bankProductList = queryFactory.selectFrom(bank)
@@ -57,10 +57,10 @@ public class TeacherBankService {
                         .fetch();
 
         // Dto 리스트로 변환
-        List<ResponseTeacherBankDto> resultList = new ArrayList<>();
+        List<ResponseBankTeacherListDto> resultList = new ArrayList<>();
         bankProductList.forEach(b-> {
             System.out.println(b); // 결과 확인
-            resultList.add(ResponseTeacherBankDto.toDto(b));
+            resultList.add(ResponseBankTeacherListDto.toDto(b));
         });
 
         return resultList;
