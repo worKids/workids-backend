@@ -76,9 +76,23 @@ public class Bank extends TimeEntity {
                 .build();
     }
 
+    // 주거래통장 등록
+    public static Bank baseOf(Nation nation, int productType, String productName, String productContent, int interestRate, int productState, LocalDateTime endDate){
+        return Bank.builder()
+                .nation(nation)
+                .productType(productType)
+                .productContent(productContent)
+                .productName(productName)
+                .interestRate(interestRate)
+                .productState(productState)
+                .endDate(endDate)
+                .build();
+    }
+
     // 은행 상품 삭제
     public void updateState(int productState, LocalDateTime endDate){
         this.productState = productState;
         this.endDate = endDate;
     }
+
 }
