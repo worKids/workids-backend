@@ -8,4 +8,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 public interface BankNationStudentRepository extends JpaRepository<BankNationStudent, Long>, QuerydslPredicateExecutor<BankNationStudent> {
 
     BankNationStudent findByAccountNumber(String accountNumber);
+
+    BankNationStudent findByNationStudent_NationStudentNumAndBank_ProductType(Long studentNum, int type);
+
 }

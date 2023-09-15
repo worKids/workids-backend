@@ -1,7 +1,7 @@
 package com.workids.domain.nation.controller;
 
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationListDto;
+import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
@@ -47,11 +47,26 @@ public class TeacherNationController {
 
     @PostMapping("/nation/list")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<List<ResponseTeacherNationListDto>>> getListAll(@RequestBody RequestNationListDto dto){
+    public ResponseEntity<BaseResponseDto<List<ResponseTeacherNationListDto>>> getListAll(@RequestBody RequestNumDto dto){
          List<ResponseTeacherNationListDto> nationList = nationService.getTeacherList(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", nationList));
+
+    }
+
+    /**
+     * 나라 삭제
+     * DELETE: /teacher/nation
+     */
+    @DeleteMapping("/nation")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> delete(@RequestBody RequestNumDto dto){
+
+        nationService.delete(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
 
     }
 

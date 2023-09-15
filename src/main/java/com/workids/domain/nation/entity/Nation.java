@@ -92,12 +92,13 @@ public class Nation extends TimeEntity {
     }
 
     // 나라 정보 수정
-    public void updateState(RequestNationUpdateDto dto, LocalDateTime start, LocalDateTime end, LocalDateTime now){
+    public void updateState(RequestNationUpdateDto dto, LocalDateTime start, LocalDateTime end){
         this.name = dto.getName();
         this.moneyName = dto.getMoneyName();
         this.taxRate = dto.getTaxRate();
         this.presidentName = dto.getPresidentName();
         this.payDay = dto.getPayDay();
+        this.state = dto.getState();
         this.startDate = start;
         this.endDate = end;
 

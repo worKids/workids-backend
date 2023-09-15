@@ -8,9 +8,13 @@ import com.workids.domain.citizen.dto.response.ResponseCitizenCreditDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenInfoDto;
 import com.workids.domain.job.entity.*;
+import com.workids.domain.job.repository.JobNationStudentRepository;
+import com.workids.domain.job.repository.JobRepository;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.entity.QNationStudent;
 import com.workids.domain.nation.repository.CitizenRepository;
+import com.workids.domain.nation.repository.NationStudentRepository;
+import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.config.stateType.JobStateType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,9 @@ import java.util.List;
 public class TeacherCitizenService {
 
     private final CitizenRepository citizenRepository;
+    private final NationStudentRepository nationStudentRepository;
+    private final JobNationStudentRepository jobNationStudentRepository;
+    private final JobRepository jobRepository;
     private final JPAQueryFactory queryFactory;
 
 
@@ -51,7 +58,7 @@ public class TeacherCitizenService {
                 .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)))
+                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)).and(bankNationStudent.state.eq(BankStateType.IN_USE)))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
@@ -86,9 +93,11 @@ public class TeacherCitizenService {
      * 신용도 수정
      */
     public void updateCredit(RequestCitizenDto citizenDto) {
-
-        citizenRepository.update(citizenDto.getCreditRating(), citizenDto.getNationNum(), citizenDto.getCitizenNumber());
-
+        QNationStudent nationStudent = QNationStudent.nationStudent;
+        queryFactory.update(nationStudent)
+                .set(nationStudent.creditRating, citizenDto.getCreditRating())
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())))
+                .execute();
     }
 
     /**
@@ -152,15 +161,45 @@ public class TeacherCitizenService {
         return immigrant;
     }
 
+    /**
+     * 국적이탈
+     * @param citizenDto
+     */
     public void immigrantLeave(RequestCitizenDto citizenDto) {
         QNationStudent nationStudent = QNationStudent.nationStudent;
 
-                queryFactory.delete(nationStudent)
+                queryFactory.update(nationStudent)
+                        .set(nationStudent.state, 2)
                 .where(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber()))
                 .execute();
 
+
     }
 
+    /**
+     * 취득신고
+     */
+    public void immigrantJoin(RequestCitizenDto citizenDto) {
+        QNationStudent nationStudent = QNationStudent.nationStudent;
+        QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
+        NationStudent nationStudent1 = nationStudentRepository.findByCitizenNumber(citizenDto.getCitizenNumber());
+        Job job =jobRepository.findById(citizenDto.getJobNum()).orElse(null);
+
+        queryFactory.update(nationStudent)
+                .set(nationStudent.creditRating, citizenDto.getCreditRating())
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())))
+                .execute();
+
+        queryFactory.update(bankNationStudent)
+                .set(bankNationStudent.balance, citizenDto.getAsset())
+                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudent1.getNationStudentNum()))
+                .execute();
+
+        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent1);
+        jobNationStudentRepository.save(jobNationStudent);
+
+
+    }
 }
 
 

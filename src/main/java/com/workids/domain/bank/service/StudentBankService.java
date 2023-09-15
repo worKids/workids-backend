@@ -256,5 +256,23 @@ public class StudentBankService {
                 .fetch();
 
         return resultList;
+
+    /**
+     * 주거래 통장 찾기
+     * */
+    public BankNationStudent findByNationStudentNum(long nationStudentNum){
+        System.out.println("nationStudentNum = "+nationStudentNum);
+        // Entity 리스트로 결과
+        List<BankNationStudent> bankNationStudentList =
+                queryFactory
+                        .select(bankNationStudent)
+                        .from(bankNationStudent)
+                        .join(bank).on(bankNationStudent.bank.productNum.eq(bank.productNum))
+                        .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
+                                bank.productType.eq(BankStateType.MAIN_ACCOUNT))
+                        .fetch();
+
+        System.out.println("select 된 결과 : " + bankNationStudentList.toString());
+        return bankNationStudentList.get(0);
     }
 }

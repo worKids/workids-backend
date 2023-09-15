@@ -1,5 +1,6 @@
 package com.workids.domain.nation.dto.request;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,12 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequestNationStudentJoinDto {
-    private Long studentNum;
-    private Long nationNum;
-
-    private String code; // 참여코드
-    private int citizenNumber; // 학급번호
-
+public class RequestNumDto {
+    /**
+     * teacher, student 공통 사용
+     * num : teacherNum or studentNum
+     */
+    private Long num;
 
 }

@@ -22,6 +22,7 @@ public class RequestNationUpdateDto {
     private String presidentName; // 대통령 명
 
     private int payDay; // 월급 지급일
+    private int state;
 
     private String startDate; // 나라 시작일
     private String endDate; // 나라 종료일

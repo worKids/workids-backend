@@ -1,6 +1,5 @@
 package com.workids.domain.nation.repository;
 
-import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,7 +7,7 @@ import java.util.List;
 
 public interface NationStudentRepository extends JpaRepository<NationStudent, Long>{
 
-    Nation findByNation_NationNum(Long nationNum);
+    List<NationStudent> findByNation_NationNum(Long nationNum);
 
     NationStudent findByCitizenNumber(int citizenNumber);
 
@@ -17,4 +16,6 @@ public interface NationStudentRepository extends JpaRepository<NationStudent, Lo
     NationStudent findByNationStudentNum(Long nationStudentNum);
 
     List<NationStudent> findAllByNation_NationNum(Long nationNum);
+
+    NationStudent findByStudent_StudentNumAndNation_NationNum(Long nationNum, Long studentNum);
 }

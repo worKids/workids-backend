@@ -1,11 +1,7 @@
 package com.workids.domain.nation.service;
 
-import com.workids.domain.law.dto.request.RequestLawDto;
-import com.workids.domain.law.entity.Law;
-import com.workids.domain.law.entity.QLaw;
-import com.workids.domain.nation.dto.request.RequestNationInfoDto;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
-import com.workids.domain.nation.dto.request.RequestNationListDto;
+import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
@@ -17,7 +13,6 @@ import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
-import com.workids.global.config.stateType.LawStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +34,8 @@ public class NationService {
     private final TeacherRepository teacherRepository;
     private final NationStudentRepository nationStudentRepository;
     private final CitizenService citizenService;
+    private final CitizenRepository citizenRepository;
+
 
     /**
      * 나라 생성
@@ -47,8 +44,7 @@ public class NationService {
     public void join(RequestNationJoinDto dto, String code) {
 
         if (nationRepository.findByName(dto.getName()) != null){
-            //NATION_EXIST_EXCEPTION(HttpStatus.CONFLICT, "N0002","중복된 나라 이름입니다");
-            throw new IllegalArgumentException("이미 존재하는 나라이름입니다.");
+            throw new ApiException(ExceptionEnum.NATION_EXIST_EXCEPTION);
         }
 
         // 날짜 타입 변환
@@ -69,12 +65,10 @@ public class NationService {
         // 나라 찾기
         Nation nation = nationRepository.findByNationNum(dto.getNationNum()).orElse(null);
 
-        LocalDateTime now = LocalDateTime.now();
-
         // 타입 변환
         LocalDateTime[] times = toLocalDateTime(dto.getStartDate(), dto.getEndDate());
 
-        nation.updateState(dto, times[0], times[1], now);
+        nation.updateState(dto, times[0], times[1]);
 
         System.out.println("나라 정보 수정 완료");
 
@@ -87,7 +81,7 @@ public class NationService {
      * teacher과 연결된 나라 전체 조회
      */
     @Transactional
-    public List<ResponseTeacherNationListDto> getTeacherList(RequestNationListDto dto){
+    public List<ResponseTeacherNationListDto> getTeacherList(RequestNumDto dto){
 
         List<Nation> list = nationRepository.findByTeacher_TeacherNum(dto.getNum());
 
@@ -107,7 +101,7 @@ public class NationService {
      * student와 연결된 나라 전체 조회
      */
     @Transactional
-    public List<ResponseStudentNationListDto> getStudentNationList(RequestNationListDto dto){
+    public List<ResponseStudentNationListDto> getStudentNationList(RequestNumDto dto){
 
         List<NationStudent> list = nationStudentRepository.findByStudent_StudentNum(dto.getNum());
 
@@ -129,8 +123,8 @@ public class NationService {
      * 나라 고유번호로 select
      */
     @Transactional
-    public ResponseNationInfoDto getInfo(RequestNationInfoDto dto){
-        Long nationNum = dto.getNationNum();
+    public ResponseNationInfoDto getInfo(RequestNumDto dto){
+        Long nationNum = dto.getNum();
         Optional<Nation> optNation = nationRepository.findById(nationNum);
 
         Nation nation;
@@ -182,6 +176,24 @@ public class NationService {
 
         return times;
 
+    }
+
+    /**
+     * 나라 삭제
+     */
+    @Transactional
+    public void delete(RequestNumDto dto) {
+
+        // 나라 찾기
+        Nation nation = nationRepository.findById(dto.getNum()).orElse(null);
+
+        List<NationStudent>  nationStudentsList = nationStudentRepository.findByNation_NationNum(dto.getNum());
+        if(!nationStudentsList.isEmpty()){ // 학생 존재하여 나라 삭제 불가
+            throw new ApiException(ExceptionEnum.NATION_NOT_DELETE_EXCEPTION);
+        }
+
+        // 학생 존재하지 않을 경우 나라 삭제
+        nationRepository.deleteById(dto.getNum());
     }
 
 

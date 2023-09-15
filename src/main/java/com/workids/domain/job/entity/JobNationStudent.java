@@ -44,11 +44,11 @@ public class JobNationStudent {
     private LocalDateTime endDate; // 종료일*/
 
     @Builder
-    public static JobNationStudent toEntity(Job job, NationStudent nationStudent, RequestStudentJobDto studentJobDto){
+    public static JobNationStudent toEntity(Job job, NationStudent nationStudent){
         return JobNationStudent.builder()
                 .job(job)
                 .nationStudent(nationStudent)
-                .state(studentJobDto.getState())
+                .state(0)
                 .build();
     }
 }

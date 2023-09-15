@@ -9,7 +9,12 @@ import lombok.ToString;
 @ToString
 public class RequestCitizenDto {
     Long nationNum;
+
     int citizenNumber;
+    String StudentName;
+    String jobName;
+    Long jobNum;
+    Long asset;
     int creditRating;
 
 
