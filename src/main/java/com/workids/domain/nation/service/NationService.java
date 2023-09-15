@@ -1,13 +1,11 @@
 package com.workids.domain.nation.service;
 
-import com.workids.domain.nation.dto.request.RequestCitizenUpdateDto;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
-import com.workids.domain.nation.entity.Citizen;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.repository.CitizenRepository;
