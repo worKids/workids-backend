@@ -147,7 +147,7 @@ public class TeacherLawController {
     /**
      * 벌금 부여 취소
      * */
-    @DeleteMapping("/teacher/law/fine")
+    @PostMapping("/teacher/law/fine/cancel")
     public ResponseEntity<BaseResponseDto<?>> deleteFineStudent(HttpServletRequest request, @RequestBody RequestLawNationStudentDto dto){
         //dto => lawNationStudentNum 필요
 

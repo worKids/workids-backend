@@ -166,4 +166,22 @@ public class StudentBankService {
         TransactionHistory newTransactionHistory = TransactionHistory.of(newBankNationStudent, "예금 신규 가입", BankStateType.CATEGORY_JOIN, BankStateType.DEPOSIT, depositAmount);
         transactionHistoryRepository.save(newTransactionHistory);
     }
+    /**
+     * 주거래 통장 찾기
+     * */
+    public BankNationStudent findByNationStudentNum(long nationStudentNum){
+        System.out.println("nationStudentNum = "+nationStudentNum);
+        // Entity 리스트로 결과
+        List<BankNationStudent> bankNationStudentList =
+                queryFactory
+                        .select(bankNationStudent)
+                        .from(bankNationStudent)
+                        .join(bank).on(bankNationStudent.bank.productNum.eq(bank.productNum))
+                        .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
+                                bank.productType.eq(BankStateType.MAIN_ACCOUNT))
+                        .fetch();
+
+        System.out.println("select 된 결과 : " + bankNationStudentList.toString());
+        return bankNationStudentList.get(0);
+    }
 }
