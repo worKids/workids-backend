@@ -82,7 +82,7 @@ public class TeacherBankService {
         // 현재 날짜 시간-얻기
         LocalDateTime now = LocalDateTime.now();
 
-        // 존재하면 상태, 종료일 업데이트
+        // 존재하면 은행 상품 상태, 종료일 업데이트
         bank.updateState(BankStateType.UN_USE, now);
     }
 
