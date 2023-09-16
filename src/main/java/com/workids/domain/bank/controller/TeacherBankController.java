@@ -3,6 +3,7 @@ package com.workids.domain.bank.controller;
 import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankListDto;
 import com.workids.domain.bank.dto.request.RequestBankUpdateStateDto;
+import com.workids.domain.bank.dto.response.ResponseBankTeacherJoinListDto;
 import com.workids.domain.bank.dto.response.ResponseBankTeacherListDto;
 import com.workids.domain.bank.service.TeacherBankService;
 import com.workids.global.comm.BaseResponseDto;
@@ -71,5 +72,41 @@ public class TeacherBankController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new BaseResponseDto<>(404, "fail"));
         }
+    }
+
+    /**
+     * 국민 예금 계좌 목록 조회
+     * POST: teacher/bank/citizen/deposit/list
+     */
+    @PostMapping("/citizen/deposit/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getCitizenDepositList(@RequestBody RequestBankListDto dto){
+        // 국민 예금 계좌 목록 조회
+        List<ResponseBankTeacherJoinListDto> list = teacherBankService.getCitizenDepositList(dto.getNationNum());
+
+        // 결과 확인
+        for (ResponseBankTeacherJoinListDto bankTeacherDto : list){
+            System.out.println(bankTeacherDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", list));
+    }
+
+    /**
+     * 국민 주거래 계좌 목록 조회
+     * POST: teacher/bank/citizen/main/list
+     */
+    @PostMapping("/citizen/main/list")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getCitizenMainList(@RequestBody RequestBankListDto dto){
+        // 국민 주거래 계좌 목록 조회
+        List<ResponseBankTeacherJoinListDto> list = teacherBankService.getCitizenMainList(dto.getNationNum());
+
+        // 결과 확인
+        for (ResponseBankTeacherJoinListDto bankTeacherDto : list){
+            System.out.println(bankTeacherDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", list));
     }
 }
