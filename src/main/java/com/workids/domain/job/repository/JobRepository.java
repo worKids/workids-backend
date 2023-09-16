@@ -16,8 +16,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     /**
      * 직업삭제
      */
-    @Query(value =  "UPDATE JOB SET STATE = 1 WHERE JOB_NUM = ?1 AND NATION_NUM = ?2", nativeQuery = true)
+    @Query(value =  "UPDATE JOB SET STATE = 1 WHERE NAME = ?1 AND NATION_NUM = ?2", nativeQuery = true)
     @Modifying
-    void delete(Long jobNum, Long nationNum);
+    void delete(String jobName, Long nationNum);
 
 }
