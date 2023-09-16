@@ -221,18 +221,13 @@ public class TeacherLawController {
      * */
     @PostMapping("/teacher/law/penalty/check")
     public ResponseEntity<BaseResponseDto<?>> updatePenaltyCompleteState(HttpServletRequest request, @RequestBody RequestLawNationStudentDto dto){
-        //dto => lawNationStudentNum 필요
+        //dto => lawNationStudentNum, penaltyCompleteState 필요
 
         if (!jwtTokenProvider.validateToken(request.getHeader("Authorization"))) {
             throw new ApiException(ExceptionEnum.MEMBER_ACCESS_EXCEPTION);
         };
 
-        long result = lawService.updatePenaltyCompleteState(dto);
-        if(result!=0){
-            System.out.println("벌칙 수행 체크 완료");
-        }else{
-            System.out.println("벌칙 수행 체크 실패");
-        }
+        lawService.updatePenaltyCompleteState(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
