@@ -1,9 +1,6 @@
 package com.workids.domain.bank.controller;
 
-import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
-import com.workids.domain.bank.dto.request.RequestBankListDto;
-import com.workids.domain.bank.dto.request.RequestBankStudentJoinListDto;
-import com.workids.domain.bank.dto.request.RequestBankTransactionListDto;
+import com.workids.domain.bank.dto.request.*;
 import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
 import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
@@ -13,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,6 +50,20 @@ public class StudentBankController {
     public ResponseEntity<BaseResponseDto<?>> createBankDeposit(@RequestBody RequestBankStudentCreateDto dto){
         // 은행 상품 가입
         studentBankService.createBankDeposit(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success"));
+    }
+    
+    /**
+     * 예금 계좌 중도 해지
+     * PATCH: /student/bank/deposit/cancel
+     */
+    @PatchMapping("/deposit/cancel")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> updateBankDepositState(@RequestBody RequestBankStudentUpdateStateDto dto){
+        // 예금 계좌 중도 해지
+        studentBankService.updateBankDepositState(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success"));
