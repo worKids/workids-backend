@@ -328,7 +328,7 @@ public class TeacherLawService {
     /**
      * 벌칙 수행 확인여부
      * */
-    public long updatePenaltyCompleteState(RequestLawNationStudentDto dto){
+    public void updatePenaltyCompleteState(RequestLawNationStudentDto dto){
         //Exception 처리
         LawNationStudent entity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
         if(entity == null){
@@ -337,12 +337,19 @@ public class TeacherLawService {
 
         QLawNationStudent lawNationStudent = QLawNationStudent.lawNationStudent;
 
-        long result = queryFactory
-                .update(lawNationStudent)
-                .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_COMPLETE)
-                .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
-                .execute();
+        if(dto.getPenaltyCompleteState()==LawStateType.PENALTY_COMPLETE) {
+            queryFactory
+                    .update(lawNationStudent)
+                    .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_COMPLETE)
+                    .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
+                    .execute();
+        } else {
+             queryFactory
+                    .update(lawNationStudent)
+                    .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_UN_COMPLETE)
+                    .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
+                    .execute();
+        }
 
-        return result;
     };
 }
