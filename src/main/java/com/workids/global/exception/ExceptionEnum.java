@@ -29,16 +29,18 @@ public enum ExceptionEnum {
     NATION_NOT_DELETE_EXCEPTION(HttpStatus.FORBIDDEN, "N006", "나라에 가입된 학생이 있어 나라를 삭제할 수 없습니다."),
     NATION_EXIST_EXCEPTION(HttpStatus.CONFLICT, "N0007","중복된 나라 이름입니다"),
 
-    // 나라-학생
+    // ===== 나라-학생 =====
     NATION_STUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "NS001", "나라와 연결된 해당 학생이 존재하지 않습니다."),
     NATION_STUDENT_EXIST_EXCEPTION(HttpStatus.CONFLICT, "NS002","이미 해당 나라에 가입한 학생입니다."),
 
     // ===== 은행 =====
     BANK_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0001", "해당 은행 상품이 존재하지 않습니다."),
+    BANKNATIONSTUDENT_NOT_EXIST_EXCEPTION(HttpStatus.NOT_FOUND, "B0002", "해당 계좌가 존재하지 않습니다."),
+
     // 예금 가입 불가
-    BANK_NOT_VALID_PRODUCT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0002", "만기일이 나라 종료일 이후로 해당 은행 상품을 가입할 수 없습니다."),
-    BANK_NOT_ENOUGH_AMOUNT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0003", "주거래 통장의 잔액이 충분하지 않아, 해당 은행 상품에 예치할 수 없습니다."),
-    BANK_NOT_VALID_AMOUNT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0004", "유효한 예금 금액을 입력하지 않아, 해당 은행 상품에 예치할 수 없습니다."),
+    BANK_NOT_VALID_PRODUCT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0003", "만기일이 나라 종료일 이후로 해당 은행 상품을 가입할 수 없습니다."),
+    BANK_NOT_ENOUGH_AMOUNT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0004", "주거래 통장의 잔액이 충분하지 않아, 해당 은행 상품에 예치할 수 없습니다."),
+    BANK_NOT_VALID_AMOUNT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0005", "유효한 예금 금액을 입력하지 않아, 해당 은행 상품에 예치할 수 없습니다."),
 
     //BANKNATIONSTUDENT_NOT_CREATE_EXCEPTION(HttpStatus.CONFLICT, "B0003", "계좌번호가 이미 존재합니다.(난수 발생 실패)"),
 
