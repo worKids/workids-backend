@@ -2,7 +2,7 @@ package com.workids.domain.bank.controller;
 
 import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankListDto;
-import com.workids.domain.bank.dto.request.RequestBankUpdateStateDto;
+import com.workids.domain.bank.dto.request.RequestBankTeacherUpdateStateDto;
 import com.workids.domain.bank.dto.response.ResponseBankTeacherJoinListDto;
 import com.workids.domain.bank.dto.response.ResponseBankTeacherListDto;
 import com.workids.domain.bank.service.TeacherBankService;
@@ -62,7 +62,7 @@ public class TeacherBankController {
      */
     @PatchMapping("/hide")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> updateBankState(@RequestBody RequestBankUpdateStateDto dto){
+    public ResponseEntity<BaseResponseDto<?>> updateBankState(@RequestBody RequestBankTeacherUpdateStateDto dto){
         try {
             // 은행 상품 삭제
             teacherBankService.updateBankState(dto.getProductNum());
