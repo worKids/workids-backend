@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * 은행 상품 삭제 RequestDto
+ * 은행 상품 삭제 RequestDto - Teacher
  */
 @Getter
 @NoArgsConstructor
 @ToString
-public class RequestBankUpdateStateDto {
+public class RequestBankTeacherUpdateStateDto {
     private Long productNum; // 상품 고유 번호
 }
