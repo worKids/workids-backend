@@ -41,23 +41,23 @@ public class TeacherJobService {
      * 나라의 직업전체조회
      */
     @Transactional
-   public List<ResponseJobDto> selectByNation(RequestJobDto jobDto) {
-       QJob job = QJob.job;
-       QJobToDo jobToDo = QJobToDo.jobToDo;
+    public List<ResponseJobDto> selectByNation(RequestJobDto jobDto) {
+        QJob job = QJob.job;
+        QJobToDo jobToDo = QJobToDo.jobToDo;
 
-    List<ResponseJobDto> jobList = queryFactory.select(
-            Projections.constructor(
-                    ResponseJobDto.class,
-                    job.name,
-                    jobToDo.jobToDoContent,
-                    job.salary
-            )
-    )
-            .from(job)
-            .join(jobToDo).on(job.jobNum.eq(jobToDo.job.jobNum))
-            .where(job.nation.nationNum.eq(jobDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)))
-            .fetch();
-    return jobList;
+        List<ResponseJobDto> jobList = queryFactory.select(
+                        Projections.constructor(
+                                ResponseJobDto.class,
+                                job.name,
+                                jobToDo.jobToDoContent,
+                                job.salary
+                        )
+                )
+                .from(job)
+                .join(jobToDo).on(job.jobNum.eq(jobToDo.job.jobNum))
+                .where(job.nation.nationNum.eq(jobDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)))
+                .fetch();
+        return jobList;
     }
     /**
      * 직업 생성
@@ -76,7 +76,7 @@ public class TeacherJobService {
      */
     public void delete(RequestJobDto jobDto) {
 
-       jobRepository.delete(jobDto.getJobNum(), jobDto.getNationNum());
+        jobRepository.delete(jobDto.getName(), jobDto.getNationNum());
     }
 
     /**
