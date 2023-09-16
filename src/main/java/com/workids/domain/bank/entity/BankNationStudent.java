@@ -65,6 +65,12 @@ public class BankNationStudent {
                 .build();
     }
 
+    // 예금 계좌 중도 해지
+    public void updateState(int state, LocalDateTime cancelDate){
+        this.state = state;
+        this.cancelDate = cancelDate;
+    }
+
     // 잔액 변경
     public void updateBalance(Long balance){
         this.balance = balance;

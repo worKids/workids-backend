@@ -21,7 +21,6 @@ import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.entity.QNationStudent;
 import com.workids.domain.nation.repository.NationRepository;
-import com.workids.domain.nation.service.NationStudentService;
 import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.config.stateType.ConsumptionStateType;
 import com.workids.global.exception.ApiException;
@@ -222,7 +221,7 @@ public class TeacherConsumptionService {
             Consumption consumptionEntity = consumptionNationStudentEntity.getConsumption();
 
             QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
-            BankNationStudent bankNationStudentEntity = studentBankService.findByNationStudentNum(nationStudentEntity.getNationStudentNum());
+            BankNationStudent bankNationStudentEntity = studentBankService.findMainAccountByNationStudentNum(nationStudentEntity.getNationStudentNum());
 
             if(bankNationStudentEntity.getBalance() < consumptionEntity.getAmount()){//학생 잔액이 금액보다 적으면
                 throw new ApiException(ExceptionEnum.CONSUMPTION_NOT_ENOUGH_AMOUNT_EXCEPTION);

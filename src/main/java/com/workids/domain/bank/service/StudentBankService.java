@@ -3,6 +3,7 @@ package com.workids.domain.bank.service;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
+import com.workids.domain.bank.dto.request.RequestBankStudentUpdateStateDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
 import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
@@ -31,6 +32,7 @@ import java.util.List;
 import static com.workids.domain.bank.entity.QBank.bank;
 import static com.workids.domain.bank.entity.QBankNationStudent.bankNationStudent;
 import static com.workids.domain.bank.entity.QTransactionHistory.transactionHistory;
+import static com.workids.domain.nation.entity.QNationStudent.nationStudent;
 
 /**
  * Student 은행 Service
@@ -78,13 +80,13 @@ public class StudentBankService {
     @Transactional
     public void createBankDeposit(RequestBankStudentCreateDto dto){
         // 은행 상품 정보 조회
-        Long productNum = dto.getProductNum();
+        Long productNum = dto.getProductNum(); // 상품 고유 번호
         Bank joinBank = bankRepository.findById(productNum).orElseThrow(() -> new ApiException(ExceptionEnum.BANK_NOT_EXIST_EXCEPTION));
         System.out.println("입력한 상품번호: "+productNum);
         System.out.println(joinBank);
 
         // 나라-학생 정보 조회
-        Long nationStudentNum = dto.getNationStudentNum();
+        Long nationStudentNum = dto.getNationStudentNum(); // 나라-학생 고유 번호
         NationStudent nationStudent = nationStudentRepository.findById(nationStudentNum).orElseThrow(() -> new ApiException(ExceptionEnum.NATION_STUDENT_NOT_EXIST_EXCEPTION));
         System.out.println("나라-학생 고유 번호: "+nationStudentNum);
         System.out.println(nationStudent);
@@ -129,12 +131,7 @@ public class StudentBankService {
         }
 
         // 주거래 통장 금액이 예금 금액보다 적은 경우 은행 상품 가입 불가
-        List<BankNationStudent> mainAccountList = queryFactory.selectFrom(bankNationStudent)
-                .join(bankNationStudent.bank, bank)
-                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
-                        bank.productType.eq(BankStateType.MAIN_ACCOUNT))
-                .fetch();
-        BankNationStudent mainAccountBankNationStudent = mainAccountList.get(0); // 주거래 통장
+        BankNationStudent mainAccountBankNationStudent = findMainAccountByNationStudentNum(nationStudentNum); // 주거래 통장
         System.out.println("주거래 통장 정보");
         System.out.println(mainAccountBankNationStudent);
         Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 통장 잔액
@@ -165,13 +162,43 @@ public class StudentBankService {
         // 주거래 통장에서 예금 금액만큼 이체
         mainAccountBankNationStudent.updateBalance(mainAccountBalance-depositAmount);
 
-        // 주거래 통장 transaction 생성
+        // 주거래 통장 출금 transaction 생성
         TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, "예금 신규 가입 출금", BankStateType.CATEGORY_TRANSFER, BankStateType.WITHDRAW, depositAmount);
         transactionHistoryRepository.save(mainTransactionHistory);
 
-        // 예금 통장 transaction 생성
+        // 예금 통장 입금 transaction 생성
         TransactionHistory newTransactionHistory = TransactionHistory.of(newBankNationStudent, "예금 신규 가입", BankStateType.CATEGORY_JOIN, BankStateType.DEPOSIT, depositAmount);
         transactionHistoryRepository.save(newTransactionHistory);
+    }
+
+    /**
+     * 예금 계좌 중도 해지
+     */
+    @Transactional
+    public void updateBankDepositState(RequestBankStudentUpdateStateDto dto){
+        Long bankNationStudentNum = dto.getBankNationStudentNum(); // 은행-나라-학생 고유 번호
+        Long nationStudentNum = dto.getNationStudentNum(); // 나라-학생 고유 번호
+
+        // 예금 계좌 존재하는지 확인
+        BankNationStudent bankNationStudent = bankNationStudentRepository.findById(bankNationStudentNum).orElseThrow(() -> new ApiException(ExceptionEnum.BANKNATIONSTUDENT_NOT_EXIST_EXCEPTION));
+
+        // 현재 날짜 시간-얻기
+        LocalDateTime now = LocalDateTime.now();
+
+        // 존재하면 예금 계좌 상태, 종료일 업데이트
+        bankNationStudent.updateState(BankStateType.MID_CANCEL, now);
+
+        // 주거래 통장
+        BankNationStudent mainAccountBankNationStudent = findMainAccountByNationStudentNum(nationStudentNum);
+
+        // 주거래 통장으로 예금 금액만큼 이체
+        Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 통장 잔액
+        Long depositAmount = bankNationStudent.getBalance(); // 예금 금액
+        mainAccountBankNationStudent.updateBalance(mainAccountBalance+depositAmount);
+        
+        // 주거래 통장 입금 transaction 생성
+        TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, "예금 해지 입금", BankStateType.CATEGORY_TRANSFER, BankStateType.DEPOSIT, depositAmount);
+        transactionHistoryRepository.save(mainTransactionHistory);
     }
 
     /**
@@ -198,6 +225,7 @@ public class StudentBankService {
                 .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
                         bankNationStudent.state.eq(BankStateType.MAINTAIN),
                         bank.productType.eq(BankStateType.DEPOSIT_ACCOUNT))
+                .orderBy(bankNationStudent.createdDate.asc())
                 .fetch();
 
         return resultList;
@@ -227,6 +255,7 @@ public class StudentBankService {
                 .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
                         bankNationStudent.state.eq(BankStateType.MAINTAIN),
                         bank.productType.eq(BankStateType.MAIN_ACCOUNT))
+                .orderBy(bankNationStudent.createdDate.asc())
                 .fetch();
 
         return resultList;
@@ -261,7 +290,7 @@ public class StudentBankService {
     /**
      * 주거래 통장 찾기
      * */
-    public BankNationStudent findByNationStudentNum(long nationStudentNum){
+    public BankNationStudent findMainAccountByNationStudentNum(long nationStudentNum){
         System.out.println("nationStudentNum = "+nationStudentNum);
         // Entity 리스트로 결과
         List<BankNationStudent> bankNationStudentList =
@@ -275,5 +304,11 @@ public class StudentBankService {
 
         System.out.println("select 된 결과 : " + bankNationStudentList.toString());
         return bankNationStudentList.get(0);
+//        List<BankNationStudent> mainAccountList = queryFactory.selectFrom(bankNationStudent)
+//                .join(bankNationStudent.bank, bank)
+//                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
+//                        bank.productType.eq(BankStateType.MAIN_ACCOUNT))
+//                .fetch();
+//        return mainAccountList.get(0);
     }
 }

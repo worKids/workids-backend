@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.entity.BankNationStudent;
 import com.workids.domain.bank.entity.QBankNationStudent;
 import com.workids.domain.bank.entity.TransactionHistory;
-import com.workids.domain.bank.repository.BankNationStudentRepository;
 import com.workids.domain.bank.repository.TransactionHistoryRepository;
 import com.workids.domain.bank.service.StudentBankService;
 import com.workids.domain.law.dto.request.RequestLawDto;
@@ -207,7 +206,7 @@ public class TeacherLawService {
 
         //벌금 빼가는 작동
         QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
-        BankNationStudent bankNationStudentEntity = studentBankService.findByNationStudentNum(nationStudent.getNationStudentNum());
+        BankNationStudent bankNationStudentEntity = studentBankService.findMainAccountByNationStudentNum(nationStudent.getNationStudentNum());
         if(bankNationStudentEntity.getBalance() < lawEntity.getFine()){//학생 잔액이 벌금보다 적으면
             throw new ApiException(ExceptionEnum.LAW_NOT_ENOUGH_AMOUNT_EXCEPTION);
         }else {
@@ -241,7 +240,7 @@ public class TeacherLawService {
 
         //벌금 다시 되돌리는 작동 추가적으로 구현
         QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
-        BankNationStudent bankNationStudentEntity = studentBankService.findByNationStudentNum(nationStudentEntity.getNationStudentNum());
+        BankNationStudent bankNationStudentEntity = studentBankService.findMainAccountByNationStudentNum(nationStudentEntity.getNationStudentNum());
 
         //학생 잔액에 벌금 다시 입금
         queryFactory
@@ -329,7 +328,7 @@ public class TeacherLawService {
     /**
      * 벌칙 수행 확인여부
      * */
-    public long updatePenaltyCompleteState(RequestLawNationStudentDto dto){
+    public void updatePenaltyCompleteState(RequestLawNationStudentDto dto){
         //Exception 처리
         LawNationStudent entity = lawNationStudentRepository.findById(dto.getLawNationStudentNum()).orElse(null);
         if(entity == null){
@@ -338,12 +337,19 @@ public class TeacherLawService {
 
         QLawNationStudent lawNationStudent = QLawNationStudent.lawNationStudent;
 
-        long result = queryFactory
-                .update(lawNationStudent)
-                .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_COMPLETE)
-                .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
-                .execute();
+        if(dto.getPenaltyCompleteState()==LawStateType.PENALTY_COMPLETE) {
+            queryFactory
+                    .update(lawNationStudent)
+                    .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_COMPLETE)
+                    .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
+                    .execute();
+        } else {
+             queryFactory
+                    .update(lawNationStudent)
+                    .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_UN_COMPLETE)
+                    .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
+                    .execute();
+        }
 
-        return result;
     };
 }
