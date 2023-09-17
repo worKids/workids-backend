@@ -86,7 +86,7 @@ public class TeacherCitizenService {
                         )
                 )
                 .from(nationStudent)
-                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()))
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)))
                 .fetch();
         return creditList;
     }
@@ -98,7 +98,7 @@ public class TeacherCitizenService {
         QNationStudent nationStudent = QNationStudent.nationStudent;
         queryFactory.update(nationStudent)
                 .set(nationStudent.creditRating, citizenDto.getCreditRating())
-                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())))
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber()).and(nationStudent.state.eq(NationStateType.IN_NATION))))
                 .execute();
     }
 
