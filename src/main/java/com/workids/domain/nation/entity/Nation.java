@@ -103,5 +103,10 @@ public class Nation extends TimeEntity {
         this.endDate = end;
 
     }
+    
+    // 나라 운영 상태 수정
+    public void updateOperateState(int state){
+        this.state = state;
+    }
 
 }
