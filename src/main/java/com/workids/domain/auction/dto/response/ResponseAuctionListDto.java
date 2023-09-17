@@ -18,7 +18,7 @@ public class ResponseAuctionListDto {
 
     private int auctionState;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
 
 
