@@ -17,6 +17,7 @@ import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.config.stateType.JobStateType;
+import com.workids.global.config.stateType.NationStateType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -59,7 +60,7 @@ public class TeacherCitizenService {
                 .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)).and(bankNationStudent.state.eq(BankStateType.IN_USE)))
+                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
