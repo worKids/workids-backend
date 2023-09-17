@@ -32,7 +32,6 @@ import java.util.List;
 import static com.workids.domain.bank.entity.QBank.bank;
 import static com.workids.domain.bank.entity.QBankNationStudent.bankNationStudent;
 import static com.workids.domain.bank.entity.QTransactionHistory.transactionHistory;
-import static com.workids.domain.nation.entity.QNationStudent.nationStudent;
 
 /**
  * Student 은행 Service
@@ -130,11 +129,11 @@ public class StudentBankService {
             throw new ApiException(ExceptionEnum.BANK_NOT_VALID_AMOUNT_CREATE_EXCEPTION);
         }
 
-        // 주거래 통장 금액이 예금 금액보다 적은 경우 은행 상품 가입 불가
-        BankNationStudent mainAccountBankNationStudent = findMainAccountByNationStudentNum(nationStudentNum); // 주거래 통장
-        System.out.println("주거래 통장 정보");
+        // 주거래 계좌 금액이 예금 금액보다 적은 경우 은행 상품 가입 불가
+        BankNationStudent mainAccountBankNationStudent = findMainAccountByNationStudentNum(nationStudentNum); // 주거래 계좌
+        System.out.println("주거래 계좌 정보");
         System.out.println(mainAccountBankNationStudent);
-        Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 통장 잔액
+        Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 계좌 잔액
 
         if (mainAccountBalance < depositAmount){
             throw new ApiException(ExceptionEnum.BANK_NOT_ENOUGH_AMOUNT_CREATE_EXCEPTION);
@@ -159,14 +158,14 @@ public class StudentBankService {
         BankNationStudent newBankNationStudent = BankNationStudent.of(joinBank, nationStudent, accountNumber, depositAmount, BankStateType.MAINTAIN, createdDateTime, endDateTime);
         bankNationStudentRepository.save(newBankNationStudent);
 
-        // 주거래 통장에서 예금 금액만큼 이체
+        // 주거래 계좌에서 예금 금액만큼 이체
         mainAccountBankNationStudent.updateBalance(mainAccountBalance-depositAmount);
 
-        // 주거래 통장 출금 transaction 생성
+        // 주거래 계좌 출금 transaction 생성-예금 금액
         TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, "예금 신규 가입 출금", BankStateType.CATEGORY_TRANSFER, BankStateType.WITHDRAW, depositAmount);
         transactionHistoryRepository.save(mainTransactionHistory);
 
-        // 예금 통장 입금 transaction 생성
+        // 예금 계좌 입금 transaction 생성-예금 금액
         TransactionHistory newTransactionHistory = TransactionHistory.of(newBankNationStudent, "예금 신규 가입", BankStateType.CATEGORY_JOIN, BankStateType.DEPOSIT, depositAmount);
         transactionHistoryRepository.save(newTransactionHistory);
     }
@@ -186,17 +185,17 @@ public class StudentBankService {
         LocalDateTime now = LocalDateTime.now();
 
         // 존재하면 예금 계좌 상태, 종료일 업데이트
-        bankNationStudent.updateState(BankStateType.MID_CANCEL, now);
+        bankNationStudent.updateCancelState(BankStateType.MID_CANCEL, now);
 
-        // 주거래 통장
+        // 주거래 계좌
         BankNationStudent mainAccountBankNationStudent = findMainAccountByNationStudentNum(nationStudentNum);
 
-        // 주거래 통장으로 예금 금액만큼 이체
-        Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 통장 잔액
+        // 주거래 계좌로 예금 금액만큼 이체
+        Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 계좌 잔액
         Long depositAmount = bankNationStudent.getBalance(); // 예금 금액
         mainAccountBankNationStudent.updateBalance(mainAccountBalance+depositAmount);
         
-        // 주거래 통장 입금 transaction 생성
+        // 주거래 계좌 입금 transaction 생성-예금 금액
         TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, "예금 해지 입금", BankStateType.CATEGORY_TRANSFER, BankStateType.DEPOSIT, depositAmount);
         transactionHistoryRepository.save(mainTransactionHistory);
     }
@@ -253,7 +252,7 @@ public class StudentBankService {
                 .from(bankNationStudent)
                 .join(bank).on(bankNationStudent.bank.productNum.eq(bank.productNum))
                 .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
-                        bankNationStudent.state.eq(BankStateType.MAINTAIN),
+                        // bankNationStudent.state.eq(BankStateType.MAINTAIN), // 주거래 계좌는 나라 종료일 이후에도 확인 가능하도록
                         bank.productType.eq(BankStateType.MAIN_ACCOUNT))
                 .orderBy(bankNationStudent.createdDate.asc())
                 .fetch();
@@ -288,7 +287,7 @@ public class StudentBankService {
     }
 
     /**
-     * 주거래 통장 찾기
+     * 주거래 계좌 찾기
      * */
     public BankNationStudent findMainAccountByNationStudentNum(long nationStudentNum){
         System.out.println("nationStudentNum = "+nationStudentNum);
