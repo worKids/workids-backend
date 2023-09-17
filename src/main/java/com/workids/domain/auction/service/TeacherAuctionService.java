@@ -30,8 +30,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Subquery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static com.workids.domain.auction.entity.QAuction.auction;
@@ -105,10 +108,10 @@ public class TeacherAuctionService {
             selectWinStudent(dto.getAuctionNum(), i);
         }
         List<Long> noSeat = getNoSeatList(dto.getAuctionNum());
-        Collections.shuffle(noSeat);
+        Collections.shuffle(seats);
         List<MatchSeat> matchResult = new ArrayList<>();
 
-        for (int i = 0; i< seats.size(); i++) {
+        for (int i = 0; i< noSeat.size(); i++) {
             int seat = seats.get(i);
             Long userNum = noSeat.get(i);
             matchResult.add(new MatchSeat(seat, userNum));
@@ -175,8 +178,12 @@ public class TeacherAuctionService {
      * @param state
      */
     private void updateState(Long auctionNum, int state) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate currentDate = LocalDate.now();
         queryFactory.update(auction)
                 .set(auction.auctionState, state)
+                .set(auction.updatedDate, currentDateTime)
+                .set(auction.endDate, currentDate)
                 .where(auction.auctionNum.eq(auctionNum))
                 .execute();
     }
@@ -189,9 +196,11 @@ public class TeacherAuctionService {
      */
     private void updateWinResult(Long studentNum, int price, int seatNum) {
         QAuctionNationStudent student = QAuctionNationStudent.auctionNationStudent;
+        LocalDateTime currentDateTime = LocalDateTime.now();
         queryFactory.update(student)
                 .set(student.resultPrice, price)
                 .set(student.resultSeatNumber, seatNum)
+                .set(student.updatedDate, currentDateTime)
                 .set(student.resultType, AuctionStateType.SUCCESSFUL_BIDDER)
                 .where(student.auctionNationStudentNum.eq(studentNum))
                 .execute();
@@ -230,16 +239,19 @@ public class TeacherAuctionService {
      */
     private void updateLoseResult(Long studentNum, int seat) {
         QAuctionNationStudent student = QAuctionNationStudent.auctionNationStudent;
+        LocalDateTime currentDateTime = LocalDateTime.now();
         int checking = checkBid(studentNum);
         System.out.println("checking = " + checking);
         if (checking == AuctionStateType.NOT_SUBMITTER) {
             queryFactory.update(student)
                     .set(student.resultSeatNumber, seat)
+                    .set(student.updatedDate, currentDateTime)
                     .where(student.auctionNationStudentNum.eq(studentNum))
                     .execute();
         } else {
             queryFactory.update(student)
                     .set(student.resultType, AuctionStateType.NON_SUCCESSFUL_BIDDER)
+                    .set(student.updatedDate, currentDateTime)
                     .set(student.resultSeatNumber, seat)
                     .where(student.auctionNationStudentNum.eq(studentNum))
                     .execute();
