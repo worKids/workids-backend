@@ -7,6 +7,7 @@ import com.workids.domain.citizen.dto.request.RequestCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenCreditDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenInfoDto;
+import com.workids.domain.citizen.dto.response.ResponseImmigrantDto;
 import com.workids.domain.job.entity.*;
 import com.workids.domain.job.repository.JobNationStudentRepository;
 import com.workids.domain.job.repository.JobRepository;
@@ -16,6 +17,7 @@ import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.config.stateType.JobStateType;
+import com.workids.global.config.stateType.NationStateType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -58,7 +60,7 @@ public class TeacherCitizenService {
                 .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)).and(bankNationStudent.state.eq(BankStateType.IN_USE)))
+                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(job.state.eq(JobStateType.IN_USE)).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
@@ -127,53 +129,38 @@ public class TeacherCitizenService {
         }
 
     /**
-     * 이민자
+     * 학급번호로 이민자 조회
      */
-    public List<ResponseCitizenDto> selectImmigrant(RequestCitizenDto citizenDto) {
+    public List<ResponseImmigrantDto> selectImmigrant(RequestCitizenDto citizenDto) {
         QNationStudent nationStudent = QNationStudent.nationStudent;
         QJobNationStudent jobNationStudent = QJobNationStudent.jobNationStudent;
         QJob job = QJob.job;
         QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
 
 
-        List<ResponseCitizenDto> immigrant = queryFactory.select(
+        List<ResponseImmigrantDto> immigrant = queryFactory.select(
                         Projections.constructor(
-                                ResponseCitizenDto.class,
+                                ResponseImmigrantDto.class,
                                 nationStudent.citizenNumber,
-                                nationStudent.studentName,
-                                job.name,
-                                bankNationStudent.balance.sum(),
-                                nationStudent.creditRating
+                                nationStudent.studentName
                         )
                 )
                 .from(nationStudent)
-                .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
-                .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
-                .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)))
-                .groupBy(
-                        nationStudent.citizenNumber,
-                        nationStudent.studentName,
-                        job.name,
-                        nationStudent.creditRating
-                )
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())))
                 .fetch();
         return immigrant;
     }
 
     /**
      * 국적이탈
-     * @param citizenDto
      */
     public void immigrantLeave(RequestCitizenDto citizenDto) {
         QNationStudent nationStudent = QNationStudent.nationStudent;
 
                 queryFactory.update(nationStudent)
-                        .set(nationStudent.state, 2)
-                .where(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber()))
+                        .set(nationStudent.state, 1)
+                .where(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber()).and(nationStudent.nation.nationNum.eq(citizenDto.getNationNum())))
                 .execute();
-
-
     }
 
     /**
@@ -187,6 +174,7 @@ public class TeacherCitizenService {
 
         queryFactory.update(nationStudent)
                 .set(nationStudent.creditRating, citizenDto.getCreditRating())
+                .set(nationStudent.state,0)
                 .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())))
                 .execute();
 

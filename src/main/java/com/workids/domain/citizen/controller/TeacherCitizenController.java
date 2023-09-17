@@ -4,6 +4,7 @@ import com.workids.domain.citizen.dto.request.RequestCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenCreditDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenDto;
 import com.workids.domain.citizen.dto.response.ResponseCitizenInfoDto;
+import com.workids.domain.citizen.dto.response.ResponseImmigrantDto;
 import com.workids.domain.citizen.service.TeacherCitizenService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class TeacherCitizenController {
      * 신용도 수정
      * {
      *     "nationNum" : 1,
-     *     "citizenNum" : 1,
+     *     "citizenNumber" : 1,
      *     "creditRating" : 1
      * }
      */
@@ -88,7 +89,7 @@ public class TeacherCitizenController {
     @PostMapping("/teacher/citizen/immigrant")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> selectImmigrant(Model model, @RequestBody RequestCitizenDto citizenDto) {
-        List<ResponseCitizenDto> immigrant = citizenService.selectImmigrant(citizenDto);
+        List<ResponseImmigrantDto> immigrant = citizenService.selectImmigrant(citizenDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",immigrant));
@@ -108,7 +109,7 @@ public class TeacherCitizenController {
     /**
      * 국적이탈
      */
-    @DeleteMapping("/teacher/citizen/immigrant/leave")
+    @PatchMapping("/teacher/citizen/immigrant/leave")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> immigrantLeave(Model model, @RequestBody RequestCitizenDto citizenDto) {
         citizenService.immigrantLeave(citizenDto);
