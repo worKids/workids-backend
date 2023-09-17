@@ -66,9 +66,14 @@ public class BankNationStudent {
     }
 
     // 예금 계좌 중도 해지
-    public void updateState(int state, LocalDateTime cancelDate){
+    public void updateCancelState(int state, LocalDateTime cancelDate){
         this.state = state;
         this.cancelDate = cancelDate;
+    }
+
+    // 예금 계좌 만기
+    public void updateExpiredState(int state){
+        this.state = state;
     }
 
     // 잔액 변경
