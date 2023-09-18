@@ -10,7 +10,8 @@ import lombok.*;
 public class ResponseCitizenDto {
             int citizenNumber;
             String studentName;
-            String jobName;
+            String name;
             Long asset;
             int credit_rating;
+
 }
