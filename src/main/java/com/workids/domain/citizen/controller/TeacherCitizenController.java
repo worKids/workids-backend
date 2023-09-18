@@ -89,11 +89,13 @@ public class TeacherCitizenController {
     @PostMapping("/teacher/citizen/immigrant")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> selectImmigrant(Model model, @RequestBody RequestCitizenDto citizenDto) {
-        List<ResponseImmigrantDto> immigrant = citizenService.selectImmigrant(citizenDto);
+        List<ResponseCitizenDto> immigrant = citizenService.selectImmigrant(citizenDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",immigrant));
     }
+
+
     /**
      * 취득신고
      */

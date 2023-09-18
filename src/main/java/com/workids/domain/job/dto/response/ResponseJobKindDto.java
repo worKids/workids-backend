@@ -8,6 +8,5 @@ import lombok.*;
 @ToString
 @Builder
 public class ResponseJobKindDto {
-    Long jobNum;
-    String jobName;
+    String name;
 }

@@ -2,6 +2,7 @@ package com.workids.domain.job.service;
 
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.job.dto.request.RequestJobDto;
 import com.workids.domain.job.dto.request.RequestStudentJobDto;
@@ -23,6 +24,7 @@ import com.workids.global.config.stateType.NationStateType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -99,9 +101,10 @@ public class TeacherJobService {
                         )
                 )
                 .from(nationStudent)
-                .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
-                .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
+                .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
+                .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .where(nationStudent.nation.nationNum.eq(studentjobDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)))
+                .orderBy(nationStudent.citizenNumber.asc())
                 .fetch();
         return studentJobList;
     }
@@ -139,7 +142,6 @@ public class TeacherJobService {
         List<ResponseJobKindDto> jobKindList = queryFactory.select(
                         Projections.constructor(
                                 ResponseJobKindDto.class,
-                                job.jobNum,
                                 job.name
                         )
                 )
