@@ -45,6 +45,7 @@ public class StudentAuctionService {
      * 경매 입찰(학생)
      * 주거래 잔액과 입찰 금액 비교, 입찰 금액과 최고 금액 비교
      */
+    @Transactional
     public void bidSeat(RequestStudentAuctionDto dto) {
         // 주거래 잔액 비교 결과 추가하기
         Long balance = getBalance(dto.getNationStudentNum());
@@ -162,6 +163,7 @@ public class StudentAuctionService {
         List<Auction> list = queryFactory.selectFrom(auction)
                 .where(auction.nation.nationNum.eq(nationNum)
                         .and(auction.auctionState.ne(AuctionStateType.DELETE)))
+                .orderBy(auction.createdDate.asc())
                 .fetch();
         return list;
     }

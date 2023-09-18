@@ -148,7 +148,7 @@ public class NationStudentService {
      */
     public ResponseNationStudentDto getNationStudentNum(RequestNationStudentDto dto) {
         NationStudent student = nationStudentRepository
-                .findByStudent_StudentNumAndNation_NationNum(dto.getNationNum(), dto.getStudentNum());
+                .findByStudent_StudentNumAndNation_NationNum( dto.getStudentNum(), dto.getNationNum());
         if (student == null) {
             throw new ApiException(ExceptionEnum.STUDENT_NOT_MATCH_EXCEPTION);
         }
