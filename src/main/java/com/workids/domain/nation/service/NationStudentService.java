@@ -6,7 +6,9 @@ import com.workids.domain.bank.entity.BankNationStudent;
 import com.workids.domain.bank.module.AccountNumberGenerator;
 import com.workids.domain.bank.repository.BankNationStudentRepository;
 import com.workids.domain.bank.repository.BankRepository;
+import com.workids.domain.nation.dto.request.RequestNationStudentDto;
 import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
+import com.workids.domain.nation.dto.response.ResponseNationStudentDto;
 import com.workids.domain.nation.entity.*;
 import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationRepository;
@@ -139,5 +141,17 @@ public class NationStudentService {
 
     }
 
-
+    /**
+     * 나라학생 번호 조회
+     * @param dto
+     * @return
+     */
+    public ResponseNationStudentDto getNationStudentNum(RequestNationStudentDto dto) {
+        NationStudent student = nationStudentRepository
+                .findByStudent_StudentNumAndNation_NationNum(dto.getNationNum(), dto.getStudentNum());
+        if (student == null) {
+            throw new ApiException(ExceptionEnum.STUDENT_NOT_MATCH_EXCEPTION);
+        }
+        return ResponseNationStudentDto.toDto(student);
+    }
 }

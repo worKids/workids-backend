@@ -1,7 +1,9 @@
 package com.workids.domain.nation.controller;
 
+import com.workids.domain.nation.dto.request.RequestNationStudentDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
+import com.workids.domain.nation.dto.response.ResponseNationStudentDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.domain.nation.service.NationStudentService;
@@ -53,6 +55,19 @@ public class NationStudentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", nationList));
 
+    }
+
+    /**
+     * 나라 학생 번호 조회
+     * @param dto
+     * @return
+     */
+    @PostMapping("/nation")
+    public ResponseEntity<BaseResponseDto<ResponseNationStudentDto>> getNationStudentNum(
+            @RequestBody RequestNationStudentDto dto) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", nationStudentService.getNationStudentNum(dto)));
     }
 
 }
