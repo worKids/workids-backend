@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ResponseStudentAuctionDto {
+    private Long auctionNum;
     private int classRow;
     private int classColumn;
     private int totalSeat;
@@ -21,6 +22,7 @@ public class ResponseStudentAuctionDto {
     private LocalDateTime createdDate;
     public static ResponseStudentAuctionDto toDto(Auction auction) {
         return ResponseStudentAuctionDto.builder()
+                .auctionNum(auction.getAuctionNum())
                 .classRow(auction.getClassRow())
                 .classColumn(auction.getClassColumn())
                 .totalSeat(auction.getTotalSeat())
