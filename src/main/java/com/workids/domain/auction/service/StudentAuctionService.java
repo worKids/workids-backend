@@ -1,8 +1,12 @@
 package com.workids.domain.auction.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.workids.domain.auction.dto.request.RequestAuctionDoneDto;
+import com.workids.domain.auction.dto.request.RequestAuctionListDto;
 import com.workids.domain.auction.dto.request.RequestStudentAuctionDto;
+import com.workids.domain.auction.dto.response.ResponseStudentAuctionDto;
 import com.workids.domain.auction.entity.Auction;
+import com.workids.domain.auction.entity.QAuction;
 import com.workids.domain.auction.entity.QAuctionNationStudent;
 import com.workids.domain.auction.repository.AuctionNationStudentRepository;
 import com.workids.domain.auction.repository.AuctionRepository;
@@ -68,6 +72,13 @@ public class StudentAuctionService {
         updateSeat(dto);
     }
 
+    public ResponseStudentAuctionDto getAuction(RequestAuctionListDto dto) {
+        Auction auction = getRecentAuction(dto.getNationNum());
+        if (auction == null) {
+            throw new ApiException(ExceptionEnum.AUCTION_NOT_EXIST_EXCEPTION);
+        }
+        return ResponseStudentAuctionDto.toDto(auction);
+    }
     // querydsl용 함수
 
     /**
@@ -84,6 +95,11 @@ public class StudentAuctionService {
                 .execute();
     }
 
+    /**
+     * 은행 잔액 가져오기
+     * @param studentNum
+     * @return
+     */
     private Long getBalance(Long studentNum) {
         QBankNationStudent account = QBankNationStudent.bankNationStudent;
         System.out.println("studentNum = " + studentNum);
@@ -95,4 +111,15 @@ public class StudentAuctionService {
         System.out.println("getbalance 종료");
         return balance;
     }
+    private Auction getRecentAuction(Long nationNum) {
+        QAuction auction = QAuction.auction;
+        Auction a = queryFactory.selectFrom(auction)
+                .where(auction.nation.nationNum.eq(nationNum)
+                        .and(auction.auctionState.eq(AuctionStateType.IN_PROGRESS)))
+                .orderBy(auction.createdDate.desc())
+                .limit(1)
+                .fetchOne();
+        return a;
+    }
+
 }

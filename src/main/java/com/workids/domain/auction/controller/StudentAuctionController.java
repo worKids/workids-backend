@@ -1,6 +1,9 @@
 package com.workids.domain.auction.controller;
 
+import com.workids.domain.auction.dto.request.RequestAuctionDoneDto;
+import com.workids.domain.auction.dto.request.RequestAuctionListDto;
 import com.workids.domain.auction.dto.request.RequestStudentAuctionDto;
+import com.workids.domain.auction.dto.response.ResponseStudentAuctionDto;
 import com.workids.domain.auction.service.AuctionService;
 import com.workids.domain.auction.service.StudentAuctionService;
 import com.workids.global.comm.BaseResponseDto;
@@ -31,4 +34,9 @@ public class StudentAuctionController {
                 .body(new BaseResponseDto<>(201, "success"));
     }
 
+    @PostMapping("/auction/detail")
+    public ResponseEntity<BaseResponseDto<ResponseStudentAuctionDto>> getAuction(@RequestBody RequestAuctionListDto dto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", studentAuctionService.getAuction(dto)));
+    }
 }
