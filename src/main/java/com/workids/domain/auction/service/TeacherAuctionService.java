@@ -151,6 +151,7 @@ public class TeacherAuctionService {
      * 경매 삭제
      * @param dto
      */
+    @Transactional
     public void deleteAuction(RequestAuctionDoneDto dto) {
         Auction auction = auctionRepository.findByAuctionNum(dto.getAuctionNum());
         // 경매 없을 때 에러

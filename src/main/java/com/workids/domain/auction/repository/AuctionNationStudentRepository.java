@@ -13,5 +13,6 @@ public interface AuctionNationStudentRepository extends JpaRepository<AuctionNat
 
     List<AuctionNationStudent> findAllByAuction_AuctionNum(Long auctionNum);
 
+    AuctionNationStudent findByAuction_AuctionNumAndNationStudent_NationStudentNum(Long auctionNum, Long NationStudentNum);
     AuctionNationStudent findTopByAuction_AuctionNumAndSubmitSeatNumberOrderBySubmitPriceDescNationStudent_CreditRatingDescUpdatedDateDesc(Long auctionNum, int seat);
 }

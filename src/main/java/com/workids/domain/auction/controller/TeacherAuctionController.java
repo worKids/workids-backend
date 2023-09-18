@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class TeacherAuctionController {
      * @param dto
      * @return
      */
-    @PostMapping("/auction/done")
+    @PatchMapping("/auction/done")
     public ResponseEntity<BaseResponseDto<?>> auctionDone(@RequestBody RequestAuctionDoneDto dto) {
         teacherAuctionService.auctionDone(dto);
         return ResponseEntity.status(HttpStatus.OK)
@@ -67,7 +68,7 @@ public class TeacherAuctionController {
      * @param dto
      * @return
      */
-    @PostMapping("/auction/hide")
+    @PatchMapping("/auction/hide")
     public ResponseEntity<BaseResponseDto<?>> deleteAuction (@RequestBody RequestAuctionDoneDto dto) {
         teacherAuctionService.deleteAuction(dto);
         return ResponseEntity.status(HttpStatus.OK)

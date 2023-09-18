@@ -4,8 +4,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.auction.dto.request.RequestAuctionDoneDto;
 import com.workids.domain.auction.dto.request.RequestAuctionListDto;
 import com.workids.domain.auction.dto.request.RequestStudentAuctionDto;
+import com.workids.domain.auction.dto.request.RequestStudentAuctionListDto;
 import com.workids.domain.auction.dto.response.ResponseStudentAuctionDto;
+import com.workids.domain.auction.dto.response.ResponseStudentAuctionListDto;
 import com.workids.domain.auction.entity.Auction;
+import com.workids.domain.auction.entity.AuctionNationStudent;
 import com.workids.domain.auction.entity.QAuction;
 import com.workids.domain.auction.entity.QAuctionNationStudent;
 import com.workids.domain.auction.repository.AuctionNationStudentRepository;
@@ -24,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -39,6 +45,7 @@ public class StudentAuctionService {
      * 경매 입찰(학생)
      * 주거래 잔액과 입찰 금액 비교, 입찰 금액과 최고 금액 비교
      */
+    @Transactional
     public void bidSeat(RequestStudentAuctionDto dto) {
         // 주거래 잔액 비교 결과 추가하기
         Long balance = getBalance(dto.getNationStudentNum());
@@ -72,15 +79,39 @@ public class StudentAuctionService {
         updateSeat(dto);
     }
 
+    /**
+     * 최근 경매 조회
+     * @param dto
+     * @return
+     */
     public ResponseStudentAuctionDto getAuction(RequestAuctionListDto dto) {
         Auction auction = getRecentAuction(dto.getNationNum());
         if (auction == null) {
-            throw new ApiException(ExceptionEnum.AUCTION_NOT_EXIST_EXCEPTION);
+            return null;
         }
         return ResponseStudentAuctionDto.toDto(auction);
     }
-    // querydsl용 함수
 
+    /**
+     * 학생 별 경매 입찰 내역
+     * @param dto
+     * @return
+     */
+    public List<ResponseStudentAuctionListDto> getAuctionList(RequestStudentAuctionListDto dto) {
+        List<Auction> auctions = getAuctions(dto.getNationNum());
+        if (auctions.isEmpty()) {
+            return null;
+        }
+        List<ResponseStudentAuctionListDto> list = auctions.stream().map(auction -> {
+            System.out.println("auction.getAuctionNum() = " + auction.getAuctionNum());
+            System.out.println("dto.getNationStudentNum() = " + dto.getNationStudentNum());
+            AuctionNationStudent student = getStudent(auction.getAuctionNum(), dto.getNationStudentNum());
+            return ResponseStudentAuctionListDto.toDto(auction, student);
+        }).collect(Collectors.toList());
+        return list;
+    }
+
+    // querydsl용 함수
     /**
      * 학생 auction 등록 update문
      * @param dto
@@ -122,4 +153,33 @@ public class StudentAuctionService {
         return a;
     }
 
+    /**
+     * 취소되지 않은 경매 내역
+     * @param nationNum
+     * @return
+     */
+    private List<Auction> getAuctions(Long nationNum) {
+        QAuction auction = QAuction.auction;
+        List<Auction> list = queryFactory.selectFrom(auction)
+                .where(auction.nation.nationNum.eq(nationNum)
+                        .and(auction.auctionState.ne(AuctionStateType.DELETE)))
+                .orderBy(auction.createdDate.asc())
+                .fetch();
+        return list;
+    }
+
+    /**
+     * 경매별 학생 조회
+     * @param auctionNum
+     * @param studentNum
+     * @return
+     */
+    private AuctionNationStudent getStudent(Long auctionNum, Long studentNum) {
+        QAuctionNationStudent student = QAuctionNationStudent.auctionNationStudent;
+        AuctionNationStudent a = queryFactory.selectFrom(student)
+                .where(student.auction.auctionNum.eq(auctionNum)
+                        .and(student.nationStudent.nationStudentNum.eq(studentNum)))
+                .fetchOne();
+        return a;
+    }
 }
