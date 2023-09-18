@@ -19,7 +19,7 @@ public class ResponseStudentNationListDto {
     public static ResponseStudentNationListDto of(NationStudent nationstudent, int totalStudent){
         return ResponseStudentNationListDto.builder()
                 .nationNum(nationstudent.getNation().getNationNum())
-                .name(nationstudent.getStudentName())
+                .name(nationstudent.getNation().getName())
                 .totalStudent(totalStudent)
                 .build();
     }
