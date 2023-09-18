@@ -11,6 +11,7 @@ public class RequestStudentJobDto {
     Long nationStudentNum;
     Long jobNum;
     Long nationNum;
+    String name;
     int citizenNumber;
     int state;
 
