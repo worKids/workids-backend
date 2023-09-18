@@ -10,7 +10,7 @@ import lombok.ToString;
 public class RequestCitizenDto {
     Long nationNum;
     int citizenNumber;
-    Long jobNum;
+    String name;
     Long asset;
     int creditRating;
 

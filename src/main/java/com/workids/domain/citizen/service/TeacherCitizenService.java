@@ -170,7 +170,7 @@ public class TeacherCitizenService {
         QNationStudent nationStudent = QNationStudent.nationStudent;
         QBankNationStudent bankNationStudent = QBankNationStudent.bankNationStudent;
         NationStudent nationStudent1 = nationStudentRepository.findByCitizenNumber(citizenDto.getCitizenNumber());
-        Job job =jobRepository.findById(citizenDto.getJobNum()).orElse(null);
+        Job job = jobRepository.findByNation_NationNumAndName(citizenDto.getNationNum(), citizenDto.getName());
 
         queryFactory.update(nationStudent)
                 .set(nationStudent.creditRating, citizenDto.getCreditRating())

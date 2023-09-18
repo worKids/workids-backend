@@ -12,6 +12,7 @@ import com.workids.domain.job.entity.*;
 import com.workids.domain.job.repository.JobNationStudentRepository;
 import com.workids.domain.job.repository.JobRepository;
 import com.workids.domain.job.repository.JobToDoRepository;
+
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.entity.QNationStudent;
@@ -109,7 +110,11 @@ public class TeacherJobService {
      * 직업부여
      */
     public void studentJobJoin(RequestStudentJobDto studentjobDto) {
-        Job job =jobRepository.findById(studentjobDto.getJobNum()).orElse(null);
+
+        Job job = jobRepository.findByNation_NationNumAndName(studentjobDto.getNationNum(), studentjobDto.getName());
+        if(job == null){
+            System.out.println("null");
+        }
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
 
         JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent);
@@ -121,10 +126,9 @@ public class TeacherJobService {
      * 직업부여수정
      */
     public void studentJobUpdate(RequestStudentJobDto studentjobDto) {
-        Job job =jobRepository.findById(studentjobDto.getJobNum()).orElse(null);
+        Job job = jobRepository.findByNation_NationNumAndName(studentjobDto.getNationNum(), studentjobDto.getName());
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
 
-        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent);
         jobNationStudentRepository.update(nationStudent.getNationStudentNum(),job.getJobNum());
 
     }
