@@ -1,5 +1,6 @@
 package com.workids.domain.law.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.law.entity.Law;
 import com.workids.domain.law.entity.LawNationStudent;
 import lombok.*;
@@ -23,6 +24,7 @@ public class ResponseLawDto {
     //벌칙 내용
     private String penalty;
     //법 항목 생성일
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
 
     public ResponseLawDto toDto(Law entity){

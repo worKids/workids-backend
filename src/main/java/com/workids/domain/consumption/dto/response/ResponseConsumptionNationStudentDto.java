@@ -1,5 +1,6 @@
 package com.workids.domain.consumption.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.consumption.entity.ConsumptionNationStudent;
 import lombok.*;
 
@@ -25,8 +26,10 @@ public class ResponseConsumptionNationStudentDto {
     //소비 신청 상태
     private int state;
     //소비 신청일
+    @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
     //소비 신청 내역 수정일(승낙, 거절일)
+    @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime updatedDate;
 
     public ResponseConsumptionNationStudentDto toDto(ConsumptionNationStudent entity){
