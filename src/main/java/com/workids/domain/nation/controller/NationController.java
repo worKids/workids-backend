@@ -65,10 +65,6 @@ public class NationController {
     }
 
 
-    /**
-     * 나라 메인페이지(나라정보, 법/직업/소비항목 조회) - teacher, student 동일
-     * POST: /teacher/nation
-     */
 
 
 
