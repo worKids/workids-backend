@@ -21,4 +21,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     void delete(String jobName, Long nationNum);
 
     Job findByNation_NationNumAndName(Long nationNum, String name);
+
+
+    Job findByNation_NationNum(Long nationNum);
+
 }

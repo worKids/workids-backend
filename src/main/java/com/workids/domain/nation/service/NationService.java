@@ -1,13 +1,17 @@
 package com.workids.domain.nation.service;
 
-import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.repository.BankRepository;
+import com.workids.domain.job.entity.Job;
+import com.workids.domain.job.repository.JobRepository;
+import com.workids.domain.law.entity.Law;
+import com.workids.domain.law.repository.LawRepository;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
+import com.workids.domain.nation.dto.response.ResponseTeacherMainDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
@@ -15,7 +19,6 @@ import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
-import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,9 @@ public class NationService {
     private final NationStudentRepository nationStudentRepository;
     private final CitizenService citizenService;
     private final BankRepository bankRepository;
+
+    private final LawRepository lawRepository;
+    private final JobRepository jobRepository;
 
 
     /**
@@ -203,6 +209,26 @@ public class NationService {
         // 학생 존재하지 않을 경우 나라 삭제
         nationRepository.deleteById(dto.getNum());
     }
+
+    /**
+     * 메인화면
+     */
+    @Transactional
+    public ResponseTeacherMainDto getMainInfo(RequestNumDto dto){
+
+        Nation nation = nationRepository.findById(dto.getNum()).orElse(null);
+        Law law = lawRepository.findByNation_NationNum(dto.getNum());
+        Job job = jobRepository.findByNation_NationNum(dto.getNum());
+
+
+        int totalCitizen = citizenService.citizenCount(nation.getNationNum());
+        ResponseTeacherMainDto responseTeacherMainDto = null;
+        responseTeacherMainDto = responseTeacherMainDto.toDto(nation, law, job, totalCitizen);
+
+        return responseTeacherMainDto;
+
+    }
+
 
 
 

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import com.workids.domain.nation.dto.response.ResponseTeacherMainDto;
+
 
 import java.util.List;
 
@@ -69,6 +71,24 @@ public class TeacherNationController {
                 .body(new BaseResponseDto<>(200, "success"));
 
     }
+    /**
+     * 나라 메인페이지(나라정보, 법/직업/소비항목 조회) - teacher, student 동일
+     * POST: /teacher/nation
+     */
+    @PostMapping("/nation")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> getMainInfo(@RequestBody RequestNumDto dto){
+
+
+        System.out.println("들어오나?");
+
+        ResponseTeacherMainDto responseTeacherMainDto = nationService.getMainInfo(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", responseTeacherMainDto));
+
+    }
+
 
 
 
