@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -61,7 +62,11 @@ public class NationService {
 
         Teacher teacher = teacherRepository.findByTeacherNum(dto.getTeacherNum());
 
-        Nation nation = nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code));
+        // 나라 상태 확인
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        int checkState = nationState(currentDateTime, times[0]);
+
+        Nation nation = nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code, checkState));
 
         // 나라 가입 시 주거래 통장 생성
         Bank newBank = Bank.baseOf(nation, 0, "주거래 통장", "주거래 통장입니다.", 0, 0, nation.getEndDate());
@@ -227,6 +232,20 @@ public class NationService {
 
         return responseTeacherMainDto;
 
+    }
+
+    /**
+     * 나라 상태 확인
+     */
+    public int nationState(LocalDateTime now, LocalDateTime start){
+        LocalDate nowDate = now.toLocalDate();
+        LocalDate startDate = start.toLocalDate();
+        
+        if (nowDate.isBefore(startDate)) { // 나중에 시작하는 경우
+            return 0; // 운영대기
+        } else{
+            return 1; // 운영중
+        }
     }
 
 
