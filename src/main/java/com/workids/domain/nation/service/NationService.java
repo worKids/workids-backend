@@ -218,8 +218,7 @@ public class NationService {
         nationRepository.deleteById(dto.getNum());
     }
 
-    
-=======
+    /**
      * 메인화면
      */
     @Transactional
