@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.nation.dto.request.RequestCitizenJoinDto;
 import com.workids.domain.nation.dto.request.RequestCitizenUpdateDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
+import com.workids.domain.nation.dto.response.ResponseNationCitizenDto;
+import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Citizen;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.repository.CitizenRepository;
@@ -28,6 +30,23 @@ public class CitizenService {
     private final NationRepository nationRepository;
 
     private final JPAQueryFactory queryFactory;
+
+    /**
+     * 국민목록 조회
+     */
+    @Transactional
+    public List<ResponseNationCitizenDto> getCitizen(RequestNumDto dto){
+
+        List<Citizen> list = citizenRepository.findByNation_NationNum(dto.getNum());
+
+
+        List<ResponseNationCitizenDto> dtoList = new ArrayList<>();
+        for(Citizen citizen : list){
+            dtoList.add(ResponseNationCitizenDto.toDto(citizen));
+        }
+
+        return dtoList;
+    }
 
     /**
      * 국민목록 등록
