@@ -1,8 +1,10 @@
 package com.workids.domain.nation.controller;
 
+import com.workids.domain.nation.dto.request.RequestNationNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
+import com.workids.domain.nation.dto.response.ResponseNationMonthDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
 import com.workids.global.security.JwtTokenProvider;
@@ -69,6 +71,12 @@ public class NationController {
      * 나라 메인페이지(나라정보, 법/직업/소비항목 조회) - teacher, student 동일
      * POST: /teacher/nation
      */
+
+    @PostMapping("/nation/month")
+    public ResponseEntity<BaseResponseDto<ResponseNationMonthDto>> getMonth(@RequestBody RequestNationNumDto dto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", nationService.getMonth(dto)));
+    }
 
 
 
