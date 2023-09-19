@@ -73,7 +73,7 @@ public class Nation extends TimeEntity {
 
 
 
-    public static Nation of(RequestNationJoinDto dto, Teacher teacher, LocalDateTime startDateTime, LocalDateTime endDateTime, String code) {
+    public static Nation of(RequestNationJoinDto dto, Teacher teacher, LocalDateTime startDateTime, LocalDateTime endDateTime, String code, int state) {
         return Nation.builder()
                 .teacher(teacher)
                 .name(dto.getName())
@@ -85,7 +85,7 @@ public class Nation extends TimeEntity {
                 .grade(dto.getGrade())
                 .classRoom(dto.getClassRoom())
                 .payDay(dto.getPayDay())
-                .state(dto.getState())
+                .state(state)
                 .startDate(startDateTime)
                 .endDate(endDateTime)
                 .build();

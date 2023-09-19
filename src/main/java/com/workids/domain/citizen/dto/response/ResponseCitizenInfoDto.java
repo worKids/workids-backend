@@ -10,6 +10,6 @@ import lombok.*;
 public class ResponseCitizenInfoDto {
     int citizenNumber;
     String studentName;
-    String jobName;
-    int credit_rating;
+    String name;
+    int creditRating;
 }

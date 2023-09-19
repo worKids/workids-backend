@@ -23,9 +23,14 @@ public class ResponseNationInfoDto {
     private int taxRate;
     private String code;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    private String presidentName; // 대통령 명
+
+    private int payDay; // 월급 지급일
+    private int state;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime startDate; // 나라 시작일
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime endDate; // 나라 종료일
 
     public static ResponseNationInfoDto toDto(Nation nation){
@@ -34,6 +39,9 @@ public class ResponseNationInfoDto {
                 .moneyName(nation.getMoneyName())
                 .taxRate(nation.getTaxRate())
                 .code(nation.getCode())
+                .presidentName(nation.getPresidentName())
+                .payDay(nation.getPayDay())
+                .state(nation.getState())
                 .startDate(nation.getStartDate())
                 .endDate(nation.getEndDate())
                 .build();

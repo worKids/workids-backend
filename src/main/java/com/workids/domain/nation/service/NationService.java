@@ -1,8 +1,11 @@
 package com.workids.domain.nation.service;
 
-import com.workids.domain.bank.dto.request.RequestBankTeacherCreateDto;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.repository.BankRepository;
+import com.workids.domain.job.entity.Job;
+import com.workids.domain.job.repository.JobRepository;
+import com.workids.domain.law.entity.Law;
+import com.workids.domain.law.repository.LawRepository;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNationNumDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
@@ -10,6 +13,7 @@ import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
 import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
 import com.workids.domain.nation.dto.response.ResponseNationMonthDto;
 import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
+import com.workids.domain.nation.dto.response.ResponseTeacherMainDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
@@ -17,7 +21,6 @@ import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Teacher;
 import com.workids.domain.user.repository.TeacherRepository;
-import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +46,9 @@ public class NationService {
     private final CitizenService citizenService;
     private final BankRepository bankRepository;
 
+    private final LawRepository lawRepository;
+    private final JobRepository jobRepository;
+
 
     /**
      * 나라 생성
@@ -58,7 +65,11 @@ public class NationService {
 
         Teacher teacher = teacherRepository.findByTeacherNum(dto.getTeacherNum());
 
-        Nation nation = nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code));
+        // 나라 상태 확인
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        int checkState = nationState(currentDateTime, times[0]);
+
+        Nation nation = nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code, checkState));
 
         // 나라 가입 시 주거래 통장 생성
         Bank newBank = Bank.baseOf(nation, 0, "주거래 통장", "주거래 통장입니다.", 0, 0, nation.getEndDate());
@@ -207,7 +218,41 @@ public class NationService {
         nationRepository.deleteById(dto.getNum());
     }
 
+    
+=======
+     * 메인화면
+     */
+    @Transactional
+    public ResponseTeacherMainDto getMainInfo(RequestNumDto dto){
+
+        Nation nation = nationRepository.findById(dto.getNum()).orElse(null);
+        Law law = lawRepository.findByNation_NationNum(dto.getNum());
+        Job job = jobRepository.findByNation_NationNum(dto.getNum());
+
+
+        int totalCitizen = citizenService.citizenCount(nation.getNationNum());
+        ResponseTeacherMainDto responseTeacherMainDto = null;
+        responseTeacherMainDto = responseTeacherMainDto.toDto(nation, law, job, totalCitizen);
+
+        return responseTeacherMainDto;
+
+    }
+
     /**
+     * 나라 상태 확인
+     */
+    public int nationState(LocalDateTime now, LocalDateTime start){
+        LocalDate nowDate = now.toLocalDate();
+        LocalDate startDate = start.toLocalDate();
+        
+        if (nowDate.isBefore(startDate)) { // 나중에 시작하는 경우
+            return 0; // 운영대기
+        } else{
+            return 1; // 운영중
+        }
+    }
+
+     /**
      * 나라 월 조회
      * @param dto
      * @return
