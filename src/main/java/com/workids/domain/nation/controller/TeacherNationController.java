@@ -1,7 +1,11 @@
 package com.workids.domain.nation.controller;
 
+import com.workids.domain.job.entity.Job;
+import com.workids.domain.law.entity.Law;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
+import com.workids.domain.nation.dto.response.ResponseNationJobDto;
+import com.workids.domain.nation.dto.response.ResponseNationLawDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
@@ -77,15 +81,44 @@ public class TeacherNationController {
      */
     @PostMapping("/nation")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> getMainInfo(@RequestBody RequestNumDto dto){
+    public ResponseEntity<BaseResponseDto<ResponseTeacherMainDto>> getMainInfo(@RequestBody RequestNumDto dto){
 
 
-        System.out.println("들어오나?");
-
+        // 나라 정보
         ResponseTeacherMainDto responseTeacherMainDto = nationService.getMainInfo(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", responseTeacherMainDto));
+
+    }
+
+    /**
+     * 나라 메인페이지 - 법 조회
+     * POST: /teacher/nation/law
+     */
+    @PostMapping("/nation/law")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<List<ResponseNationLawDto>>> getMainInfoLaw(@RequestBody RequestNumDto dto){
+
+        List<ResponseNationLawDto> lawList = nationService.getMainInfoLaw(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", lawList));
+
+    }
+
+    /**
+     * 나라 메인페이지 - 직업 조회
+     * POST: /teacher/nation/job
+     */
+    @PostMapping("/nation/job")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<List<ResponseNationJobDto>>> getMainInfoJob(@RequestBody RequestNumDto dto){
+
+        List<ResponseNationJobDto> jobList = nationService.getMainInfoJob(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", jobList));
 
     }
 
