@@ -88,6 +88,7 @@ public class TeacherCitizenService {
                 )
                 .from(nationStudent)
                 .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)))
+                .orderBy(nationStudent.citizenNumber.asc())
                 .fetch();
         return creditList;
     }
