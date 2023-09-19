@@ -119,7 +119,7 @@ public class TeacherCitizenService {
                                     nationStudent.citizenNumber,
                                     nationStudent.studentName,
                                     job.name,
-                                    bankNationStudent.balance.sum(),
+
                                     nationStudent.creditRating
                             )
                     )
