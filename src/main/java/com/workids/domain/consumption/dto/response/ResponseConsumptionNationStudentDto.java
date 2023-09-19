@@ -22,7 +22,7 @@ public class ResponseConsumptionNationStudentDto {
     //소비 항목 내용
     private String content;
     //소비 항목 금액
-    private int amount;
+    private Long amount;
     //소비 신청 상태
     private int state;
     //소비 신청일

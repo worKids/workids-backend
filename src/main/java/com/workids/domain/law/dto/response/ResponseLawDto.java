@@ -20,11 +20,11 @@ public class ResponseLawDto {
     //벌금, 벌칙 type
     private int type;
     //벌금 금액
-    private int fine;
+    private Long fine;
     //벌칙 내용
     private String penalty;
     //법 항목 생성일
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
 
     public ResponseLawDto toDto(Law entity){

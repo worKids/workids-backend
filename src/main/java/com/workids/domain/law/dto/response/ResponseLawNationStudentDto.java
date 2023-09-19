@@ -2,6 +2,7 @@ package com.workids.domain.law.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workids.domain.law.entity.LawNationStudent;
+import com.workids.global.config.stateType.LawStateType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class ResponseLawNationStudentDto {
     //벌금, 벌칙 type
     private int type;
     //벌금 금액
-    private int fine;
+    private Long fine;
     //벌칙 내용
     private String penalty;
     //벌칙 수행 여부

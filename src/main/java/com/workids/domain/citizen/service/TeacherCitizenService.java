@@ -59,8 +59,8 @@ public class TeacherCitizenService {
                 .from(nationStudent)
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
-                .leftJoin(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)))
+                .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
@@ -88,6 +88,7 @@ public class TeacherCitizenService {
                 )
                 .from(nationStudent)
                 .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)))
+                .orderBy(nationStudent.citizenNumber.asc())
                 .fetch();
         return creditList;
     }
@@ -119,14 +120,14 @@ public class TeacherCitizenService {
                                     nationStudent.citizenNumber,
                                     nationStudent.studentName,
                                     job.name,
-                                    bankNationStudent.balance.sum(),
+
                                     nationStudent.creditRating
                             )
                     )
                     .from(nationStudent)
                     .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                     .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
-                    .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)))
+                    .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(nationStudent.state.eq(NationStateType.IN_NATION)))
                     .fetch();
             return citizenInfoList;
         }

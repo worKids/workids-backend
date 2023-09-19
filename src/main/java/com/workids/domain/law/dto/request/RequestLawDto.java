@@ -17,7 +17,7 @@ public class RequestLawDto {
     //벌금, 벌칙 type
     private int type;
     //벌금 금액
-    private int fine;
+    private Long fine;
     //벌칙 내용
     private String penalty;
     //법 항목 고유 번호

@@ -7,9 +7,10 @@ import com.workids.domain.job.repository.JobRepository;
 import com.workids.domain.law.entity.Law;
 import com.workids.domain.law.repository.LawRepository;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
+import com.workids.domain.nation.dto.request.RequestNationNumDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
-import com.workids.domain.nation.dto.response.*;
+import com.workids.domain.nation.dto.response.*; 
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.repository.NationRepository;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -283,7 +285,27 @@ public class NationService {
         }
     }
 
+     /**
+     * 나라 월 조회
+     * @param dto
+     * @return
+     */
+    public ResponseNationMonthDto getMonth(RequestNationNumDto dto) {
+        Nation nation = nationRepository.findByNationNum(dto.getNationNum())
+                .orElseThrow(() -> new ApiException(ExceptionEnum.NATION_EXIST_EXCEPTION));
+        LocalDateTime start = nation.getStartDate();
+        LocalDateTime end = nation.getEndDate();
 
+        Set<Integer> monthList = new HashSet<>();
+        LocalDateTime current = start;
+        while (!current.isAfter(end)) {
+            YearMonth yearMonth = YearMonth.from(current);
+            int monthNumber = yearMonth.getMonthValue();
+            monthList.add(monthNumber);
 
-
+            current = current.plusMonths(1); // 다음 달로 이동
+        }
+        System.out.println("monthList = " + monthList);
+        return ResponseNationMonthDto.toDto(monthList);
+    }
 }

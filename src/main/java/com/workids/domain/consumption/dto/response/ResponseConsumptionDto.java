@@ -17,7 +17,7 @@ public class ResponseConsumptionDto {
     //소비 항목 내용
     private String content;
     //소비 항목 금액
-    private int amount;
+    private Long amount;
     //소비 항목 생성일
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
