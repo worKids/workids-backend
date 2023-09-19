@@ -34,7 +34,7 @@ public class Law extends TimeEntity {
     @Column(nullable = false)
     private int type;
 
-    private int fine;
+    private Long fine;
 
     @Column(length = 500)
     private String penalty;

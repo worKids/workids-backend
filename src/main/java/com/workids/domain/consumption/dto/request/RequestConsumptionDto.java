@@ -15,7 +15,7 @@ public class RequestConsumptionDto {
     //소비 항목 내용
     private String content;
     //소비 항목 금액
-    private int amount;
+    private Long amount;
     //소비 항목 고유 번호
     private Long consumptionNum;
 }

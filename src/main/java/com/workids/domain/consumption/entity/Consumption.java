@@ -30,7 +30,7 @@ public class Consumption extends TimeEntity {
     @Column(length = 100)
     private String content;
 
-    private int amount;
+    private Long amount;
 
     private int state;
 
