@@ -59,8 +59,8 @@ public class TeacherCitizenService {
                 .from(nationStudent)
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
-                .leftJoin(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)))
+                .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
