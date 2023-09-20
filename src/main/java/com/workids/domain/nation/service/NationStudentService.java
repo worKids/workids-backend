@@ -45,14 +45,24 @@ public class NationStudentService {
     @Transactional
     public void join(RequestNationStudentJoinDto dto) {
 
+        // 나라코드로 nationNum 찾기
+        Nation nation = nationRepository.findByCode(dto.getCode());
 
+        if(nation == null){
+            throw new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION);
+        }
+        /*
         Nation nation = nationRepository.findByNationNum(dto.getNationNum())
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
 
+         */
         // 나라코드 일치여부 확인
+        /*
         if (!checkNationCode(nation.getCode(), dto.getCode())) {
             throw new ApiException(ExceptionEnum.NATION_CODE_NOT_MATCH_EXCEPTION);
         }
+
+         */
 
         // 학생 가입여부 확인
         Student student = studentRepository.findByStudentNum(dto.getStudentNum());
@@ -61,13 +71,13 @@ public class NationStudentService {
         }
 
         // nationStudent에 가입된 회원인지 확인
-        NationStudent ns = nationStudentRepository.findByStudent_StudentNumAndNation_NationNum(dto.getNationNum(), dto.getStudentNum());
+        NationStudent ns = nationStudentRepository.findByStudent_StudentNumAndNation_NationNum(nation.getNationNum(), dto.getStudentNum());
         if(ns != null){
             throw new ApiException(ExceptionEnum.NATION_STUDENT_EXIST_EXCEPTION);
         }
 
         // 나라, 학급번호로 가입 가능 여부 확인
-        Citizen citizen = citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(), dto.getNationNum());
+        Citizen citizen = citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(), nation.getNationNum());
         if(citizen == null){
             throw new ApiException(ExceptionEnum.NATION_NOT_JOIN_EXCEPTION);
         }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RequestNationStudentJoinDto {
     private Long studentNum;
-    private Long nationNum;
+    //private Long nationNum;
 
     private String code; // 참여코드
     private int citizenNumber; // 학급번호
