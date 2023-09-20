@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -87,7 +88,7 @@ public class StudentConsumptionService {
                 .join(consumptionNationStudent).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
                 .join(nationStudent).on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nationStudentNum.eq(dto.getNationStudentNum()))
-                .orderBy(consumptionNationStudent.createdDate.desc())
+                .orderBy(consumptionNationStudent.updatedDate.desc())
                 .fetch();
         return list;
     }
@@ -99,9 +100,12 @@ public class StudentConsumptionService {
     public long updateConsumptionNationStudentStateByStudent(RequestConsumptionNationStudentDto dto){
         QConsumptionNationStudent consumptionNationStudent = QConsumptionNationStudent.consumptionNationStudent;
 
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
         long result = queryFactory
                 .update(consumptionNationStudent)
                 .set(consumptionNationStudent.state, ConsumptionStateType.CANCEL)
+                .set(consumptionNationStudent.updatedDate, currentDateTime)
                 .where(consumptionNationStudent.consumptionNationStudentNum.eq(dto.getConsumptionNationStudentNum()))
                 .execute();
 
@@ -139,7 +143,7 @@ public class StudentConsumptionService {
                 .join(consumptionNationStudent).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
                 .join(nationStudent).on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nationStudentNum.eq(dto.getNationStudentNum()).and(consumptionNationStudent.state.eq(ConsumptionStateType.APPROVAL)))
-                .orderBy(consumptionNationStudent.createdDate.desc())
+                .orderBy(consumptionNationStudent.updatedDate.desc())
                 .fetch();
         return list;
     }
