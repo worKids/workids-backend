@@ -2,12 +2,15 @@ package com.workids.domain.job.entity;
 
 import com.workids.domain.job.dto.request.RequestStudentJobDto;
 import com.workids.domain.nation.entity.NationStudent;
+import com.workids.global.config.TimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import static com.workids.global.config.stateType.JobStateType.EMPLOY;
 
 /**
  * 직업-나라-학생
@@ -17,7 +20,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JobNationStudent {
+public class JobNationStudent extends TimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_nation_student_seq")
     @SequenceGenerator(name = "job_nation_student_seq", sequenceName = "job_nation_student_seq", allocationSize = 1)
@@ -48,7 +51,7 @@ public class JobNationStudent {
         return JobNationStudent.builder()
                 .job(job)
                 .nationStudent(nationStudent)
-                .state(0)
+                .state(EMPLOY)
                 .build();
     }
 }
