@@ -59,7 +59,7 @@ public class TeacherLawService {
 
     private final JPAQueryFactory queryFactory;
 
-    LocalDateTime currentDateTime = LocalDateTime.now();
+    private final LocalDateTime currentDateTime = LocalDateTime.now();
 
     /**
      * 법 내역 조회

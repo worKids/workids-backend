@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -54,6 +55,8 @@ public class TeacherConsumptionService {
 
     private final JPAQueryFactory queryFactory;
 
+    private final LocalDateTime currentDateTime = LocalDateTime.now();
+
     /**
      * 소비 항목 조회
      * */
@@ -71,6 +74,7 @@ public class TeacherConsumptionService {
                 )
                 .from(consumption)
                 .where(consumption.nation.nationNum.eq(dto.getNationNum()).and(consumption.state.eq(ConsumptionStateType.IN_USE)))
+                .orderBy(consumption.updatedDate.desc())
                 .fetch();
 
         return consumptionList;
@@ -110,6 +114,7 @@ public class TeacherConsumptionService {
         long result = queryFactory
                 .update(consumption)
                 .set(consumption.state, ConsumptionStateType.UN_USE)
+                .set(consumption.updatedDate, currentDateTime)
                 .where(consumption.consumptionNum.eq(dto.getConsumptionNum()))
                 .execute();
 
@@ -130,6 +135,7 @@ public class TeacherConsumptionService {
         long result = queryFactory
                 .update(consumption)
                 .set(consumption.state, ConsumptionStateType.UN_USE)
+                .set(consumption.updatedDate, currentDateTime)
                 .where(consumption.consumptionNum.eq(dto.getConsumptionNum()))
                 .execute();
 
@@ -161,7 +167,7 @@ public class TeacherConsumptionService {
                 .join(consumptionNationStudent).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
                 .join(nationStudent).on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(consumptionNationStudent.state.eq(ConsumptionStateType.BEFORE_CHECK)))
-                .orderBy(consumptionNationStudent.createdDate.desc())
+                .orderBy(consumptionNationStudent.updatedDate.desc())
                 .fetch();
         System.out.println(list.size());
         return list;
@@ -192,7 +198,7 @@ public class TeacherConsumptionService {
                 .join(consumptionNationStudent).on(consumptionNationStudent.consumption.consumptionNum.eq(consumption.consumptionNum))
                 .join(nationStudent).on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(consumptionNationStudent.state.in(ConsumptionStateType.APPROVAL, ConsumptionStateType.REFUSE)))
-                .orderBy(consumptionNationStudent.createdDate.desc())
+                .orderBy(consumptionNationStudent.updatedDate.desc())
                 .fetch();
         return list;
     }
@@ -211,6 +217,7 @@ public class TeacherConsumptionService {
         long result = queryFactory
                 .update(consumptionNationStudent)
                 .set(consumptionNationStudent.state, dto.getState())
+                .set(consumptionNationStudent.updatedDate, currentDateTime)
                 .where(consumptionNationStudent.consumptionNationStudentNum.eq(dto.getConsumptionNationStudentNum()))
                 .execute();
 
