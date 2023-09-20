@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -57,6 +58,8 @@ public class TeacherLawService {
     private TransactionHistoryRepository transactionHistoryRepository;
 
     private final JPAQueryFactory queryFactory;
+
+    LocalDateTime currentDateTime = LocalDateTime.now();
 
     /**
      * 법 내역 조회
@@ -120,6 +123,7 @@ public class TeacherLawService {
         long reuslt = queryFactory
                 .update(law)
                 .set(law.state, LawStateType.UN_USE)
+                .set(law.updatedDate, currentDateTime)
                 .where(law.lawNum.eq(dto.getLawNum()))
                 .execute();
 
@@ -141,6 +145,7 @@ public class TeacherLawService {
         long result = queryFactory
                 .update(law)
                 .set(law.state, LawStateType.UN_USE)
+                .set(law.updatedDate, currentDateTime)
                 .where(law.lawNum.eq(dto.getLawNum()))
                 .execute();
         return result;
@@ -341,12 +346,14 @@ public class TeacherLawService {
             queryFactory
                     .update(lawNationStudent)
                     .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_COMPLETE)
+                    .set(lawNationStudent.updatedDate, currentDateTime)
                     .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
                     .execute();
         } else {
              queryFactory
                     .update(lawNationStudent)
                     .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_UN_COMPLETE)
+                    .set(lawNationStudent.updatedDate, currentDateTime)
                     .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
                     .execute();
         }
