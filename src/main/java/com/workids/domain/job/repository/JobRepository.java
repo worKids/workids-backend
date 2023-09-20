@@ -23,6 +23,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     Job findByNation_NationNumAndName(Long nationNum, String name);
 
 
-    Job findByNation_NationNum(Long nationNum);
+    List<Job> findByNation_NationNum(Long nationNum);
 
 }

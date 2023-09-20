@@ -10,11 +10,7 @@ import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNationNumDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
 import com.workids.domain.nation.dto.request.RequestNationUpdateDto;
-import com.workids.domain.nation.dto.response.ResponseNationInfoDto;
-import com.workids.domain.nation.dto.response.ResponseNationMonthDto;
-import com.workids.domain.nation.dto.response.ResponseStudentNationListDto;
-import com.workids.domain.nation.dto.response.ResponseTeacherMainDto;
-import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
+import com.workids.domain.nation.dto.response.*; 
 import com.workids.domain.nation.entity.Nation;
 import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.repository.NationRepository;
@@ -224,16 +220,54 @@ public class NationService {
     @Transactional
     public ResponseTeacherMainDto getMainInfo(RequestNumDto dto){
 
-        Nation nation = nationRepository.findById(dto.getNum()).orElse(null);
-        Law law = lawRepository.findByNation_NationNum(dto.getNum());
-        Job job = jobRepository.findByNation_NationNum(dto.getNum());
 
+        Long nationNum = dto.getNum();
+        Optional<Nation> optNation = nationRepository.findById(nationNum);
 
-        int totalCitizen = citizenService.citizenCount(nation.getNationNum());
-        ResponseTeacherMainDto responseTeacherMainDto = null;
-        responseTeacherMainDto = responseTeacherMainDto.toDto(nation, law, job, totalCitizen);
+        Nation nation;
+        ResponseTeacherMainDto mainDto = null;
+        if(optNation.isPresent()){
+            nation = optNation.orElseThrow(NullPointerException::new);
+            int totalCitizen = citizenService.citizenCount(nation.getNationNum());
+            mainDto = ResponseTeacherMainDto.toDto(nation, totalCitizen);
 
-        return responseTeacherMainDto;
+        }
+
+        return mainDto;
+
+    }
+
+    /**
+     * 메인화면 - 법
+     */
+    @Transactional
+    public List<ResponseNationLawDto> getMainInfoLaw(RequestNumDto dto){
+
+        List<Law> lawList = lawRepository.findByNation_NationNum(dto.getNum());
+
+        List<ResponseNationLawDto> nationLawDtoList = new ArrayList<>();
+        for(Law law : lawList){
+            nationLawDtoList.add(ResponseNationLawDto.toDto(law));
+        }
+
+        return nationLawDtoList;
+
+    }
+
+    /**
+     * 메인화면 - 직업
+     */
+    @Transactional
+    public List<ResponseNationJobDto> getMainInfoJob(RequestNumDto dto){
+
+        List<Job> jobList = jobRepository.findByNation_NationNum(dto.getNum());
+
+        List<ResponseNationJobDto> nationJobDtoList = new ArrayList<>();
+        for(Job job : jobList){
+            nationJobDtoList.add(ResponseNationJobDto.toDto(job));
+        }
+
+        return nationJobDtoList;
 
     }
 
@@ -243,7 +277,7 @@ public class NationService {
     public int nationState(LocalDateTime now, LocalDateTime start){
         LocalDate nowDate = now.toLocalDate();
         LocalDate startDate = start.toLocalDate();
-        
+
         if (nowDate.isBefore(startDate)) { // 나중에 시작하는 경우
             return 0; // 운영대기
         } else{
