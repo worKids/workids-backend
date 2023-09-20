@@ -62,8 +62,8 @@ public class StudentJobService {
                                 ResponseMyJobDto.class,
                                 job.name,
                                 job.salary,
-                                job.createdDate,
-                                job.updatedDate
+                                jobNationStudent.createdDate,
+                                jobNationStudent.updatedDate
                         )
                 )
 
