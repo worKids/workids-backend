@@ -77,10 +77,10 @@ public class RankingService {
 
         resultDto.setAssetRanking(assetRanking);
 
-
         //월
         if(dto.getType()=='m') {
             int currentMonth = currentDate.getMonthValue();
+
             //저축왕 //이 달에 가장 많은 예금을 저축
             List<Tuple> result = queryFactory
                     .select(
@@ -198,6 +198,7 @@ public class RankingService {
 
         //전체
         if(dto.getType()=='t') {
+
             //저축왕
             List<Tuple> result = queryFactory
                     .select(

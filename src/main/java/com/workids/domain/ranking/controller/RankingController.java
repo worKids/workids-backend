@@ -11,8 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +24,8 @@ public class RankingController {
     /**
      * 랭킹 조회
      * */
-    @PostMapping("/ranking/save/list")
+    @PostMapping("/ranking/list")
+    @ResponseBody
     public ResponseEntity<BaseResponseDto<ResponseRankingResultDto>> getRanking(@RequestBody RequestRankingDto dto){
         //dto => nationNum, type 필요
 
