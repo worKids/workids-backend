@@ -49,7 +49,7 @@ public class StudentLawService {
                 .join(lawNationStudent).on(law.lawNum.eq(lawNationStudent.law.lawNum))
                 .join(nationStudent).on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nationStudentNum.eq(dto.getNationStudentNum()).and(law.type.eq(LawStateType.FINE)))
-                .orderBy(lawNationStudent.createdDate.desc())
+                .orderBy(lawNationStudent.updatedDate.desc())
                 .fetch();
 
         return studentFineList;
@@ -81,7 +81,7 @@ public class StudentLawService {
                 .join(lawNationStudent).on(law.lawNum.eq(lawNationStudent.law.lawNum))
                 .join(nationStudent).on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nationStudentNum.eq(dto.getNationStudentNum()).and(law.type.eq(LawStateType.PENALTY)))
-                .orderBy(lawNationStudent.createdDate.desc())
+                .orderBy(lawNationStudent.updatedDate.desc())
                 .fetch();
 
         return studentPenaltyList;
