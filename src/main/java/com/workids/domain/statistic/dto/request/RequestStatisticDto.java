@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequestStatisticDto {
     private Long nationStudentNum;
+    private Long nationNum;
 }
