@@ -1,6 +1,7 @@
 package com.workids.domain.bank.controller;
 
 import com.workids.domain.bank.dto.request.*;
+import com.workids.domain.bank.dto.response.ResponseBankStudentAssetDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
 import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
@@ -121,5 +122,19 @@ public class StudentBankController {
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", list));
+    }
+
+    /**
+     * 총 자산 조회
+     * POST: /student/bank/asset
+     */
+    @PostMapping("/asset")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto> getAsset(@RequestBody RequestBankStudentJoinListDto dto){
+        // 총 자산 조회
+        ResponseBankStudentAssetDto asset = studentBankService.getAsset(dto.getNationStudentNum());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", asset));
     }
 }
