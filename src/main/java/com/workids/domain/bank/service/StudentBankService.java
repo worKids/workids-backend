@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankStudentUpdateStateDto;
+import com.workids.domain.bank.dto.response.ResponseBankStudentAssetDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
 import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
 import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
@@ -284,6 +285,21 @@ public class StudentBankService {
                 .fetch();
 
         return resultList;
+    }
+
+    /**
+     * 총 자산 조회
+     * POST: /student/bank/asset
+     */
+    @Transactional
+    public ResponseBankStudentAssetDto getAsset(Long nationStudentNum){
+        Long sum = queryFactory.select(bankNationStudent.balance.sum())
+                .from(bankNationStudent)
+                .where(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudentNum),
+                        bankNationStudent.state.eq(BankStateType.IN_USE))
+                .fetchOne();
+
+        return ResponseBankStudentAssetDto.toDto(sum);
     }
 
     /**

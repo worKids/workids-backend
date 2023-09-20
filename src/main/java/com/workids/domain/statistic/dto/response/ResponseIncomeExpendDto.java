@@ -15,4 +15,11 @@ public class ResponseIncomeExpendDto {
     private List<String> menu;
 
     private List<Integer> percent;
+
+    public static ResponseIncomeExpendDto toDto(List<String> menu, List<Integer> percent) {
+        return ResponseIncomeExpendDto.builder()
+                .menu(menu)
+                .percent(percent)
+                .build();
+    }
 }

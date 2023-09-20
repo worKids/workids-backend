@@ -13,5 +13,6 @@ public class ResponseCitizenDto {
             String name;
             Long asset;
             int credit_rating;
+            Long nationStudentNum;
 
 }

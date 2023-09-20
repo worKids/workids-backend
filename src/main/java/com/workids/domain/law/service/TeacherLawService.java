@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -58,6 +59,8 @@ public class TeacherLawService {
 
     private final JPAQueryFactory queryFactory;
 
+    private final LocalDateTime currentDateTime = LocalDateTime.now();
+
     /**
      * 법 내역 조회
      * */
@@ -81,6 +84,7 @@ public class TeacherLawService {
                 )
                 .from(law)
                 .where(law.nation.nationNum.eq(dto.getNationNum()).and(law.state.eq(LawStateType.IN_USE)))
+                .orderBy(law.updatedDate.desc())
                 .fetch();
 
         return lawList;
@@ -120,6 +124,7 @@ public class TeacherLawService {
         long reuslt = queryFactory
                 .update(law)
                 .set(law.state, LawStateType.UN_USE)
+                .set(law.updatedDate, currentDateTime)
                 .where(law.lawNum.eq(dto.getLawNum()))
                 .execute();
 
@@ -141,6 +146,7 @@ public class TeacherLawService {
         long result = queryFactory
                 .update(law)
                 .set(law.state, LawStateType.UN_USE)
+                .set(law.updatedDate, currentDateTime)
                 .where(law.lawNum.eq(dto.getLawNum()))
                 .execute();
         return result;
@@ -174,7 +180,7 @@ public class TeacherLawService {
                 .join(lawNationStudent).on(law.lawNum.eq(lawNationStudent.law.lawNum))
                 .join(nationStudent).on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(law.type.eq(LawStateType.FINE)))
-                .orderBy(lawNationStudent.createdDate.desc())
+                .orderBy(lawNationStudent.updatedDate.desc())
                 .fetch();
 
         return fineList;
@@ -287,7 +293,7 @@ public class TeacherLawService {
                 .join(lawNationStudent).on(law.lawNum.eq(lawNationStudent.law.lawNum))
                 .join(nationStudent).on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                 .where(nationStudent.nation.nationNum.eq(dto.getNationNum()).and(law.type.eq(LawStateType.PENALTY)))
-                .orderBy(lawNationStudent.createdDate.desc())
+                .orderBy(lawNationStudent.updatedDate.desc())
                 .fetch();
 
         return penaltyList;
@@ -341,12 +347,14 @@ public class TeacherLawService {
             queryFactory
                     .update(lawNationStudent)
                     .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_COMPLETE)
+                    .set(lawNationStudent.updatedDate, currentDateTime)
                     .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
                     .execute();
         } else {
              queryFactory
                     .update(lawNationStudent)
                     .set(lawNationStudent.penaltyCompleteState, LawStateType.PENALTY_UN_COMPLETE)
+                    .set(lawNationStudent.updatedDate, currentDateTime)
                     .where(lawNationStudent.lawNationStudentNum.eq(dto.getLawNationStudentNum()))
                     .execute();
         }

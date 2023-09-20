@@ -11,7 +11,7 @@ public interface JobNationStudentRepository extends JpaRepository<JobNationStude
     /**
      * 직업부여 수정
      */
-    @Query(value =  "UPDATE JOB_NATION_STUDENT SET JOB_NUM = ?2 WHERE NATION_STUDENT_NUM = ?1", nativeQuery = true)
+    @Query(value =  "UPDATE JOB_NATION_STUDENT SET STATE = ?2 WHERE NATION_STUDENT_NUM = ?1", nativeQuery = true)
     @Modifying
-    void update(Long nationStudentNum, Long jobNum);
+    void update(Long nationStudentNum, int state);
 }

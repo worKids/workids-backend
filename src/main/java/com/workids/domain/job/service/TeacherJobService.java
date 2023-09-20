@@ -28,6 +28,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.workids.global.config.stateType.JobStateType.UN_EMPLOY;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -103,7 +105,7 @@ public class TeacherJobService {
                 .from(nationStudent)
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
-                .where(nationStudent.nation.nationNum.eq(studentjobDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)))
+                .where(nationStudent.nation.nationNum.eq(studentjobDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)))
                 .orderBy(nationStudent.citizenNumber.asc())
                 .fetch();
         return studentJobList;
@@ -131,9 +133,10 @@ public class TeacherJobService {
     public void studentJobUpdate(RequestStudentJobDto studentjobDto) {
         Job job = jobRepository.findByNation_NationNumAndName(studentjobDto.getNationNum(), studentjobDto.getName());
         NationStudent nationStudent = nationStudentRepository.findByCitizenNumber(studentjobDto.getCitizenNumber());
+        jobNationStudentRepository.update(nationStudent.getNationStudentNum(),UN_EMPLOY);
 
-        jobNationStudentRepository.update(nationStudent.getNationStudentNum(),job.getJobNum());
-
+        JobNationStudent jobNationStudent = JobNationStudent.toEntity(job,nationStudent);
+        jobNationStudentRepository.save(jobNationStudent);
     }
 
     public List<ResponseJobKindDto> jobKindList(RequestStudentJobDto studentJobDto) {
