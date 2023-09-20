@@ -14,5 +14,7 @@ public interface NationRepository extends JpaRepository<Nation, Long>{
 
     List<Nation> findByTeacher_TeacherNum(Long teacherNum);
 
+    Nation findByCode(String code);
+
 
 }
