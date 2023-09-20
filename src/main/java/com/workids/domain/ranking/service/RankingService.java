@@ -80,6 +80,7 @@ public class RankingService {
         //월
         if(dto.getType()=='m') {
             int currentMonth = currentDate.getMonthValue();
+            int currentYear = currentDate.getYear();
 
             //저축왕 //이 달에 가장 많은 예금을 저축
             List<Tuple> result = queryFactory
@@ -94,6 +95,7 @@ public class RankingService {
                     .join(nationStudent)
                     .on(bankNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                     .where(
+                            bankNationStudent.createdDate.year().eq(currentYear),
                             bankNationStudent.createdDate.month().eq(currentMonth),
                             bankNationStudent.state.eq(BankStateType.IN_USE),
                             bank.productType.eq(BankStateType.DEPOSIT_ACCOUNT),
@@ -133,6 +135,7 @@ public class RankingService {
                     .join(nationStudent)
                     .on(consumptionNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                     .where(
+                            consumptionNationStudent.updatedDate.year().eq(currentYear),
                             consumptionNationStudent.updatedDate.month().eq(currentMonth), //현재 달에 승인된 내역들만
                             consumptionNationStudent.state.eq(ConsumptionStateType.APPROVAL),
                             nationStudent.nation.nationNum.eq(dto.getNationNum())
@@ -171,6 +174,7 @@ public class RankingService {
                     .join(nationStudent)
                     .on(lawNationStudent.nationStudent.nationStudentNum.eq(nationStudent.nationStudentNum))
                     .where(
+                            lawNationStudent.createdDate.year().eq(currentYear),
                             lawNationStudent.createdDate.month().eq(currentMonth),
                             nationStudent.nation.nationNum.eq(dto.getNationNum())
                     )
