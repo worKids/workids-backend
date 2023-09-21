@@ -56,7 +56,8 @@ public class JobScheduler {
                                     JobSalaryVo.class,
                                     jobNationStudent.nationStudent.nationStudentNum,
                                     job.name.as("jobName"),
-                                    job.salary
+                                    job.salary,
+                                    nation.taxRate
                             )
                     ).from(jobNationStudent)
                     .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
@@ -72,18 +73,22 @@ public class JobScheduler {
             Long nationStudentNum = b.getNationStudentNum(); // 나라-학생 고유 번호
             String jobName = b.getJobName(); // 직업명
             int salary = b.getSalary(); // 월급
+            int taxRate = b.getTaxRate(); // 세율
+
+            // 실수령액
+            long actualSalary = (long)(salary - (salary * ((double) taxRate / 100)));
 
             // 주거래 계좌
             BankNationStudent mainAccountBankNationStudent = studentBankService.findMainAccountByNationStudentNum(nationStudentNum);
 
             // 주거래 계좌 입금 transaction 생성-월급
             String content = nowMonth + "월 " + jobName + " 월급";
-            TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, content, BankStateType.CATEGORY_SALARY, BankStateType.DEPOSIT, (long) salary);
+            TransactionHistory mainTransactionHistory = TransactionHistory.of(mainAccountBankNationStudent, content, BankStateType.CATEGORY_SALARY, BankStateType.DEPOSIT, actualSalary);
             transactionHistoryRepository.save(mainTransactionHistory);
 
             // 주거래 계좌로 월급만큼 이체
             Long mainAccountBalance = mainAccountBankNationStudent.getBalance(); // 주거래 계좌 잔액
-            mainAccountBankNationStudent.updateBalance(mainAccountBalance+salary);
+            mainAccountBankNationStudent.updateBalance(mainAccountBalance+actualSalary);
         });
     }
 }
