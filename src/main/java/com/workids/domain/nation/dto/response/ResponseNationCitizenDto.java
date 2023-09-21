@@ -9,12 +9,14 @@ import lombok.*;
 @ToString
 @Builder
 public class ResponseNationCitizenDto {
+    Long citizenNum; // PK
     int citizenNumber; // 학급번호
     String studentName; // 학생이름
     String birthDate; // 생년월일
 
     public static ResponseNationCitizenDto toDto(Citizen entity) {
         return ResponseNationCitizenDto.builder()
+                .citizenNum(entity.getCitizenNum())
                 .citizenNumber(entity.getCitizenNumber())
                 .studentName(entity.getName())
                 .birthDate(entity.getBirthDate())
