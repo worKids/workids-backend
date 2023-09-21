@@ -16,4 +16,6 @@ public class JobSalaryVo {
     private String jobName; // 직업명
 
     private int salary; // 월급
+
+    private int taxRate; // 세율
 }
