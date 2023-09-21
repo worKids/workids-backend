@@ -138,7 +138,7 @@ public class NationService {
 
 
     /**
-     * 나라 고유번호로 select
+     * 나라 고유번호, state = 0(진행중) 으로 select
      */
     @Transactional
     public ResponseNationInfoDto getInfo(RequestNumDto dto){
@@ -243,7 +243,7 @@ public class NationService {
     @Transactional
     public List<ResponseNationLawDto> getMainInfoLaw(RequestNumDto dto){
 
-        List<Law> lawList = lawRepository.findByNation_NationNum(dto.getNum());
+        List<Law> lawList = lawRepository.findByNation_NationNumAndState(dto.getNum(), 0);
 
         List<ResponseNationLawDto> nationLawDtoList = new ArrayList<>();
         for(Law law : lawList){
@@ -260,7 +260,7 @@ public class NationService {
     @Transactional
     public List<ResponseNationJobDto> getMainInfoJob(RequestNumDto dto){
 
-        List<Job> jobList = jobRepository.findByNation_NationNum(dto.getNum());
+        List<Job> jobList = jobRepository.findByNation_NationNumAndState(dto.getNum(), 0);
 
         List<ResponseNationJobDto> nationJobDtoList = new ArrayList<>();
         for(Job job : jobList){

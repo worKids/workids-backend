@@ -33,6 +33,6 @@ public interface LawRepository extends JpaRepository<Law, Long>, QuerydslPredica
     int updateStateByLawNum(Long lawNum);*/
 
 
-    List<Law> findByNation_NationNum(Long nationNum);
+    List<Law> findByNation_NationNumAndState(Long nationNum, int state);
 
 }
