@@ -4,10 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.dto.request.RequestBankStudentCreateDto;
 import com.workids.domain.bank.dto.request.RequestBankStudentUpdateStateDto;
-import com.workids.domain.bank.dto.response.ResponseBankStudentAssetDto;
-import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
-import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
-import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
+import com.workids.domain.bank.dto.response.*;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.entity.BankNationStudent;
 import com.workids.domain.bank.entity.TransactionHistory;
@@ -33,6 +30,7 @@ import java.util.List;
 import static com.workids.domain.bank.entity.QBank.bank;
 import static com.workids.domain.bank.entity.QBankNationStudent.bankNationStudent;
 import static com.workids.domain.bank.entity.QTransactionHistory.transactionHistory;
+import static com.workids.domain.nation.entity.QNationStudent.nationStudent;
 
 /**
  * Student 은행 Service
@@ -289,7 +287,6 @@ public class StudentBankService {
 
     /**
      * 총 자산 조회
-     * POST: /student/bank/asset
      */
     @Transactional
     public ResponseBankStudentAssetDto getAsset(Long nationStudentNum){
@@ -300,6 +297,19 @@ public class StudentBankService {
                 .fetchOne();
 
         return ResponseBankStudentAssetDto.toDto(sum);
+    }
+
+    /**
+     * 신용도 조회
+     */
+    @Transactional
+    public ResponseBankStudentCreditRatingDto getCreditRating(Long nationStudentNum){
+        int credit = queryFactory.select(nationStudent.creditRating)
+                .from(nationStudent)
+                .where(nationStudent.nationStudentNum.eq(nationStudentNum))
+                .fetchOne();
+
+        return ResponseBankStudentCreditRatingDto.toDto(credit);
     }
 
     /**

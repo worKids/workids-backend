@@ -8,6 +8,7 @@ import lombok.ToString;
  * 예금 계좌 목록 조회 RequestDto - Student
  * 주거래 계좌 목록 조회 RequestDto - Student
  * 총 자산 조회 RequestDto - Student
+ * 신용도 조회 RequestDto - Student
  */
 @Getter
 @NoArgsConstructor
