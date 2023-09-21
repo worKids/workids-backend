@@ -1,10 +1,7 @@
 package com.workids.domain.bank.controller;
 
 import com.workids.domain.bank.dto.request.*;
-import com.workids.domain.bank.dto.response.ResponseBankStudentAssetDto;
-import com.workids.domain.bank.dto.response.ResponseBankStudentListDto;
-import com.workids.domain.bank.dto.response.ResponseBankStudentJoinListDto;
-import com.workids.domain.bank.dto.response.ResponseBankTransactionListDto;
+import com.workids.domain.bank.dto.response.*;
 import com.workids.domain.bank.service.StudentBankService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -131,10 +128,22 @@ public class StudentBankController {
     @PostMapping("/asset")
     @ResponseBody
     public ResponseEntity<BaseResponseDto> getAsset(@RequestBody RequestBankStudentJoinListDto dto){
-        // 총 자산 조회
         ResponseBankStudentAssetDto asset = studentBankService.getAsset(dto.getNationStudentNum());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success", asset));
+    }
+
+    /**
+     * 신용도 조회
+     * POST: /student/bank/credit-rating
+     */
+    @PostMapping("/credit-rating")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto> getCreditRating(@RequestBody RequestBankStudentJoinListDto dto){
+        ResponseBankStudentCreditRatingDto credit = studentBankService.getCreditRating(dto.getNationStudentNum());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success", credit));
     }
 }
