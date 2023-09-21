@@ -71,6 +71,7 @@ public class StudentJobService {
                 .join(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .join(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .where(nationStudent.nation.nationNum.eq(studentJobDto.getNationNum()).and(nationStudent.nationStudentNum.eq(studentJobDto.getNationStudentNum())))
+                .orderBy(jobNationStudent.createdDate.desc())
                 .fetch();
         return myJobList;
 
