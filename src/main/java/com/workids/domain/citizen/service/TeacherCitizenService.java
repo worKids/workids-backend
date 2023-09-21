@@ -54,8 +54,7 @@ public class TeacherCitizenService {
                                 job.name,
                                 bankNationStudent.balance.sum(),
                                 nationStudent.creditRating,
-                                nationStudent.nationStudentNum,
-                                bankNationStudent.bankNationStudentNum
+                                nationStudent.nationStudentNum
 
                         )
                 )
@@ -154,7 +153,8 @@ public class TeacherCitizenService {
                                 nationStudent.studentName,
                                 job.name,
                                 bankNationStudent.balance.sum(),
-                                nationStudent.creditRating
+                                nationStudent.creditRating,
+                                nationStudent.nationStudentNum
                         )
                 )
                 .from(nationStudent)
@@ -166,7 +166,8 @@ public class TeacherCitizenService {
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
                         job.name,
-                        nationStudent.creditRating
+                        nationStudent.creditRating,
+                        nationStudent.nationStudentNum
                 )
                 .fetch();
         return selectImmigrant;
@@ -188,7 +189,9 @@ public class TeacherCitizenService {
                                 nationStudent.citizenNumber,
                                 nationStudent.studentName,
                                 job.name,
-                                nationStudent.creditRating
+                                nationStudent.creditRating,
+                                nationStudent.nationStudentNum
+
                         )
                 )
                 .from(nationStudent)
@@ -200,7 +203,8 @@ public class TeacherCitizenService {
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
                         job.name,
-                        nationStudent.creditRating
+                        nationStudent.creditRating,
+                        nationStudent.nationStudentNum
                 )
                 .fetch();
         return selectImmigrantLeave;
