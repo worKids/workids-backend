@@ -14,14 +14,14 @@ public class AccountNumberGenerator {
 
         // 숫자 길이
         int totalNumLength = 14; // 계좌번호 총 길이
-        int curNumLength = nationNumString.length() + productNumString.length() + nationStudentNumString.length(); // 생성된 길이
+        int curNumLength = 3; // 생성된 길이
         int generateNumLength = totalNumLength - curNumLength; // 생성 필요한 난수 길이
 
         // ========== 계좌번호 생성 ==========
         StringBuilder sb = new StringBuilder();
-        sb.append(nationNumString);
-        sb.append(productNumString);
-        sb.append(nationStudentNumString);
+        sb.append(nationNumString.charAt(nationNumString.length()-1));  // 가장 마지막 문자만 사용
+        sb.append(productNumString.charAt(productNumString.length()-1)); // 가장 마지막 문자만 사용
+        sb.append(nationStudentNumString.charAt(nationStudentNumString.length()-1)); // 가장 마지막 문자만 사용
 
         // 필요한만큼 난수 생성
         for (int i=0; i<generateNumLength; i++){
