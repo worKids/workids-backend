@@ -52,9 +52,9 @@ public class CitizenService {
      * 국민목록 등록
      */
     @Transactional
-    public void join(List<RequestCitizenJoinDto> dtoList) {
+    public void join(RequestCitizenJoinDto dto) {
 
-        Nation nation = nationRepository.findById(dtoList.get(dtoList.size()-1).getNationNum()).orElse(null);
+        Nation nation = nationRepository.findById(dto.getNationNum()).orElse(null);
 
         // 나라 고유번호 존재하면 가입 가능
         if (nation == null){
@@ -62,15 +62,14 @@ public class CitizenService {
         }
 
 
-        for(RequestCitizenJoinDto dto : dtoList){
-            // 학급번호 중복 불가
-            if(citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(),
-                    dto.getNationNum()) != null){
-                throw new ApiException(ExceptionEnum.CITIZEN_NOT_JOIN_EXCEPTION);
-            }
-            // 국민목록 등록
-            citizenRepository.save(Citizen.of(dto, nation));
+        // 학급번호 중복 불가
+        if(citizenRepository.findByCitizenNumberAndNation_NationNum(dto.getCitizenNumber(),
+                dto.getNationNum()) != null){
+            throw new ApiException(ExceptionEnum.CITIZEN_NOT_JOIN_EXCEPTION);
         }
+        // 국민목록 등록
+        citizenRepository.save(Citizen.of(dto, nation));
+
 
 
         System.out.println("국민목록 citizen 저장 완료.");
