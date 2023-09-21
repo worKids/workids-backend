@@ -14,6 +14,5 @@ public class ResponseCitizenDto {
             Long asset;
             int credit_rating;
             Long nationStudentNum;
-            Long bankNationStudentNum;
 
 }
