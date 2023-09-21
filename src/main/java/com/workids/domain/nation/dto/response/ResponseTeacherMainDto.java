@@ -36,7 +36,7 @@ public class ResponseTeacherMainDto {
                 .moneyName(nation.getMoneyName())
                 .taxRate(nation.getTaxRate())
                 .startDate(nation.getStartDate())
-                .endDate(nation.getStartDate())
+                .endDate(nation.getEndDate())
                 .totalCitizen(totalCitizen)
                 .build();
     }
