@@ -45,7 +45,7 @@ public class CitizenController {
      */
     @PostMapping("/citizen")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody List<RequestCitizenJoinDto> dtoList){
+    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody RequestCitizenJoinDto dtoList){
         citizenService.join(dtoList);
 
         System.out.println("국민목록 등록 완료");
