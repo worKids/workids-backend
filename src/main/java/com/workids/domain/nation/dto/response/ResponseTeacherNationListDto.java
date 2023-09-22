@@ -18,12 +18,13 @@ public class ResponseTeacherNationListDto {
     private Long nationNum;
     private String name;
     private int totalStudent;
-
+    private String moneyName;
     public static ResponseTeacherNationListDto of(Nation nation, int totalStudent){
         return ResponseTeacherNationListDto.builder()
                 .nationNum(nation.getNationNum())
                 .name(nation.getName())
                 .totalStudent(totalStudent)
+                .moneyName(nation.getMoneyName())
                 .build();
     }
 
