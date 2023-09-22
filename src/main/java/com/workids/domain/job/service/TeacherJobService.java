@@ -108,7 +108,7 @@ public class TeacherJobService {
                 .from(nationStudent)
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
-                .where(nationStudent.nation.nationNum.eq(studentjobDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)))
+                .where(nationStudent.nation.nationNum.eq(studentjobDto.getNationNum()).and(nationStudent.state.eq(NationStateType.IN_NATION)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)).or(jobNationStudent.state.isNull()))
                 .orderBy(nationStudent.citizenNumber.asc())
                 .fetch();
         return studentJobList;
