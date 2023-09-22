@@ -1,12 +1,8 @@
 package com.workids.domain.nation.controller;
 
-import com.workids.domain.job.entity.Job;
-import com.workids.domain.law.entity.Law;
 import com.workids.domain.nation.dto.request.RequestNationJoinDto;
 import com.workids.domain.nation.dto.request.RequestNumDto;
-import com.workids.domain.nation.dto.response.ResponseNationJobDto;
-import com.workids.domain.nation.dto.response.ResponseNationLawDto;
-import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
+import com.workids.domain.nation.dto.response.*;
 import com.workids.domain.nation.service.NationService;
 import com.workids.global.comm.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.workids.domain.nation.dto.response.ResponseTeacherMainDto;
 
 
 import java.util.List;
@@ -32,16 +27,18 @@ public class TeacherNationController {
      */
     @PostMapping("/nation/join")
     @ResponseBody
-    public ResponseEntity<BaseResponseDto<?>> join(@RequestBody RequestNationJoinDto dto){
+    public ResponseEntity<BaseResponseDto<ResponseNationInfoDto>> join(@RequestBody RequestNationJoinDto dto){
         // 참여코드 발급
         String code = nationService.randomCode();
 
         // 나라 등록
-        nationService.join(dto, code);
+        Long nationNum = nationService.join(dto, code);
+
+        ResponseNationInfoDto infoDto = nationService.getNationInfo(nationNum);
 
         System.out.println("나라 등록 완료");
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponseDto<>(200, "success", code));
+                .body(new BaseResponseDto<>(200, "success", infoDto));
 
     }
 

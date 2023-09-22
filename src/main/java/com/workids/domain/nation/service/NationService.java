@@ -50,7 +50,7 @@ public class NationService {
      * 나라 생성
      */
     @Transactional
-    public void join(RequestNationJoinDto dto, String code) {
+    public Long join(RequestNationJoinDto dto, String code) {
 
         if (nationRepository.findByName(dto.getName()) != null){
             throw new ApiException(ExceptionEnum.NATION_EXIST_EXCEPTION);
@@ -71,6 +71,8 @@ public class NationService {
         Bank newBank = Bank.baseOf(nation, 0, "주거래 통장", "주거래 통장입니다.", 0, 0, nation.getEndDate());
         // 은행 상품 등록
         bankRepository.save(newBank);
+
+        return nation.getNationNum();
 
     }
 
@@ -154,8 +156,24 @@ public class NationService {
         }
 
         return infoDto;
+    }
 
+    /**
+     * 나라 고유번호, state = 0(진행중) 으로 select
+     */
+    @Transactional
+    public ResponseNationInfoDto getNationInfo(Long nationNum){
+        Optional<Nation> optNation = nationRepository.findById(nationNum);
 
+        Nation nation;
+        ResponseNationInfoDto infoDto = null;
+        if(optNation.isPresent()){
+            nation = optNation.orElseThrow(NullPointerException::new);
+            infoDto = ResponseNationInfoDto.toDto(nation);
+
+        }
+
+        return infoDto;
     }
 
     /**

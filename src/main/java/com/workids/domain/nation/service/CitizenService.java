@@ -8,8 +8,10 @@ import com.workids.domain.nation.dto.response.ResponseNationCitizenDto;
 import com.workids.domain.nation.dto.response.ResponseTeacherNationListDto;
 import com.workids.domain.nation.entity.Citizen;
 import com.workids.domain.nation.entity.Nation;
+import com.workids.domain.nation.entity.NationStudent;
 import com.workids.domain.nation.repository.CitizenRepository;
 import com.workids.domain.nation.repository.NationRepository;
+import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +30,9 @@ public class CitizenService {
 
     private final CitizenRepository citizenRepository;
     private final NationRepository nationRepository;
+    private final NationStudentRepository nationStudentRepository;
 
-    private final JPAQueryFactory queryFactory;
+    //private final JPAQueryFactory queryFactory;
 
     /**
      * 국민목록 조회
@@ -81,13 +84,15 @@ public class CitizenService {
      */
     @Transactional
     public int citizenCount(Long nationNum){
-        // 모든 항목 조회(사용중)-상품 유형으로 정렬
         // Entity 리스트로 결과
+        /*
         List<Citizen> citizenList = queryFactory.selectFrom(citizen)
                 .where(citizen.nation.nationNum.eq(nationNum))
                 .fetch();
 
-        int count = citizenList.size();
+         */
+        List<NationStudent> nationStudentList = nationStudentRepository.findByNation_NationNum(nationNum);
+        int count = nationStudentList.size();
 
         return count;
     }
