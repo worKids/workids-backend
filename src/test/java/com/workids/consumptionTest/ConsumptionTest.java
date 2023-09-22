@@ -41,7 +41,7 @@ public class ConsumptionTest {
                 Consumption.builder()
                         .nation(nationTest)
                         .content("노래 1곡 선곡")
-                        .amount(60)
+                        .amount(60L)
                         .state(0)
                         .build()
         );
@@ -49,7 +49,7 @@ public class ConsumptionTest {
                 Consumption.builder()
                         .nation(nationTest)
                         .content("일기쓰기 1회 제외")
-                        .amount(70)
+                        .amount(70L)
                         .state(0)
                         .build()
         );
@@ -57,7 +57,7 @@ public class ConsumptionTest {
                 Consumption.builder()
                         .nation(nationTest)
                         .content("초콜릿 1개 교환")
-                        .amount(30)
+                        .amount(30L)
                         .state(0)
                         .build()
         );
@@ -65,7 +65,7 @@ public class ConsumptionTest {
                 Consumption.builder()
                         .nation(nationTest)
                         .content("급식 우선권")
-                        .amount(80)
+                        .amount(80L)
                         .state(0)
                         .build()
         );
@@ -73,7 +73,7 @@ public class ConsumptionTest {
                 Consumption.builder()
                         .nation(nationTest)
                         .content("청소 1회 면제")
-                        .amount(100)
+                        .amount(100L)
                         .state(0)
                         .build()
         );

@@ -41,7 +41,7 @@ public class LawTest {
                 .nation(nationTest)
                 .content("숙제 1회 안함")
                 .type(0)
-                .fine(50)
+                .fine(50L)
                 .state(0)
                 .build();
 
@@ -51,7 +51,7 @@ public class LawTest {
                         .nation(nationTest)
                         .content("지각 할 시")
                         .type(0)
-                        .fine(80)
+                        .fine(80L)
                         .state(0)
                         .build()
         );
@@ -61,7 +61,7 @@ public class LawTest {
                         .nation(nationTest)
                         .content("친구를 때릴 시")
                         .type(0)
-                        .fine(120)
+                        .fine(120L)
                         .state(0)
                         .build()
         );
