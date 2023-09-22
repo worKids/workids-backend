@@ -18,4 +18,5 @@ public interface NationStudentRepository extends JpaRepository<NationStudent, Lo
     List<NationStudent> findAllByNation_NationNum(Long nationNum);
 
     NationStudent findByStudent_StudentNumAndNation_NationNum(Long nationNum, Long studentNum);
+
 }
