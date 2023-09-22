@@ -125,13 +125,12 @@ public class NationService {
 
         List<NationStudent> list = nationStudentRepository.findByStudent_StudentNum(dto.getNum());
 
-        int totalStudent = list.size();
-        System.out.println("size: " + totalStudent);
-
-
+        int totalCitizen = 0;
         List<ResponseStudentNationListDto> dtoList = new ArrayList<>();
         for(NationStudent nationstudent : list){
-            dtoList.add(ResponseStudentNationListDto.of(nationstudent, totalStudent));
+            // 나라에 참여하고 있는 학생 수
+            totalCitizen = citizenService.citizenCount(nationstudent.getNation().getNationNum());
+            dtoList.add(ResponseStudentNationListDto.of(nationstudent, totalCitizen));
         }
 
         return dtoList;
