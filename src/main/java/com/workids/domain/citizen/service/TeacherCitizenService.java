@@ -68,8 +68,7 @@ public class TeacherCitizenService {
                         nationStudent.studentName,
                         job.name,
                         nationStudent.creditRating,
-                        nationStudent.nationStudentNum,
-                        bankNationStudent.bankNationStudentNum
+                        nationStudent.nationStudentNum
                 )
                 .orderBy(nationStudent.citizenNumber.asc())
                 .fetch();
