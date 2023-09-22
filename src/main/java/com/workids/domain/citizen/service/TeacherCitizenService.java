@@ -62,7 +62,7 @@ public class TeacherCitizenService {
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .join(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)))
+                .where(nationStudent.nation.nationNum.eq(citizenDto.getNationNum()).and(bankNationStudent.state.eq(BankStateType.IN_USE)).and(nationStudent.state.eq(NationStateType.IN_NATION)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)).or(jobNationStudent.state.isNull()))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
@@ -161,7 +161,7 @@ public class TeacherCitizenService {
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .leftJoin(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)))
+                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)).or(jobNationStudent.state.isNull()))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
@@ -198,7 +198,7 @@ public class TeacherCitizenService {
                 .leftJoin(jobNationStudent).on(nationStudent.nationStudentNum.eq(jobNationStudent.nationStudent.nationStudentNum))
                 .leftJoin(job).on(jobNationStudent.job.jobNum.eq(job.jobNum))
                 .leftJoin(bankNationStudent).on(nationStudent.nationStudentNum.eq(bankNationStudent.nationStudent.nationStudentNum))
-                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)))
+                .where(job.nation.nationNum.eq(citizenDto.getNationNum()).and(nationStudent.citizenNumber.eq(citizenDto.getCitizenNumber())).and(job.state.eq(JobStateType.IN_USE)).and(jobNationStudent.state.eq(JobStateType.EMPLOY)).or(jobNationStudent.state.isNull()))
                 .groupBy(
                         nationStudent.citizenNumber,
                         nationStudent.studentName,
