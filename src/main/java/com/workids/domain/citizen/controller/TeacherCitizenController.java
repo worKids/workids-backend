@@ -84,12 +84,24 @@ public class TeacherCitizenController {
     }
 
     /**
-     * 이민자 학급번호로 조회
+     * 이민자 학급번호로 조회(취득신고)
      */
     @PostMapping("/teacher/citizen/immigrant")
     @ResponseBody
     public ResponseEntity<BaseResponseDto<?>> selectImmigrant(Model model, @RequestBody RequestCitizenDto citizenDto) {
         List<ResponseCitizenDto> immigrant = citizenService.selectImmigrant(citizenDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponseDto<>(200, "success",immigrant));
+    }
+
+    /**
+     * 이민자 학급번호로 조회(국적이탈)
+     */
+    @PostMapping("/teacher/citizen/immigrant/leave")
+    @ResponseBody
+    public ResponseEntity<BaseResponseDto<?>> selectImmigrantLeave(Model model, @RequestBody RequestCitizenDto citizenDto) {
+        List<ResponseCitizenDto> immigrant = citizenService.selectImmigrantLeave(citizenDto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponseDto<>(200, "success",immigrant));
