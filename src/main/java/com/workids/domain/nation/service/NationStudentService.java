@@ -3,9 +3,11 @@ package com.workids.domain.nation.service;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.workids.domain.bank.entity.Bank;
 import com.workids.domain.bank.entity.BankNationStudent;
+import com.workids.domain.bank.entity.TransactionHistory;
 import com.workids.domain.bank.module.AccountNumberGenerator;
 import com.workids.domain.bank.repository.BankNationStudentRepository;
 import com.workids.domain.bank.repository.BankRepository;
+import com.workids.domain.bank.repository.TransactionHistoryRepository;
 import com.workids.domain.nation.dto.request.RequestNationStudentDto;
 import com.workids.domain.nation.dto.request.RequestNationStudentJoinDto;
 import com.workids.domain.nation.dto.response.ResponseNationStudentDto;
@@ -15,6 +17,7 @@ import com.workids.domain.nation.repository.NationRepository;
 import com.workids.domain.nation.repository.NationStudentRepository;
 import com.workids.domain.user.entity.Student;
 import com.workids.domain.user.repository.StudentRepository;
+import com.workids.global.config.stateType.BankStateType;
 import com.workids.global.exception.ApiException;
 import com.workids.global.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ public class NationStudentService {
     private final BankRepository bankRepository;
 
     private final BankNationStudentRepository bankNationStudentRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
 
 
 
@@ -91,7 +95,11 @@ public class NationStudentService {
         }
 
         // 은행-나라-학생 생성(주거래통장 생성)
-        createMainAcount(nationStudent, accountNumber, nation.getBalance(), nationStudent.getCreatedDate(), nation.getEndDate());
+        BankNationStudent mainBankNationStudent = createMainAcount(nationStudent, accountNumber, nation.getBalance(), nationStudent.getCreatedDate(), nation.getEndDate());
+
+        // 주거래통장 계좌 입금(default 자산 transaction 생성)
+        TransactionHistory newTransactionHistory = TransactionHistory.of(mainBankNationStudent, "나라 가입 축하 지원금", BankStateType.CATEGORY_SUPPORT, BankStateType.DEPOSIT, nation.getBalance());
+        transactionHistoryRepository.save(newTransactionHistory);
 
         System.out.println("은행-나라-학생 생성 완료");
 
@@ -116,12 +124,13 @@ public class NationStudentService {
      * 은행-나라-학생 생성(주거래통장 생성)
      */
     @Transactional
-    public void createMainAcount(NationStudent nationStudent, String accountNumber, Long balance, LocalDateTime createDate, LocalDateTime endDate){
+    public BankNationStudent createMainAcount(NationStudent nationStudent, String accountNumber, Long balance, LocalDateTime createDate, LocalDateTime endDate){
 
         Bank bank = bankRepository.findById(1L).orElse(null); // default 은행상품 PK = 1
 
-        bankNationStudentRepository.save(BankNationStudent.of(bank, nationStudent, accountNumber, balance, 0, createDate, endDate));
+        BankNationStudent bankNationStudent = bankNationStudentRepository.save(BankNationStudent.of(bank, nationStudent, accountNumber, balance, 0, createDate, endDate));
 
+        return bankNationStudent;
     }
 
     /**
