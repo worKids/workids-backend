@@ -51,18 +51,6 @@ public class NationStudentService {
         if(nation == null){
             throw new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION);
         }
-        /*
-        Nation nation = nationRepository.findByNationNum(dto.getNationNum())
-                .orElseThrow(() -> new ApiException(ExceptionEnum.NATION_NOT_EXIST_EXCEPTION));
-
-         */
-        // 나라코드 일치여부 확인
-        /*
-        if (!checkNationCode(nation.getCode(), dto.getCode())) {
-            throw new ApiException(ExceptionEnum.NATION_CODE_NOT_MATCH_EXCEPTION);
-        }
-
-         */
 
         // 학생 가입여부 확인
         Student student = studentRepository.findByStudentNum(dto.getStudentNum());
@@ -91,7 +79,6 @@ public class NationStudentService {
 
         NationStudent nationStudent = NationStudent.of(dto, student, nation);
         nationStudentRepository.save(nationStudent);
-        System.out.println("nationStudent 등록 완료");
 
         // 계좌번호 생성
         String accountNumber = AccountNumberGenerator.createRandomNumber(nation.getNationNum().intValue(), 1, nationStudent.getNationStudentNum().intValue());
@@ -104,7 +91,7 @@ public class NationStudentService {
         }
 
         // 은행-나라-학생 생성(주거래통장 생성)
-        createMainAcount(nationStudent, accountNumber, nationStudent.getCreatedDate(), nation.getEndDate());
+        createMainAcount(nationStudent, accountNumber, nation.getBalance(), nationStudent.getCreatedDate(), nation.getEndDate());
 
         System.out.println("은행-나라-학생 생성 완료");
 
@@ -129,11 +116,11 @@ public class NationStudentService {
      * 은행-나라-학생 생성(주거래통장 생성)
      */
     @Transactional
-    public void createMainAcount(NationStudent nationStudent, String accountNumber, LocalDateTime createDate, LocalDateTime endDate){
+    public void createMainAcount(NationStudent nationStudent, String accountNumber, Long balance, LocalDateTime createDate, LocalDateTime endDate){
 
         Bank bank = bankRepository.findById(1L).orElse(null); // default 은행상품 PK = 1
 
-        bankNationStudentRepository.save(BankNationStudent.of(bank, nationStudent, accountNumber, 0L, 0, createDate, endDate));
+        bankNationStudentRepository.save(BankNationStudent.of(bank, nationStudent, accountNumber, balance, 0, createDate, endDate));
 
     }
 

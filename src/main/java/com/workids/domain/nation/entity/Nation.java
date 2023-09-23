@@ -61,6 +61,10 @@ public class Nation extends TimeEntity {
     private int state;
 
     @Column(nullable = false)
+    private Long balance;
+
+
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime startDate; // 나라 시작일
 
@@ -86,6 +90,7 @@ public class Nation extends TimeEntity {
                 .classRoom(dto.getClassRoom())
                 .payDay(dto.getPayDay())
                 .state(state)
+                .balance(dto.getBalance())
                 .startDate(startDateTime)
                 .endDate(endDateTime)
                 .build();

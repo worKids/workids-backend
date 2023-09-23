@@ -68,7 +68,7 @@ public class NationService {
         Nation nation = nationRepository.save(Nation.of(dto, teacher, times[0], times[1], code, checkState));
 
         // 나라 가입 시 주거래 통장 생성
-        Bank newBank = Bank.baseOf(nation, 0, "주거래 통장", "주거래 통장입니다.", 0, 0, nation.getEndDate());
+        Bank newBank = Bank.baseOf(nation, 0, "주거래 통장", "주거래 통장입니다.", 0, 0,  nation.getEndDate());
         // 은행 상품 등록
         bankRepository.save(newBank);
 

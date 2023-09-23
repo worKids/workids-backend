@@ -29,8 +29,9 @@ public class RequestNationJoinDto {
     private int classRoom;
 
     private int payDay;
-
     private int state;
+    private Long balance; // default 자산
+
 
     private String startDate; // 나라 시작일
     private String endDate; // 나라 종료일

@@ -38,6 +38,7 @@ public class BankStateType {
     public static final String CATEGORY_JOIN = "가입";
     public static final String CATEGORY_INTEREST = "이자";
     public static final String CATEGORY_TRANSFER = "이체";
+    public static final String CATEGORY_SUPPORT = "지원금";
 
     // 기타
     public static final String CATEGORY_ETC = "기타";
