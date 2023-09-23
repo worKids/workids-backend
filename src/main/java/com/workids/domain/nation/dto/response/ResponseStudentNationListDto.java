@@ -15,12 +15,14 @@ public class ResponseStudentNationListDto {
     private Long nationNum;
     private String name;
     private int totalStudent;
+    private String moneyName;
 
     public static ResponseStudentNationListDto of(NationStudent nationstudent, int totalStudent){
         return ResponseStudentNationListDto.builder()
                 .nationNum(nationstudent.getNation().getNationNum())
                 .name(nationstudent.getNation().getName())
                 .totalStudent(totalStudent)
+                .moneyName(nationstudent.getNation().getMoneyName())
                 .build();
     }
 
