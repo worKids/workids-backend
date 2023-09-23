@@ -22,6 +22,7 @@ public class ResponseTeacherMainDto {
      */
     private String moneyName; // 화폐명
     private int taxRate; // 세율
+    private String presidentName; // 대통령 명
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDateTime startDate; // 나라 시작일
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -35,6 +36,7 @@ public class ResponseTeacherMainDto {
         return ResponseTeacherMainDto.builder()
                 .moneyName(nation.getMoneyName())
                 .taxRate(nation.getTaxRate())
+                .presidentName(nation.getPresidentName())
                 .startDate(nation.getStartDate())
                 .endDate(nation.getEndDate())
                 .totalCitizen(totalCitizen)
